@@ -1,25 +1,23 @@
 package com.stolz.alexander.chessengine.pieces;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 public class PieceRook extends Piece {
-	public String name = "Rook";
-	public String imgname = "rook.png";
 	private Piece[][] boardstate;
-	private int i;
-	private int j;
-	private int te;
 
-	public PieceRook(int type, int ii, int jj) {
+	public PieceRook(PieceColor type, int ii, int jj) {
 		super(type);
-		te=type;
+        name = "Rook";
+        imgname = "rook.png";
+		this.type = type;
 		i = ii;
 		j = jj;
 	}
 	
 	@Override
 	public Image image(){
-	 if(te==1)
+	 if(type == PieceColor.WHITE)
 	 return new Image("file:resource/whiterookcursor.png");
 	 else
 	 return new Image("file:resource/blackrookcursor.png");
@@ -46,24 +44,19 @@ public class PieceRook extends Piece {
 		
 		else{return j;}
 	}
-	
-	@Override
-	public String toString(){
-		return name;
-	}
-	
-	@Override
-	public String imagefilename(){
-		return imgname;
-	}
 
 	@Override
 	public Piece[][] move(Piece r, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceRook(r.type(), t.icoord(), t.jcoord());
-		boardstate[r.icoord()][r.jcoord()] = new Empty(0, r.icoord(), r.jcoord());
+		boardstate[r.icoord()][r.jcoord()] = new Empty(PieceColor.NONE, r.icoord(), r.jcoord());
 		// Return the new board
 		return boardstate;
 	}
+
+    @Override
+    public void drawValidMoves(Piece[][] pieces, Rectangle[][] board) {
+
+    }
 }

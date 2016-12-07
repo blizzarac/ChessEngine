@@ -33,12 +33,12 @@ public class ChessBoard extends Pane {
 	
 	private double cell_width;
 	private double cell_height;
-	private int current_player=1;
+	private Piece.PieceColor current_player = Piece.PieceColor.WHITE;
 	private String clicklogic="false";
 	
-	private final int PlayerWhite = 1;
-	private final int PlayerBlack = 2;
-	private final int Empty = 0;
+	private final Piece.PieceColor PlayerWhite = Piece.PieceColor.WHITE;
+	private final Piece.PieceColor PlayerBlack = Piece.PieceColor.BLACK;
+	private final Piece.PieceColor Empty = Piece.PieceColor.NONE;
 	private boolean pieceselect = false;
 	private boolean winner = false;
 	
@@ -60,17 +60,17 @@ public class ChessBoard extends Pane {
 	clicklogic = "null";
 	}
 	
-	public int currentplayer(){
+	public Piece.PieceColor currentplayer(){
 		return current_player;
 	}
 	
-	public int otherplayer(){
-		if(current_player==1){
-			int otherplayer=2;
+	public Piece.PieceColor otherplayer(){
+		if(current_player== Piece.PieceColor.WHITE){
+            Piece.PieceColor otherplayer= Piece.PieceColor.BLACK;
 			return otherplayer;
 		}
 		else{
-		int otherplayer=1;
+            Piece.PieceColor otherplayer = Piece.PieceColor.WHITE;
 		return otherplayer;}
 	}
 	
@@ -227,7 +227,7 @@ public ChessBoard() {
 		pieces[1][1] = new PiecePawn(PlayerBlack, 1, 1, true);
 		pieces[0][1] = new PiecePawn(PlayerBlack, 0, 1, true);
 		
-		current_player = 1;
+		current_player = Piece.PieceColor.WHITE;
 }
 
 	public void placeboard(final int i, final int j){
@@ -317,15 +317,15 @@ public ChessBoard() {
 			}
 		}
 	
-		int enemyplayer = 0;
+		Piece.PieceColor enemyplayer = Piece.PieceColor.NONE;
 		
-		if(current_player == 1){
-			enemyplayer = 2;
+		if(current_player == Piece.PieceColor.WHITE){
+			enemyplayer = Piece.PieceColor.BLACK;
 		}
-		else{enemyplayer = 1;}
+		else{enemyplayer = Piece.PieceColor.WHITE;}
 		
 		if(winner == false){
-			if(pieces[i][j].type() == 0 || pieces[i][j].type() == enemyplayer){
+			if(pieces[i][j].type() == Piece.PieceColor.NONE || pieces[i][j].type() == enemyplayer){
 			return pieces[i][j];	
 			}
 		}
@@ -345,8 +345,8 @@ public ChessBoard() {
 			}
 		}
 
-		if(current_player == 1 && winner == false){
-			if(pieces[i][j].type() == 1){
+		if(current_player == Piece.PieceColor.WHITE && winner == false){
+			if(pieces[i][j].type() == Piece.PieceColor.WHITE){
 				// If player has already selected the piece, deselect it
 				if(board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true){
 					if(i%2==0 && j%2==1){
@@ -377,7 +377,7 @@ public ChessBoard() {
 		
 		// If current player is black
 			else{
-			if(pieces[i][j].type() == 2){
+			if(pieces[i][j].type() == Piece.PieceColor.BLACK){
 				if(board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true){
 						// Resets color
 						if(i%2==0 && j%2==1){
@@ -406,7 +406,7 @@ public ChessBoard() {
 		}
 		
 		// return something ..
-		return new Empty(0,i,j);
+		return new Empty(Piece.PieceColor.NONE,i,j);
 	}
 	
 	// Draw the move and remove highlights
@@ -414,7 +414,7 @@ public ChessBoard() {
 		Image empty = new Image("file:resource/empty.png");
 		String piece = "???";
 		piece = "black";
-		if(pieces[ti][tj].type() == 1){
+		if(pieces[ti][tj].type() == Piece.PieceColor.WHITE){
 		piece = "white";}
 		piece = piece + pieces[ti][tj].imagefilename();
 		//System.out.println("The new piece image filename: " + piece);
@@ -483,10 +483,10 @@ public ChessBoard() {
 	}
 		
 	public void changeplayer(){
-		if(current_player == 1){
-			current_player = 2;
+		if(current_player == Piece.PieceColor.WHITE){
+			current_player = Piece.PieceColor.BLACK;
 		} else {
-			current_player = 1;
+			current_player = Piece.PieceColor.WHITE;
 		}
 	}
 }

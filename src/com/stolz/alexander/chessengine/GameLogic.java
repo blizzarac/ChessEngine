@@ -2,13 +2,16 @@ package com.stolz.alexander.chessengine;
 
 import com.stolz.alexander.chessengine.pieces.*;
 
+import static com.stolz.alexander.chessengine.pieces.Piece.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.pieces.Piece.PieceColor.WHITE;
+
 public class GameLogic implements Cloneable {
 	
 	private String secondclick="false";
 	private boolean check = false;
 	private int checki; private int checkj;
-	private int currentplayer;
-	private int otherplayer;
+	private Piece.PieceColor currentplayer;
+	private Piece.PieceColor otherplayer;
 	
 	// Keep track of mouse clicks
 	
@@ -40,7 +43,7 @@ public class GameLogic implements Cloneable {
 	}
 	
 	// Take current boardstate and evaluate check for all pieces in boardstate
-	public String check4checkmate(int currentplayer, Piece[][] boardstate){
+	public String check4checkmate(Piece.PieceColor currentplayer, Piece[][] boardstate){
 		String checkmateflag="null";
 		// For loop to check every piece on current board
 		for(int x=0; x < 8; x++){
@@ -82,72 +85,72 @@ public class GameLogic implements Cloneable {
 		}
 		
 		//_____________________________________WHITEPAWNS_____________________________________//
-		if(p.toString() == "Pawn" && p.type() == 1){
+		if(p.toString() == "Pawn" && p.type() == WHITE){
 			// LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
 			if(p.jcoord()-1 >= 0){ // Guard for bounds
 			if(pieces[p.icoord()][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-				possiblemoves[p.icoord()][p.jcoord()-1]=new PiecePawn(1,p.icoord(),p.jcoord()-1,false);
+				possiblemoves[p.icoord()][p.jcoord()-1]=new PiecePawn(WHITE, p.icoord(),p.jcoord()-1,false);
 			}}
 			
 			if(p.firstmove() == true){
 			// LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
 			if(pieces[p.icoord()][p.jcoord()-2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty") && pieces[p.icoord()][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-				possiblemoves[p.icoord()][p.jcoord()-2]=new PiecePawn(1,p.icoord(),p.jcoord()-2,false);
+				possiblemoves[p.icoord()][p.jcoord()-2]=new PiecePawn(WHITE, p.icoord(),p.jcoord()-2,false);
 			}}
 	
 			// LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
 			if(p.icoord()-1 >= 0 && p.jcoord()-1 >= 0){
-			if(pieces[p.icoord()-1][p.jcoord()-1].type() == 2){
-				possiblemoves[p.icoord()-1][p.jcoord()-1]=new PiecePawn(1,p.icoord()-1,p.jcoord()-1,false);
+			if(pieces[p.icoord()-1][p.jcoord()-1].type() == BLACK){
+				possiblemoves[p.icoord()-1][p.jcoord()-1]=new PiecePawn(WHITE, p.icoord()-1,p.jcoord()-1,false);
 			}}
 		
 			// LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
 			if(p.icoord()+1 < 8 && p.jcoord()-1 >= 0){
-			if(pieces[p.icoord()+1][p.jcoord()-1].type() == 2){
-				possiblemoves[p.icoord()+1][p.jcoord()-1]=new PiecePawn(1,p.icoord()+1,p.jcoord()-1,false);
+			if(pieces[p.icoord()+1][p.jcoord()-1].type() == BLACK){
+				possiblemoves[p.icoord()+1][p.jcoord()-1]=new PiecePawn(WHITE, p.icoord()+1,p.jcoord()-1,false);
 			}}
 		}
 			
 			//_____________________________________BLACKPAWNS_____________________________________//
-			if(p.toString() == "Pawn" && p.type() == 2){
+			if(p.toString() == "Pawn" && p.type() == BLACK){
 				// LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
 				if(p.jcoord()+1 < 8){ // Guard for bounds
 				if(pieces[p.icoord()][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()+1] = new PiecePawn(2,p.icoord(),p.jcoord()+1,false);
+					possiblemoves[p.icoord()][p.jcoord()+1] = new PiecePawn(BLACK, p.icoord(),p.jcoord()+1,false);
 				}}
 				
 				if(p.firstmove() == true){
 				// LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
 				if(pieces[p.icoord()][p.jcoord()+2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty") && pieces[p.icoord()][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()+2] = new PiecePawn(2,p.icoord(),p.jcoord()+2,false);
+					possiblemoves[p.icoord()][p.jcoord()+2] = new PiecePawn(BLACK, p.icoord(),p.jcoord()+2,false);
 				}}
 		
 				// LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
 				if(p.icoord()-1 >= 0 && p.jcoord()+1 < 8){
-				if(pieces[p.icoord()-1][p.jcoord()+1].type() == 1){
-					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PiecePawn(2,p.icoord()-1,p.jcoord()+1,false);
+				if(pieces[p.icoord()-1][p.jcoord()+1].type() == WHITE){
+					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PiecePawn(BLACK, p.icoord()-1,p.jcoord()+1,false);
 				}}
 			
 				// LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
 				if(p.icoord()+1 < 8 && p.jcoord()+1 < 8){
-				if(pieces[p.icoord()+1][p.jcoord()+1].type() == 1){
-					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PiecePawn(2,p.icoord()+1,p.jcoord()+1,false);
+				if(pieces[p.icoord()+1][p.jcoord()+1].type() == WHITE){
+					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PiecePawn(BLACK, p.icoord()+1,p.jcoord()+1,false);
 				}}
 			}
 		
 			//__________________________________________WHITEROOK_____________________________________//
-			if(p.toString() == "Rook" && p.type() == 1){	
+			if(p.toString() == "Rook" && p.type() == WHITE){	
 				// Look Up ..
 				for(int y = p.jcoord()-1; y >= 0; y--){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceRook(1,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceRook(WHITE, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==2){
-						possiblemoves[p.icoord()][y] = new PieceRook(1,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == BLACK){
+						possiblemoves[p.icoord()][y] = new PieceRook(WHITE, p.icoord(),y);
 					// Stop looking
 					y=-1;
 					}
-					if(y!=-1 && pieces[p.icoord()][y].type()==1){
+					if(y!=-1 && pieces[p.icoord()][y].type() == WHITE){
 					// Stop looking
 					y=-1;
 					}
@@ -156,14 +159,14 @@ public class GameLogic implements Cloneable {
 				// Look Right ..
 				for(int x = p.icoord()+1; x < 8; x++){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceRook(1,x,p.jcoord());	
+						possiblemoves[x][p.jcoord()] = new PieceRook(WHITE, x,p.jcoord());	
 					}
-					if(pieces[x][p.jcoord()].type()==2){
-						possiblemoves[x][p.jcoord()] = new PieceRook(1,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == BLACK){
+						possiblemoves[x][p.jcoord()] = new PieceRook(WHITE, x,p.jcoord());
 					// Stop looking
 					x=8;
 					}
-					if(x!=8 && pieces[x][p.jcoord()].type()==1){
+					if(x!=8 && pieces[x][p.jcoord()].type() == WHITE){
 					// Stop looking
 					x=8;
 					}
@@ -172,14 +175,14 @@ public class GameLogic implements Cloneable {
 				// Look Left ..
 				for(int x = p.icoord()-1; x >= 0; x--){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceRook(1,x,p.jcoord());
+						possiblemoves[x][p.jcoord()] = new PieceRook(WHITE, x,p.jcoord());
 					}
-					if(pieces[x][p.jcoord()].type()==2){
-						possiblemoves[x][p.jcoord()] = new PieceRook(1,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == BLACK){
+						possiblemoves[x][p.jcoord()] = new PieceRook(WHITE, x,p.jcoord());
 					// Stop looking
 					x=-1;
 					}
-					if(x!=-1 && pieces[x][p.jcoord()].type()==1){
+					if(x!=-1 && pieces[x][p.jcoord()].type() == WHITE){
 					// Stop looking
 					x=-1;
 					}
@@ -188,14 +191,14 @@ public class GameLogic implements Cloneable {
 				// Look Down ..
 				for(int y = p.jcoord()+1; y < 8; y++){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceRook(1,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceRook(WHITE, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==2){
-						possiblemoves[p.icoord()][y] = new PieceRook(1,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == BLACK){
+						possiblemoves[p.icoord()][y] = new PieceRook(WHITE, p.icoord(),y);
 					// Stop looking
 					y=8;
 					}
-					if(y!=8 && pieces[p.icoord()][y].type()==1 && y!=8){
+					if(y!=8 && pieces[p.icoord()][y].type() == WHITE && y!=8){
 					// Stop looking
 					y=8;
 					}
@@ -204,18 +207,18 @@ public class GameLogic implements Cloneable {
 			
 			//__________________________________________BLACKROOK_____________________________________//
 			
-			if(p.toString() == "Rook" && p.type() == 2){
+			if(p.toString() == "Rook" && p.type() == BLACK){
 				// Look Up ..
 				for(int y = p.jcoord()-1; y >= 0; y--){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceRook(2,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceRook(BLACK, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==1){
-						possiblemoves[p.icoord()][y] = new PieceRook(2,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == WHITE){
+						possiblemoves[p.icoord()][y] = new PieceRook(BLACK, p.icoord(),y);
 					// Stop looking
 					y=-1;
 					}
-					if(y!=-1 && pieces[p.icoord()][y].type()==2){
+					if(y!=-1 && pieces[p.icoord()][y].type() == BLACK){
 					// Stop looking
 					y=-1;
 					}
@@ -224,14 +227,14 @@ public class GameLogic implements Cloneable {
 				// Look Right ..
 				for(int x = p.icoord()+1; x < 8; x++){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceRook(2,x,p.jcoord());
+						possiblemoves[x][p.jcoord()] = new PieceRook(BLACK, x,p.jcoord());
 					}
-					if(pieces[x][p.jcoord()].type()==1){
-						possiblemoves[x][p.jcoord()] = new PieceRook(2,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == WHITE){
+						possiblemoves[x][p.jcoord()] = new PieceRook(BLACK, x,p.jcoord());
 					// Stop looking
 					x=8;
 					}
-					if(x!=8 && pieces[x][p.jcoord()].type()==2){
+					if(x!=8 && pieces[x][p.jcoord()].type() == BLACK){
 					// Stop looking
 					x=8;
 					}
@@ -240,14 +243,14 @@ public class GameLogic implements Cloneable {
 				// Look Left ..
 				for(int x = p.icoord()-1; x >= 0; x--){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceRook(2,x,p.jcoord());
+						possiblemoves[x][p.jcoord()] = new PieceRook(BLACK, x,p.jcoord());
 					}
-					if(pieces[x][p.jcoord()].type()==1){
-						possiblemoves[x][p.jcoord()] = new PieceRook(2,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == WHITE){
+						possiblemoves[x][p.jcoord()] = new PieceRook(BLACK, x,p.jcoord());
 					// Stop looking
 					x=-1;
 					}
-					if(x!=-1 && pieces[x][p.jcoord()].type()==2){
+					if(x!=-1 && pieces[x][p.jcoord()].type() == BLACK){
 					// Stop looking
 					x=-1;
 					}
@@ -256,14 +259,14 @@ public class GameLogic implements Cloneable {
 				// Look Down ..
 				for(int y = p.jcoord()+1; y < 8; y++){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceRook(2,p.icoord(),y);
+						possiblemoves[p.icoord()][y] = new PieceRook(BLACK, p.icoord(),y);
 					}
-					if(pieces[p.icoord()][y].type()==1){
-						possiblemoves[p.icoord()][y] = new PieceRook(2,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == WHITE){
+						possiblemoves[p.icoord()][y] = new PieceRook(BLACK, p.icoord(),y);
 					// Stop looking
 					y=8;
 					}
-					if(y!=8 && pieces[p.icoord()][y].type()==2){
+					if(y!=8 && pieces[p.icoord()][y].type() == BLACK){
 					// Stop looking
 					y=8;
 					}
@@ -271,18 +274,18 @@ public class GameLogic implements Cloneable {
 			}
 	
 			//__________________________________________WHITEBISHOP_____________________________________//
-			if(p.toString() == "Bishop" && p.type() == 1){
+			if(p.toString() == "Bishop" && p.type() == WHITE){
 				// Look up .. (left)
 				for(int y=p.jcoord()-1, x=p.icoord()-1; y >= 0 && x >= 0; y--,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					// Stop Looking
 					x=-1; y=-1;
 					}
-					if(x!=-1 && y!=-1 && pieces[x][y].type()==1){
+					if(x!=-1 && y!=-1 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=-1; y=-1;
 					}
@@ -291,14 +294,14 @@ public class GameLogic implements Cloneable {
 				// Look up .. (right)
 				for(int y=p.jcoord()-1, x=p.icoord()+1; y >= 0 && x < 8; y--,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					// Stop Looking
 					x=8; y=-1;
 					}
-					if(x!=8 && y!=-1 && pieces[x][y].type()==1){
+					if(x!=8 && y!=-1 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=8; y=-1;
 					}
@@ -307,14 +310,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (left)
 				for(int y=p.jcoord()+1, x=p.icoord()-1; y < 8 && x >= 0; y++,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					// Stop Looking
 					x=-1; y=8;
 					}
-					if(x!=-1 && y!=8 && pieces[x][y].type()==1){
+					if(x!=-1 && y!=8 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=-1; y=8;
 					}
@@ -323,32 +326,32 @@ public class GameLogic implements Cloneable {
 				// Look down .. (right)
 				for(int y=p.jcoord()+1, x=p.icoord()+1; y < 8 && x < 8; y++,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceBishop(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceBishop(WHITE, x,y);
 					// Stop Looking
 					x=8;y=8;
 					}
-					if(x!=8 && y!=8 && pieces[x][y].type()==1){
+					if(x!=8 && y!=8 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=8;y=8;
 					}
 				}
 			}
 			//__________________________________________BLACKBISHOP_____________________________________//
-			if(p.toString() == "Bishop" && p.type() == 2){
+			if(p.toString() == "Bishop" && p.type() == BLACK){
 				// Look up .. (left)
 				for(int y=p.jcoord()-1, x=p.icoord()-1; y >= 0 && x >= 0; y--,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					// Stop Looking
 					x=-1; y=-1;
 					}
-					if(x!=-1 && y!=-1 && pieces[x][y].type()==2){
+					if(x!=-1 && y!=-1 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=-1; y=-1;
 					}
@@ -357,14 +360,14 @@ public class GameLogic implements Cloneable {
 				// Look up .. (right)
 				for(int y=p.jcoord()-1, x=p.icoord()+1; y >= 0 && x < 8; y--,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					// Stop Looking
 					x=8;y=-1;
 					}
-					if(x!=8 && y!=-1 && pieces[x][y].type()==2){
+					if(x!=8 && y!=-1 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=8;y = -1;
 					}
@@ -373,14 +376,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (left)
 				for(int y=p.jcoord()+1, x=p.icoord()-1; y < 8 && x >= 0; y++,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					// Stop Looking
 					x= -1; y = 8;
 					}
-					if(x!=-1 && y!=8 && pieces[x][y].type()==2){
+					if(x!=-1 && y!=8 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x = -1; y = 8;
 					}
@@ -389,14 +392,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (right)
 				for(int y=p.jcoord()+1, x=p.icoord()+1; y < 8 && x < 8; y++,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceBishop(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceBishop(BLACK, x,y);
 					// Stop Looking
 					x=8;y=8;
 					}
-					if(x!=8 && y!=8 && pieces[x][y].type()==2){
+					if(x!=8 && y!=8 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=8;y=8;
 					}
@@ -407,185 +410,185 @@ public class GameLogic implements Cloneable {
 			
 			// Assuming knights can jump regardless of what pieces are in the way
 			
-			if(p.toString() == "Knight" && p.type() == 1){
+			if(p.toString() == "Knight" && p.type() == WHITE){
 				// Up and left (first)
 				if(p.icoord()-1 >= 0 && p.jcoord()-2 >= 0){				// Bound check
 					if(pieces[p.icoord()-1][p.jcoord()-2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(1,p.icoord()-1,p.jcoord()-2);
+						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(WHITE, p.icoord()-1,p.jcoord()-2);
 					}
-					if(pieces[p.icoord()-1][p.jcoord()-2].type()==2){
-						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(1,p.icoord()-1,p.jcoord()-2);
+					if(pieces[p.icoord()-1][p.jcoord()-2].type() == BLACK){
+						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(WHITE, p.icoord()-1,p.jcoord()-2);
 					}
 				}
 				
 				// Up and left (second)
 				if(p.icoord()-2 >= 0 && p.jcoord()-1 >= 0){				// Bound check
 					if(pieces[p.icoord()-2][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(1,p.icoord()-2,p.jcoord()-1);
+						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(WHITE, p.icoord()-2,p.jcoord()-1);
 					}
-					if(pieces[p.icoord()-2][p.jcoord()-1].type()==2){
-						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(1,p.icoord()-2,p.jcoord()-1);
+					if(pieces[p.icoord()-2][p.jcoord()-1].type() == BLACK){
+						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(WHITE, p.icoord()-2,p.jcoord()-1);
 					}
 				}
 				
 				// Up and right (first)
 				if(p.icoord()+1 < 8 && p.jcoord()-2 >= 0){				// Bound check
 					if(pieces[p.icoord()+1][p.jcoord()-2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(1,p.icoord()+1,p.jcoord()-2);
+						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(WHITE, p.icoord()+1,p.jcoord()-2);
 					}
-					if(pieces[p.icoord()+1][p.jcoord()-2].type()==2){
-						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(1,p.icoord()+1,p.jcoord()-2);
+					if(pieces[p.icoord()+1][p.jcoord()-2].type() == BLACK){
+						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(WHITE, p.icoord()+1,p.jcoord()-2);
 					}
 				}
 				
 				// Up and right (second)
 				if(p.icoord()+2 < 8 && p.jcoord()-1 >= 0){				// Bound check
 					if(pieces[p.icoord()+2][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(1,p.icoord()+2,p.jcoord()-1);
+						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(WHITE, p.icoord()+2,p.jcoord()-1);
 					}
-					if(pieces[p.icoord()+2][p.jcoord()-1].type()==2){
-						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(1,p.icoord()+2,p.jcoord()-1);
+					if(pieces[p.icoord()+2][p.jcoord()-1].type() == BLACK){
+						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(WHITE, p.icoord()+2,p.jcoord()-1);
 					}
 				}
 				
 				// Bottom and right (first)
 				if(p.icoord()+1 < 8 && p.jcoord()+2 < 8){				// Bound check
 					if(pieces[p.icoord()+1][p.jcoord()+2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(1,p.icoord()+1,p.jcoord()+2);
+						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(WHITE, p.icoord()+1,p.jcoord()+2);
 					}
-					if(pieces[p.icoord()+1][p.jcoord()+2].type()==2){
-						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(1,p.icoord()+1,p.jcoord()+2);
+					if(pieces[p.icoord()+1][p.jcoord()+2].type() == BLACK){
+						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(WHITE, p.icoord()+1,p.jcoord()+2);
 					}
 				}
 				
 				// Bottom and right (second)
 				if(p.icoord()+2 < 8 && p.jcoord()+1 < 8){				// Bound check
 					if(pieces[p.icoord()+2][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(1,p.icoord()+2,p.jcoord()+1);
+						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(WHITE, p.icoord()+2,p.jcoord()+1);
 					}
-					if(pieces[p.icoord()+2][p.jcoord()+1].type()==2){
-						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(1,p.icoord()+2,p.jcoord()+1);
+					if(pieces[p.icoord()+2][p.jcoord()+1].type() == BLACK){
+						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(WHITE, p.icoord()+2,p.jcoord()+1);
 					}
 				}
 				
 				// Bottom and left (first)
 				if(p.icoord()-1 >= 0 && p.jcoord()+2 < 8){				// Bound check
 					if(pieces[p.icoord()-1][p.jcoord()+2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(1,p.icoord()-1,p.jcoord()+2);
+						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(WHITE, p.icoord()-1,p.jcoord()+2);
 					}
-					if(pieces[p.icoord()-1][p.jcoord()+2].type()==2){
-						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(1,p.icoord()-1,p.jcoord()+2);
+					if(pieces[p.icoord()-1][p.jcoord()+2].type() == BLACK){
+						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(WHITE, p.icoord()-1,p.jcoord()+2);
 					}
 				}
 				
 				// Bottom and left (second)
 				if(p.icoord()-2 >= 0 && p.jcoord()+1 < 8){				// Bound check
 					if(pieces[p.icoord()-2][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(1,p.icoord()-2,p.jcoord()+1);
+						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(WHITE, p.icoord()-2,p.jcoord()+1);
 					}
-					if(pieces[p.icoord()-2][p.jcoord()+1].type()==2){
-						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(1,p.icoord()-2,p.jcoord()+1);
+					if(pieces[p.icoord()-2][p.jcoord()+1].type() == BLACK){
+						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(WHITE, p.icoord()-2,p.jcoord()+1);
 					}
 				}	
 			}
 			
 			//_________________________________BLACKKNIGHT_____________________________________//
-			if(p.toString() == "Knight" && p.type() == 2){
+			if(p.toString() == "Knight" && p.type() == BLACK){
 				// Up and left (first)
 				if(p.icoord()-1 >= 0 && p.jcoord()-2 >= 0){				// Bound check
 					if(pieces[p.icoord()-1][p.jcoord()-2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(2,p.icoord()-1,p.jcoord()-2);
+						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(BLACK, p.icoord()-1,p.jcoord()-2);
 					}
-					if(pieces[p.icoord()-1][p.jcoord()-2].type()==1){
-						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(2,p.icoord()-1,p.jcoord()-2);
+					if(pieces[p.icoord()-1][p.jcoord()-2].type() == WHITE){
+						possiblemoves[p.icoord()-1][p.jcoord()-2] = new PieceKnight(BLACK, p.icoord()-1,p.jcoord()-2);
 					}
 				}
 				
 				// Up and left (second)
 				if(p.icoord()-2 >= 0 && p.jcoord()-1 >= 0){				// Bound check
 					if(pieces[p.icoord()-2][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(2,p.icoord()-2,p.jcoord()-1);
+						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(BLACK, p.icoord()-2,p.jcoord()-1);
 					}
-					if(pieces[p.icoord()-2][p.jcoord()-1].type()==1){
-						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(2,p.icoord()-2,p.jcoord()-1);
+					if(pieces[p.icoord()-2][p.jcoord()-1].type() == WHITE){
+						possiblemoves[p.icoord()-2][p.jcoord()-1] = new PieceKnight(BLACK, p.icoord()-2,p.jcoord()-1);
 					}
 				}
 				
 				// Up and right (first)
 				if(p.icoord()+1 < 8 && p.jcoord()-2 >= 0){				// Bound check
 					if(pieces[p.icoord()+1][p.jcoord()-2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(2,p.icoord()+1,p.jcoord()-2);
+						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(BLACK, p.icoord()+1,p.jcoord()-2);
 					}
-					if(pieces[p.icoord()+1][p.jcoord()-2].type()==1){
-						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(2,p.icoord()+1,p.jcoord()-2);
+					if(pieces[p.icoord()+1][p.jcoord()-2].type() == WHITE){
+						possiblemoves[p.icoord()+1][p.jcoord()-2] = new PieceKnight(BLACK, p.icoord()+1,p.jcoord()-2);
 					}
 				}
 				
 				// Up and right (second)
 				if(p.icoord()+2 < 8 && p.jcoord()-1 >= 0){				// Bound check
 					if(pieces[p.icoord()+2][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(2,p.icoord()+2,p.jcoord()-1);
+						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(BLACK, p.icoord()+2,p.jcoord()-1);
 					}
-					if(pieces[p.icoord()+2][p.jcoord()-1].type()==1){
-						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(2,p.icoord()+2,p.jcoord()-1);
+					if(pieces[p.icoord()+2][p.jcoord()-1].type() == WHITE){
+						possiblemoves[p.icoord()+2][p.jcoord()-1] = new PieceKnight(BLACK, p.icoord()+2,p.jcoord()-1);
 					}
 				}
 				
 				// Bottom and right (first)
 				if(p.icoord()+1 < 8 && p.jcoord()+2 < 8){				// Bound check
 					if(pieces[p.icoord()+1][p.jcoord()+2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(2,p.icoord()+1,p.jcoord()+2);
+						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(BLACK, p.icoord()+1,p.jcoord()+2);
 					}
-					if(pieces[p.icoord()+1][p.jcoord()+2].type()==1){
-						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(2,p.icoord()+1,p.jcoord()+2);
+					if(pieces[p.icoord()+1][p.jcoord()+2].type() == WHITE){
+						possiblemoves[p.icoord()+1][p.jcoord()+2] = new PieceKnight(BLACK, p.icoord()+1,p.jcoord()+2);
 					}
 				}
 				
 				// Bottom and right (second)
 				if(p.icoord()+2 < 8 && p.jcoord()+1 < 8){				// Bound check
 					if(pieces[p.icoord()+2][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(2,p.icoord()+2,p.jcoord()+1);
+						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(BLACK, p.icoord()+2,p.jcoord()+1);
 					}
-					if(pieces[p.icoord()+2][p.jcoord()+1].type()==1){
-						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(2,p.icoord()+2,p.jcoord()+1);
+					if(pieces[p.icoord()+2][p.jcoord()+1].type() == WHITE){
+						possiblemoves[p.icoord()+2][p.jcoord()+1] = new PieceKnight(BLACK, p.icoord()+2,p.jcoord()+1);
 					}
 				}
 				
 				// Bottom and left (first)
 				if(p.icoord()-1 >= 0 && p.jcoord()+2 < 8){				// Bound check
 					if(pieces[p.icoord()-1][p.jcoord()+2].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(2,p.icoord()-1,p.jcoord()+2);
+						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(BLACK, p.icoord()-1,p.jcoord()+2);
 					}
-					if(pieces[p.icoord()-1][p.jcoord()+2].type()==1){
-						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(2,p.icoord()-1,p.jcoord()+2);
+					if(pieces[p.icoord()-1][p.jcoord()+2].type() == WHITE){
+						possiblemoves[p.icoord()-1][p.jcoord()+2] = new PieceKnight(BLACK, p.icoord()-1,p.jcoord()+2);
 					}
 				}
 				
 				// Bottom and left (second)
 				if(p.icoord()-2 >= 0 && p.jcoord()+1 < 8){				// Bound check
 					if(pieces[p.icoord()-2][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(2,p.icoord()-2,p.jcoord()+1);
+						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(BLACK, p.icoord()-2,p.jcoord()+1);
 					}
-					if(pieces[p.icoord()-2][p.jcoord()+1].type()==1){
-						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(2,p.icoord()-2,p.jcoord()+1);
+					if(pieces[p.icoord()-2][p.jcoord()+1].type() == WHITE){
+						possiblemoves[p.icoord()-2][p.jcoord()+1] = new PieceKnight(BLACK, p.icoord()-2,p.jcoord()+1);
 					}
 				}
 				
 			}
 			
 			//______________________________WHITEQUEEN_____________________________________//
-			if(p.toString() == "Queen" && p.type() == 1){
+			if(p.toString() == "Queen" && p.type() == WHITE){
 				// Look up .. (left)
 				for(int y=p.jcoord()-1, x=p.icoord()-1; y >= 0 && x >= 0; y--,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					// Stop Looking
 					x=-1; y=-1;
 					}
-					if(x!=-1 && y!=-1 && pieces[x][y].type()==1){
+					if(x!=-1 && y!=-1 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=-1; y=-1;
 					}
@@ -594,14 +597,14 @@ public class GameLogic implements Cloneable {
 				// Look up .. (right)
 				for(int y=p.jcoord()-1, x=p.icoord()+1; y >= 0 && x < 8; y--,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					// Stop Looking
 					x=8; y=-1;
 					}
-					if(x!=8 && y!=-1 && pieces[x][y].type()==1){
+					if(x!=8 && y!=-1 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=8; y=-1;
 					}
@@ -610,14 +613,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (left)
 				for(int y=p.jcoord()+1, x=p.icoord()-1; y < 8 && x >= 0; y++,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					// Stop Looking
 					x=-1;y=8;
 					}
-					if(x!=-1 && y!=8 && pieces[x][y].type()==1){
+					if(x!=-1 && y!=8 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=-1;y=8;
 					}
@@ -626,14 +629,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (right)
 				for(int y=p.jcoord()+1, x=p.icoord()+1; y < 8 && x < 8; y++,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					}
-					if(pieces[x][y].type()==2){
-						possiblemoves[x][y] = new PieceQueen(1,x,y);
+					if(pieces[x][y].type() == BLACK){
+						possiblemoves[x][y] = new PieceQueen(WHITE, x,y);
 					// Stop Looking
 					x=8;y=8;
 					}
-					if(x!=8 && y!=8 && pieces[x][y].type()==1){
+					if(x!=8 && y!=8 && pieces[x][y].type() == WHITE){
 					// Stop Looking
 					x=8;y=8;
 					}
@@ -642,14 +645,14 @@ public class GameLogic implements Cloneable {
 				// Look Up ..
 				for(int y = p.jcoord()-1; y >= 0; y--){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceQueen(1,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceQueen(WHITE, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==2){
-						possiblemoves[p.icoord()][y] = new PieceQueen(1,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == BLACK){
+						possiblemoves[p.icoord()][y] = new PieceQueen(WHITE, p.icoord(),y);
 					// Stop looking
 					y=-1;
 					}
-					if(y!=-1 && pieces[p.icoord()][y].type()==1){
+					if(y!=-1 && pieces[p.icoord()][y].type() == WHITE){
 					// Stop looking
 					y=-1;
 					}
@@ -658,14 +661,14 @@ public class GameLogic implements Cloneable {
 				// Look Right ..
 				for(int x = p.icoord()+1; x < 8; x++){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(1,x,p.jcoord());	
+						possiblemoves[x][p.jcoord()] = new PieceQueen(WHITE, x,p.jcoord());	
 					}
-					if(pieces[x][p.jcoord()].type()==2){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(1,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == BLACK){
+						possiblemoves[x][p.jcoord()] = new PieceQueen(WHITE, x,p.jcoord());
 					// Stop looking
 					x=8;
 					}
-					if(x!=8 && pieces[x][p.jcoord()].type()==1){
+					if(x!=8 && pieces[x][p.jcoord()].type() == WHITE){
 					// Stop looking
 					x=8;
 					}
@@ -674,14 +677,14 @@ public class GameLogic implements Cloneable {
 				// Look Left ..
 				for(int x = p.icoord()-1; x >= 0; x--){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(1,x,p.jcoord());
+						possiblemoves[x][p.jcoord()] = new PieceQueen(WHITE, x,p.jcoord());
 					}
-					if(pieces[x][p.jcoord()].type()==2){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(1,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == BLACK){
+						possiblemoves[x][p.jcoord()] = new PieceQueen(WHITE, x,p.jcoord());
 					// Stop looking
 					x=-1;
 					}
-					if(x!=-1 && pieces[x][p.jcoord()].type()==1){
+					if(x!=-1 && pieces[x][p.jcoord()].type() == WHITE){
 					// Stop looking
 					x=-1;
 					}
@@ -690,14 +693,14 @@ public class GameLogic implements Cloneable {
 				// Look Down ..
 				for(int y = p.jcoord()+1; y < 8; y++){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceQueen(1,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceQueen(WHITE, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==2){
-						possiblemoves[p.icoord()][y] = new PieceQueen(1,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == BLACK){
+						possiblemoves[p.icoord()][y] = new PieceQueen(WHITE, p.icoord(),y);
 					// Stop looking
 					y=8;
 					}
-					if(y!=8 && pieces[p.icoord()][y].type()==1 && y!=8){
+					if(y!=8 && pieces[p.icoord()][y].type() == WHITE && y!=8){
 					// Stop looking
 					y=8;
 					}
@@ -705,18 +708,18 @@ public class GameLogic implements Cloneable {
 			}
 			
 			//______________________________BLACKQUEEN_____________________________________//
-			if(p.toString() == "Queen" && p.type() == 2){
+			if(p.toString() == "Queen" && p.type() == BLACK){
 				// Look up .. (left)
 				for(int y=p.jcoord()-1, x=p.icoord()-1; y >= 0 && x >= 0; y--,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					// Stop Looking
 					x=-1;y=-1;
 					}
-					if(x!=-1 && y!=-1 && pieces[x][y].type()==2){
+					if(x!=-1 && y!=-1 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=-1;y=-1;
 					}
@@ -725,14 +728,14 @@ public class GameLogic implements Cloneable {
 				// Look up .. (right)
 				for(int y=p.jcoord()-1, x=p.icoord()+1; y >= 0 && x < 8; y--,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					// Stop Looking
 					x=8;y=-1;
 					}
-					if(x!=8 && y!=-1 && pieces[x][y].type()==2){
+					if(x!=8 && y!=-1 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=8;y=-1;
 					}
@@ -741,14 +744,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (left)
 				for(int y=p.jcoord()+1, x=p.icoord()-1; y < 8 && x >= 0; y++,x--){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					// Stop Looking
 					x=-1;y=8;
 					}
-					if(x!=-1 && y!=8 && pieces[x][y].type()==2){
+					if(x!=-1 && y!=8 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=-1;y=8;
 					}
@@ -757,14 +760,14 @@ public class GameLogic implements Cloneable {
 				// Look down .. (right)
 				for(int y=p.jcoord()+1, x=p.icoord()+1; y < 8 && x < 8; y++,x++){
 					if(pieces[x][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					}
-					if(pieces[x][y].type()==1){
-						possiblemoves[x][y] = new PieceQueen(2,x,y);
+					if(pieces[x][y].type() == WHITE){
+						possiblemoves[x][y] = new PieceQueen(BLACK, x,y);
 					// Stop Looking
 					x=8;y=8;
 					}
-					if(x!=8 && y!=8 && pieces[x][y].type()==2){
+					if(x!=8 && y!=8 && pieces[x][y].type() == BLACK){
 					// Stop Looking
 					x=8;y=8;
 					}
@@ -773,14 +776,14 @@ public class GameLogic implements Cloneable {
 				// Look Up ..
 				for(int y = p.jcoord()-1; y >= 0; y--){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceQueen(2,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceQueen(BLACK, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==1){
-						possiblemoves[p.icoord()][y] = new PieceQueen(2,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == WHITE){
+						possiblemoves[p.icoord()][y] = new PieceQueen(BLACK, p.icoord(),y);
 					// Stop looking
 					y=-1;
 					}
-					if(y!=-1 && pieces[p.icoord()][y].type()==2){
+					if(y!=-1 && pieces[p.icoord()][y].type() == BLACK){
 					// Stop looking
 					y=-1;
 					}
@@ -789,14 +792,14 @@ public class GameLogic implements Cloneable {
 				// Look Right ..
 				for(int x = p.icoord()+1; x < 8; x++){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(2,x,p.jcoord());	
+						possiblemoves[x][p.jcoord()] = new PieceQueen(BLACK, x,p.jcoord());	
 					}
-					if(pieces[x][p.jcoord()].type()==1){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(2,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == WHITE){
+						possiblemoves[x][p.jcoord()] = new PieceQueen(BLACK, x,p.jcoord());
 					// Stop looking
 					x=8;
 					}
-					if(x!=8 && pieces[x][p.jcoord()].type()==2){
+					if(x!=8 && pieces[x][p.jcoord()].type() == BLACK){
 					// Stop looking
 					x=8;
 					}
@@ -805,14 +808,14 @@ public class GameLogic implements Cloneable {
 				// Look Left ..
 				for(int x = p.icoord()-1; x >= 0; x--){
 					if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(2,x,p.jcoord());
+						possiblemoves[x][p.jcoord()] = new PieceQueen(BLACK, x,p.jcoord());
 					}
-					if(pieces[x][p.jcoord()].type()==1){
-						possiblemoves[x][p.jcoord()] = new PieceQueen(2,x,p.jcoord());
+					if(pieces[x][p.jcoord()].type() == WHITE){
+						possiblemoves[x][p.jcoord()] = new PieceQueen(BLACK, x,p.jcoord());
 					// Stop looking
 					x=-1;
 					}
-					if(x!=-1 && pieces[x][p.jcoord()].type()==2){
+					if(x!=-1 && pieces[x][p.jcoord()].type() == BLACK){
 					// Stop looking
 					x=-1;
 					}
@@ -821,14 +824,14 @@ public class GameLogic implements Cloneable {
 				// Look Down ..
 				for(int y = p.jcoord()+1; y < 8; y++){
 					if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-						possiblemoves[p.icoord()][y] = new PieceQueen(2,p.icoord(),y);	
+						possiblemoves[p.icoord()][y] = new PieceQueen(BLACK, p.icoord(),y);	
 					}
-					if(pieces[p.icoord()][y].type()==1){
-						possiblemoves[p.icoord()][y] = new PieceQueen(2,p.icoord(),y);
+					if(pieces[p.icoord()][y].type() == WHITE){
+						possiblemoves[p.icoord()][y] = new PieceQueen(BLACK, p.icoord(),y);
 					// Stop looking
 					y=8;
 					}
-					if(y!=8 && pieces[p.icoord()][y].type()==2 && y!=8){
+					if(y!=8 && pieces[p.icoord()][y].type() == BLACK && y!=8){
 					// Stop looking
 					y=8;
 					}
@@ -836,167 +839,167 @@ public class GameLogic implements Cloneable {
 			}
 	
 		//_________________________________WHITEKING_____________________________________//
-			if(p.toString() == "King" && p.type() == 1){
+			if(p.toString() == "King" && p.type() == WHITE){
 				// Up
 				if(p.jcoord()-1 >= 0){
 				if(pieces[p.icoord()][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(1,p.icoord(),p.jcoord()-1);
+					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(WHITE, p.icoord(),p.jcoord()-1);
 				}
-				if(pieces[p.icoord()][p.jcoord()-1].type()==2){
-					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(1,p.icoord(),p.jcoord()-1);
+				if(pieces[p.icoord()][p.jcoord()-1].type() == BLACK){
+					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(WHITE, p.icoord(),p.jcoord()-1);
 				}
 				}
 				
 				// Up - right
 				if(p.jcoord()-1 >= 0 && p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(1,p.icoord()+1,p.jcoord()-1);
+					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(WHITE, p.icoord()+1,p.jcoord()-1);
 				}
-				if(pieces[p.icoord()+1][p.jcoord()-1].type()==2){
-					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(1,p.icoord()+1,p.jcoord()-1);
+				if(pieces[p.icoord()+1][p.jcoord()-1].type() == BLACK){
+					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(WHITE, p.icoord()+1,p.jcoord()-1);
 				}
 				}
 				
 				// Up - left
 				if(p.jcoord()-1 >= 0 && p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(1,p.icoord()-1,p.jcoord()-1);
+					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(WHITE, p.icoord()-1,p.jcoord()-1);
 				}
-				if(pieces[p.icoord()-1][p.jcoord()-1].type()==2){
-					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(1,p.icoord()-1,p.jcoord()-1);
+				if(pieces[p.icoord()-1][p.jcoord()-1].type() == BLACK){
+					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(WHITE, p.icoord()-1,p.jcoord()-1);
 				}
 				}
 				
 				// Left
 				if(p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(1,p.icoord()-1,p.jcoord());
+					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(WHITE, p.icoord()-1,p.jcoord());
 				}
-				if(pieces[p.icoord()-1][p.jcoord()].type()==2){
-					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(1,p.icoord()-1,p.jcoord());
+				if(pieces[p.icoord()-1][p.jcoord()].type() == BLACK){
+					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(WHITE, p.icoord()-1,p.jcoord());
 				}
 				}
 				
 				// Right
 				if(p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(1,p.icoord()+1,p.jcoord());
+					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(WHITE, p.icoord()+1,p.jcoord());
 				}
-				if(pieces[p.icoord()+1][p.jcoord()].type()==2){
-					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(1,p.icoord()+1,p.jcoord());
+				if(pieces[p.icoord()+1][p.jcoord()].type() == BLACK){
+					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(WHITE, p.icoord()+1,p.jcoord());
 				}
 				}
 				
 				// Down
 				if(p.jcoord()+1 < 8){
 				if(pieces[p.icoord()][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(1,p.icoord(),p.jcoord()+1);
+					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(WHITE, p.icoord(),p.jcoord()+1);
 				}
-				if(pieces[p.icoord()][p.jcoord()+1].type()==2){
-					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(1,p.icoord(),p.jcoord()+1);
+				if(pieces[p.icoord()][p.jcoord()+1].type() == BLACK){
+					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(WHITE, p.icoord(),p.jcoord()+1);
 				}
 				}
 				
 				// Down - left
 				if(p.jcoord()+1 < 8 && p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(1,p.icoord()-1,p.jcoord()+1);
+					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(WHITE, p.icoord()-1,p.jcoord()+1);
 				}
-				if(pieces[p.icoord()-1][p.jcoord()+1].type()==2){
-					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(1,p.icoord()-1,p.jcoord()+1);
+				if(pieces[p.icoord()-1][p.jcoord()+1].type() == BLACK){
+					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(WHITE, p.icoord()-1,p.jcoord()+1);
 				}
 				}
 				
 				// Down - right
 				if(p.jcoord()+1 < 8 && p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(1,p.icoord()+1,p.jcoord()+1);
+					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(WHITE, p.icoord()+1,p.jcoord()+1);
 				}
-				if(pieces[p.icoord()+1][p.jcoord()+1].type()==2){
-					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(1,p.icoord()+1,p.jcoord()+1);
+				if(pieces[p.icoord()+1][p.jcoord()+1].type() == BLACK){
+					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(WHITE, p.icoord()+1,p.jcoord()+1);
 				}
 				}	
 			}
 			
 			//_________________________________BLACKKING_____________________________________//
-			if(p.toString() == "King" && p.type() == 2){
+			if(p.toString() == "King" && p.type() == BLACK){
 				// Up
 				if(p.jcoord()-1 >= 0){
 				if(pieces[p.icoord()][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(2,p.icoord(),p.jcoord()-1);
+					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(BLACK, p.icoord(),p.jcoord()-1);
 				}
-				if(pieces[p.icoord()][p.jcoord()-1].type()==1){
-					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(2,p.icoord(),p.jcoord()-1);
+				if(pieces[p.icoord()][p.jcoord()-1].type() == WHITE){
+					possiblemoves[p.icoord()][p.jcoord()-1] = new PieceKing(BLACK, p.icoord(),p.jcoord()-1);
 				}
 				}
 				
 				// Up - right
 				if(p.jcoord()-1 >= 0 && p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(2,p.icoord()+1,p.jcoord()-1);
+					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(BLACK, p.icoord()+1,p.jcoord()-1);
 				}
-				if(pieces[p.icoord()+1][p.jcoord()-1].type()==1){
-					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(2,p.icoord()+1,p.jcoord()-1);
+				if(pieces[p.icoord()+1][p.jcoord()-1].type() == WHITE){
+					possiblemoves[p.icoord()+1][p.jcoord()-1] = new PieceKing(BLACK, p.icoord()+1,p.jcoord()-1);
 				}
 				}
 				
 				// Up - left
 				if(p.jcoord()-1 >= 0 && p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()-1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(2,p.icoord()-1,p.jcoord()-1);
+					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(BLACK, p.icoord()-1,p.jcoord()-1);
 				}
-				if(pieces[p.icoord()-1][p.jcoord()-1].type()==1){
-					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(2,p.icoord()-1,p.jcoord()-1);
+				if(pieces[p.icoord()-1][p.jcoord()-1].type() == WHITE){
+					possiblemoves[p.icoord()-1][p.jcoord()-1] = new PieceKing(BLACK, p.icoord()-1,p.jcoord()-1);
 				}
 				}
 				
 				// Left
 				if(p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(2,p.icoord()-1,p.jcoord());
+					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(BLACK, p.icoord()-1,p.jcoord());
 				}
-				if(pieces[p.icoord()-1][p.jcoord()].type()==1){
-					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(2,p.icoord()-1,p.jcoord());
+				if(pieces[p.icoord()-1][p.jcoord()].type() == WHITE){
+					possiblemoves[p.icoord()-1][p.jcoord()] = new PieceKing(BLACK, p.icoord()-1,p.jcoord());
 				}
 				}
 				
 				// Right
 				if(p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(2,p.icoord()+1,p.jcoord());
+					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(BLACK, p.icoord()+1,p.jcoord());
 				}
-				if(pieces[p.icoord()+1][p.jcoord()].type()==1){
-					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(2,p.icoord()+1,p.jcoord());
+				if(pieces[p.icoord()+1][p.jcoord()].type() == WHITE){
+					possiblemoves[p.icoord()+1][p.jcoord()] = new PieceKing(BLACK, p.icoord()+1,p.jcoord());
 				}
 				}
 				
 				// Down
 				if(p.jcoord()+1 < 8){
 				if(pieces[p.icoord()][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(2,p.icoord(),p.jcoord()+1);
+					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(BLACK, p.icoord(),p.jcoord()+1);
 				}
-				if(pieces[p.icoord()][p.jcoord()+1].type()==1){
-					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(2,p.icoord(),p.jcoord()+1);
+				if(pieces[p.icoord()][p.jcoord()+1].type() == WHITE){
+					possiblemoves[p.icoord()][p.jcoord()+1] = new PieceKing(BLACK, p.icoord(),p.jcoord()+1);
 				}
 				}
 				
 				// Down - left
 				if(p.jcoord()+1 < 8 && p.icoord()-1 >= 0){
 				if(pieces[p.icoord()-1][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(2,p.icoord()-1,p.jcoord()+1);
+					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(BLACK, p.icoord()-1,p.jcoord()+1);
 				}
-				if(pieces[p.icoord()-1][p.jcoord()+1].type()==1){
-					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(2,p.icoord()-1,p.jcoord()+1);
+				if(pieces[p.icoord()-1][p.jcoord()+1].type() == WHITE){
+					possiblemoves[p.icoord()-1][p.jcoord()+1] = new PieceKing(BLACK, p.icoord()-1,p.jcoord()+1);
 				}
 				}
 				
 				// Down - right
 				if(p.jcoord()+1 < 8 && p.icoord()+1 < 8){
 				if(pieces[p.icoord()+1][p.jcoord()+1].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
-					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(2,p.icoord()+1,p.jcoord()+1);
+					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(BLACK, p.icoord()+1,p.jcoord()+1);
 				}
-				if(pieces[p.icoord()+1][p.jcoord()+1].type()==1){
-					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(2,p.icoord()+1,p.jcoord()+1);
+				if(pieces[p.icoord()+1][p.jcoord()+1].type() == WHITE){
+					possiblemoves[p.icoord()+1][p.jcoord()+1] = new PieceKing(BLACK, p.icoord()+1,p.jcoord()+1);
 				}
 				}	
 			}
@@ -1006,9 +1009,9 @@ public class GameLogic implements Cloneable {
 	}
 	
 	// Check if player is in check
-	public boolean check4check(int current_player, Piece[][] boardstate){
-		if(current_player==1){otherplayer=2;currentplayer=1;}
-		else{otherplayer=1; currentplayer=2;}
+	public boolean check4check(Piece.PieceColor current_player, Piece[][] boardstate){
+		if(current_player==WHITE){otherplayer=BLACK;currentplayer=WHITE;}
+		else{otherplayer=WHITE; currentplayer=BLACK;}
 		
 		// For loop to go through each piece and see if it can target the king
 		for(int xi=0; xi < 8; xi++){

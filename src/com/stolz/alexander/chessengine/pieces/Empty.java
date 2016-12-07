@@ -1,14 +1,13 @@
 package com.stolz.alexander.chessengine.pieces;
 
-import com.stolz.alexander.chessengine.pieces.Piece;
+import javafx.scene.shape.Rectangle;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Empty extends Piece {
-	private int i;
-	private int j;
-	private String name = "com.stolz.alexander.chessengine.pieces.Empty";
 
-	public Empty(int type, int ii, int jj) {
+	public Empty(PieceColor type, int ii, int jj) {
 		super(type);
+		name = "com.stolz.alexander.chessengine.pieces.Empty";
 		i = ii;
 		j = jj;
 	}
@@ -34,10 +33,9 @@ public class Empty extends Piece {
 		
 		else{return j;}
 	}
-	
-	@Override
-	public String toString(){
-		return name;
-	}
 
+	@Override
+	public void drawValidMoves(Piece[][] pieces, Rectangle[][] board) {
+		throw new NotImplementedException();
+	}
 }

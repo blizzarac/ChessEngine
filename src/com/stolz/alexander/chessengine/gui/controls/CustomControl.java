@@ -15,6 +15,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Translate;
 
+import static com.stolz.alexander.chessengine.pieces.Piece.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.pieces.Piece.PieceColor.WHITE;
+
 
 public class CustomControl extends Control {
 	
@@ -109,7 +112,7 @@ public class CustomControl extends Control {
 				
 				// Print current player..
 				if(chessboard.clicklogic()=="false" && winner==false && stale==false){
-					if(chessboard.currentplayer()==1){
+					if(chessboard.currentplayer() == WHITE){
 						System.out.print("Current player: White");
 					}
 					else{System.out.print("Current player: Black");}
@@ -156,10 +159,10 @@ public class CustomControl extends Control {
 							gamelogic.flipcheck();
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -196,10 +199,10 @@ public class CustomControl extends Control {
 							gamelogic.flipcheck();
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -213,10 +216,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -256,10 +259,10 @@ public class CustomControl extends Control {
 								gamelogic.flipcheck();
 								
 								// Stalemate check
-								if(selectedpiece.type()==1){
+								if(selectedpiece.type()==WHITE){
 									stalecountwhite--;
 									}
-									if(selectedpiece.type()==2){
+									if(selectedpiece.type()==BLACK){
 									stalecountblack--;	
 									}
 									if(stalecountwhite==0 || stalecountblack==0){
@@ -295,10 +298,10 @@ public class CustomControl extends Control {
 									gamelogic.flipcheck();
 									
 									// Stalemate check
-									if(selectedpiece.type()==1){
+									if(selectedpiece.type()==WHITE){
 										stalecountwhite--;
 										}
-										if(selectedpiece.type()==2){
+										if(selectedpiece.type()==BLACK){
 										stalecountblack--;	
 										}
 										if(stalecountwhite==0 || stalecountblack==0){
@@ -311,10 +314,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -352,10 +355,10 @@ public class CustomControl extends Control {
 								chessboard.changeclicknull();
 								chessboard.setBoard(oldstate);
 								gamelogic.flipcheck();
-								if(selectedpiece.type()==1){
+								if(selectedpiece.type()==WHITE){
 									stalecountwhite--;
 									}
-									if(selectedpiece.type()==2){
+									if(selectedpiece.type()==BLACK){
 									stalecountblack--;	
 									}
 									if(stalecountwhite==0 || stalecountblack==0){
@@ -391,10 +394,10 @@ public class CustomControl extends Control {
 									gamelogic.flipcheck();
 									
 									// Stalemate check
-									if(selectedpiece.type()==1){
+									if(selectedpiece.type()==WHITE){
 										stalecountwhite--;
 										}
-										if(selectedpiece.type()==2){
+										if(selectedpiece.type()==BLACK){
 										stalecountblack--;	
 										}
 									}
@@ -407,10 +410,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -450,10 +453,10 @@ public class CustomControl extends Control {
 								gamelogic.flipcheck();
 								
 								// Stalemate check
-								if(selectedpiece.type()==1){
+								if(selectedpiece.type()==WHITE){
 									stalecountwhite--;
 								}
-									if(selectedpiece.type()==2){
+									if(selectedpiece.type()==BLACK){
 									stalecountblack--;	
 									}
 									if(stalecountwhite==0 || stalecountblack==0){
@@ -489,10 +492,10 @@ public class CustomControl extends Control {
 									gamelogic.flipcheck();
 									
 									// Stalemate check
-									if(selectedpiece.type()==1){
+									if(selectedpiece.type()==WHITE){
 										stalecountwhite--;
 										}
-										if(selectedpiece.type()==2){
+										if(selectedpiece.type()==BLACK){
 										stalecountblack--;	
 										}
 										if(stalecountwhite==0 || stalecountblack==0){
@@ -505,10 +508,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -548,10 +551,10 @@ public class CustomControl extends Control {
 								gamelogic.flipcheck();
 								
 								// Stalemate check
-								if(selectedpiece.type()==1){
+								if(selectedpiece.type()==WHITE){
 									stalecountwhite--;
 									}
-									if(selectedpiece.type()==2){
+									if(selectedpiece.type()==BLACK){
 									stalecountblack--;	
 									}
 									if(stalecountwhite==0 || stalecountblack==0){
@@ -587,10 +590,10 @@ public class CustomControl extends Control {
 									gamelogic.flipcheck();
 									
 									// Stalemate check
-									if(selectedpiece.type()==1){
+									if(selectedpiece.type()==WHITE){
 										stalecountwhite--;
 										}
-										if(selectedpiece.type()==2){
+										if(selectedpiece.type()==BLACK){
 										stalecountblack--;	
 										}
 										if(stalecountwhite==0 || stalecountblack==0){
@@ -603,10 +606,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -646,10 +649,10 @@ public class CustomControl extends Control {
 								gamelogic.flipcheck();
 								
 								// Stalemate check
-								if(selectedpiece.type()==1){
+								if(selectedpiece.type()==WHITE){
 									stalecountwhite--;
 									}
-									if(selectedpiece.type()==2){
+									if(selectedpiece.type()==BLACK){
 									stalecountblack--;	
 									}
 									if(stalecountwhite==0 || stalecountblack==0){
@@ -685,10 +688,10 @@ public class CustomControl extends Control {
 									gamelogic.flipcheck();
 									
 									// Stalemate check
-									if(selectedpiece.type()==1){
+									if(selectedpiece.type()==WHITE){
 										stalecountwhite--;
 										}
-										if(selectedpiece.type()==2){
+										if(selectedpiece.type()==BLACK){
 										stalecountblack--;	
 										}
 										if(stalecountwhite==0 || stalecountblack==0){
@@ -701,10 +704,10 @@ public class CustomControl extends Control {
 						else{
 							
 							// Stalemate check
-							if(selectedpiece.type()==1){
+							if(selectedpiece.type()==WHITE){
 							stalecountwhite--;
 							}
-							if(selectedpiece.type()==2){
+							if(selectedpiece.type()==BLACK){
 							stalecountblack--;	
 							}
 							if(stalecountwhite==0 || stalecountblack==0){
@@ -784,7 +787,7 @@ public class CustomControl extends Control {
 		// Count white pieces
 		for(int x=0; x < 8; x++){
 			for(int y=0; y < 8; y++){
-				if(boardstate[x][y].type()==1){
+				if(boardstate[x][y].type()==WHITE){
 					whitepieces++;
 				}
 			}
@@ -799,7 +802,7 @@ public class CustomControl extends Control {
 		// Count white pieces
 		for(int x=0; x < 8; x++){
 			for(int y=0; y < 8; y++){
-				if(boardstate[x][y].type()==2){
+				if(boardstate[x][y].type() == BLACK){
 					blackpieces++;
 				}
 			}

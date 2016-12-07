@@ -1,19 +1,24 @@
 package com.stolz.alexander.chessengine.pieces;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 //class declaration - abstract because we will not want to create a com.stolz.alexander.chessengine.pieces.Piece object but we would
 //like to specify the private fields that all pieces should have in addition to their behaviours
 public abstract class Piece {
 
+    public enum PieceColor {NONE, WHITE, BLACK}
+
+    ;
+
     //piece can be either white (1) or black (2)
-    private int type;
-    private String name;
-    private String imgname;
-    private int i;
-    private int j;
-    private Piece[][] newboard;
-    private boolean firstmove;
+    protected PieceColor type;
+    protected String name;
+    protected String imgname;
+    protected int i;
+    protected int j;
+    protected Piece[][] newboard;
+    protected boolean firstmove;
 
     public Image image() {
         return image();
@@ -54,7 +59,7 @@ public abstract class Piece {
         return imgname;
     }
 
-    public Piece(int type) {
+    public Piece(PieceColor type) {
         this.type = type;
     }
 
@@ -62,16 +67,11 @@ public abstract class Piece {
         return firstmove;
     }
 
-    public int type() {
-        if (type == 1) {
-            return 1;
-        }
-        if (type == 2) {
-            return 2;
-        } else return 0;
-    }
+    public PieceColor type() { return type; }
 
     public Piece[][] move(Piece selectedpiece, Piece targetpiece, Piece[][] boardstate) {
         return newboard;
     }
+
+    public abstract void drawValidMoves(Piece[][] pieces, Rectangle[][] board);
 }
