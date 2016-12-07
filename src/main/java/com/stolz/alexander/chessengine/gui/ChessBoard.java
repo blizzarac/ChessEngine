@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.gui;
 
-import com.stolz.alexander.chessengine.engine.pieces.*;
+import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.gui.pieces.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,15 +22,15 @@ public class ChessBoard extends Pane {
     private int boardWidth = 8;
     private int boardHeight = 8;
 
-    public Piece[][] getPieces() {
-        return pieces;
+    public PieceView[][] getPieceViews() {
+        return pieceViews;
     }
 
     public Rectangle[][] getBoard() {
         return board;
     }
 
-    private Piece[][] pieces;
+    private PieceView[][] pieceViews;
     private Rectangle[][] board;
     private Image[][] images;
     private ImageView[][] imageviews;
@@ -89,7 +90,6 @@ public class ChessBoard extends Pane {
     }
 
     public ChessBoard() {
-
         pos = new Translate();
 
         // Declares new board
@@ -122,55 +122,17 @@ public class ChessBoard extends Pane {
             }
         }
 
-        // New image array
+        pieceViews = initPiecesViews();
+
         images = new Image[8][8];
-
-        // first row of renders (black)
-        images[7][0] = new Image("blackrook.png");
-        images[6][0] = new Image("blackknight.png");
-        images[5][0] = new Image("blackbishop.png");
-        images[4][0] = new Image("blackking.png");
-        images[3][0] = new Image("blackqueen.png");
-        images[2][0] = new Image("blackbishop.png");
-        images[1][0] = new Image("blackknight.png");
-        images[0][0] = new Image("blackrook.png");
-        // second row (black)
-        images[7][1] = new Image("blackpawn.png");
-        images[6][1] = new Image("blackpawn.png");
-        images[5][1] = new Image("blackpawn.png");
-        images[4][1] = new Image("blackpawn.png");
-        images[3][1] = new Image("blackpawn.png");
-        images[2][1] = new Image("blackpawn.png");
-        images[1][1] = new Image("blackpawn.png");
-        images[0][1] = new Image("blackpawn.png");
-
-        // empty squares
         for (int x = 0; x < 8; x++) {
-            for (int y = 2; y < 6; y++) {
-                images[x][y] = new Image("empty.png");
+            for (int y = 0; y < 8; y++) {
+                images[x][y] = pieceViews[x][y].getImage();
             }
         }
 
-        // third row (white)
-        images[7][6] = new Image("whitepawn.png");
-        images[6][6] = new Image("whitepawn.png");
-        images[5][6] = new Image("whitepawn.png");
-        images[4][6] = new Image("whitepawn.png");
-        images[3][6] = new Image("whitepawn.png");
-        images[2][6] = new Image("whitepawn.png");
-        images[1][6] = new Image("whitepawn.png");
-        images[0][6] = new Image("whitepawn.png");
-        // fourth row of renders (white)
-        images[7][7] = new Image("whiterook.png");
-        images[6][7] = new Image("whiteknight.png");
-        images[5][7] = new Image("whitebishop.png");
-        images[4][7] = new Image("whiteking.png");
-        images[3][7] = new Image("whitequeen.png");
-        images[2][7] = new Image("whitebishop.png");
-        images[1][7] = new Image("whiteknight.png");
-        images[0][7] = new Image("whiterook.png");
 
-        // Viewers for each image
+        // Viewers for each getImage
         imageviews = new ImageView[8][8];
 
         // Initializes imageviewers and windows
@@ -193,55 +155,59 @@ public class ChessBoard extends Pane {
             }
         }
 
-        //initialize the board: background, data structures, inital layout of pieces
-        pieces = new Piece[boardWidth][boardHeight];
+        current_player = WHITE;
+    }
+
+    private PieceView[][] initPiecesViews() {
+        //initialize the board: background, data structures, inital layout of pieceViews
+        PieceView[][] pieceViews = new PieceView[boardWidth][boardHeight];
 
         // White Pieces
-        pieces[7][7] = new PieceRook(WHITE, 7, 7);
-        pieces[6][7] = new PieceKnight(WHITE, 6, 7);
-        pieces[5][7] = new PieceBishop(WHITE, 5, 7);
-        pieces[4][7] = new PieceKing(WHITE, 4, 7);
-        pieces[3][7] = new PieceQueen(WHITE, 3, 7);
-        pieces[2][7] = new PieceBishop(WHITE, 2, 7);
-        pieces[1][7] = new PieceKnight(WHITE, 1, 7);
-        pieces[0][7] = new PieceRook(WHITE, 0, 7);
+        pieceViews[7][7] = new PieceViewRook(WHITE, 7, 7);
+        pieceViews[6][7] = new PieceViewKnight(WHITE, 6, 7);
+        pieceViews[5][7] = new PieceViewBishop(WHITE, 5, 7);
+        pieceViews[4][7] = new PieceViewKing(WHITE, 4, 7);
+        pieceViews[3][7] = new PieceViewQueen(WHITE, 3, 7);
+        pieceViews[2][7] = new PieceViewBishop(WHITE, 2, 7);
+        pieceViews[1][7] = new PieceViewKnight(WHITE, 1, 7);
+        pieceViews[0][7] = new PieceViewRook(WHITE, 0, 7);
         // Pawns
-        pieces[7][6] = new PiecePawn(WHITE, 7, 6, true);
-        pieces[6][6] = new PiecePawn(WHITE, 6, 6, true);
-        pieces[5][6] = new PiecePawn(WHITE, 5, 6, true);
-        pieces[4][6] = new PiecePawn(WHITE, 4, 6, true);
-        pieces[3][6] = new PiecePawn(WHITE, 3, 6, true);
-        pieces[2][6] = new PiecePawn(WHITE, 2, 6, true);
-        pieces[1][6] = new PiecePawn(WHITE, 1, 6, true);
-        pieces[0][6] = new PiecePawn(WHITE, 0, 6, true);
+        pieceViews[7][6] = new PieceViewPawn(WHITE, 7, 6, true);
+        pieceViews[6][6] = new PieceViewPawn(WHITE, 6, 6, true);
+        pieceViews[5][6] = new PieceViewPawn(WHITE, 5, 6, true);
+        pieceViews[4][6] = new PieceViewPawn(WHITE, 4, 6, true);
+        pieceViews[3][6] = new PieceViewPawn(WHITE, 3, 6, true);
+        pieceViews[2][6] = new PieceViewPawn(WHITE, 2, 6, true);
+        pieceViews[1][6] = new PieceViewPawn(WHITE, 1, 6, true);
+        pieceViews[0][6] = new PieceViewPawn(WHITE, 0, 6, true);
 
-        // com.stolz.alexander.chessengine.engine.pieces.Empty Pieces
+        // com.stolz.alexander.chessengine.gui.pieceViews.Empty Pieces
         for (int x = 5; x > 1; x--) {
             for (int j = 0; j < 8; j++) {
-                pieces[j][x] = new Empty(NONE, j, x);
+                pieceViews[j][x] = new Empty(j, x);
             }
         }
 
         // Black Pieces
-        pieces[7][0] = new PieceRook(BLACK, 7, 0);
-        pieces[6][0] = new PieceKnight(BLACK, 6, 0);
-        pieces[5][0] = new PieceBishop(BLACK, 5, 0);
-        pieces[4][0] = new PieceKing(BLACK, 4, 0);
-        pieces[3][0] = new PieceQueen(BLACK, 3, 0);
-        pieces[2][0] = new PieceBishop(BLACK, 2, 0);
-        pieces[1][0] = new PieceKnight(BLACK, 1, 0);
-        pieces[0][0] = new PieceRook(BLACK, 0, 0);
+        pieceViews[7][0] = new PieceViewRook(BLACK, 7, 0);
+        pieceViews[6][0] = new PieceViewKnight(BLACK, 6, 0);
+        pieceViews[5][0] = new PieceViewBishop(BLACK, 5, 0);
+        pieceViews[4][0] = new PieceViewKing(BLACK, 4, 0);
+        pieceViews[3][0] = new PieceViewQueen(BLACK, 3, 0);
+        pieceViews[2][0] = new PieceViewBishop(BLACK, 2, 0);
+        pieceViews[1][0] = new PieceViewKnight(BLACK, 1, 0);
+        pieceViews[0][0] = new PieceViewRook(BLACK, 0, 0);
         // Pawns
-        pieces[7][1] = new PiecePawn(BLACK, 7, 1, true);
-        pieces[6][1] = new PiecePawn(BLACK, 6, 1, true);
-        pieces[5][1] = new PiecePawn(BLACK, 5, 1, true);
-        pieces[4][1] = new PiecePawn(BLACK, 4, 1, true);
-        pieces[3][1] = new PiecePawn(BLACK, 3, 1, true);
-        pieces[2][1] = new PiecePawn(BLACK, 2, 1, true);
-        pieces[1][1] = new PiecePawn(BLACK, 1, 1, true);
-        pieces[0][1] = new PiecePawn(BLACK, 0, 1, true);
+        pieceViews[7][1] = new PieceViewPawn(BLACK, 7, 1, true);
+        pieceViews[6][1] = new PieceViewPawn(BLACK, 6, 1, true);
+        pieceViews[5][1] = new PieceViewPawn(BLACK, 5, 1, true);
+        pieceViews[4][1] = new PieceViewPawn(BLACK, 4, 1, true);
+        pieceViews[3][1] = new PieceViewPawn(BLACK, 3, 1, true);
+        pieceViews[2][1] = new PieceViewPawn(BLACK, 2, 1, true);
+        pieceViews[1][1] = new PieceViewPawn(BLACK, 1, 1, true);
+        pieceViews[0][1] = new PieceViewPawn(BLACK, 0, 1, true);
 
-        current_player = WHITE;
+        return pieceViews;
     }
 
     public void placeboard(final int i, final int j) {
@@ -316,7 +282,7 @@ public class ChessBoard extends Pane {
         pos.setY(x);
     }
 
-    public Piece selectTarget(int hash) {
+    public PieceView selectTarget(int hash) {
 
         int i = 0;
         int j = 0;
@@ -330,24 +296,24 @@ public class ChessBoard extends Pane {
             }
         }
 
-        PieceColor enemyplayer = NONE;
+        PieceColor enemyPlayer = NONE;
 
         if (current_player == WHITE) {
-            enemyplayer = BLACK;
+            enemyPlayer = BLACK;
         } else {
-            enemyplayer = WHITE;
+            enemyPlayer = WHITE;
         }
 
         if (winner == false) {
-            if (pieces[i][j].getColor() == NONE || pieces[i][j].getColor() == enemyplayer) {
-                return pieces[i][j];
+            if (pieceViews[i][j].getColor() == NONE || pieceViews[i][j].getColor() == enemyPlayer) {
+                return pieceViews[i][j];
             }
         }
-        return pieces[i][j];
+        return pieceViews[i][j];
     }
 
     //select piece method
-    public Piece selectPiece(int hash) {
+    public PieceView selectPiece(int hash) {
         // Determine what piece was selected and if it can be selected
         int i = 0;
         int j = 0;
@@ -362,7 +328,7 @@ public class ChessBoard extends Pane {
         }
 
         if (current_player == WHITE && winner == false) {
-            if (pieces[i][j].getColor() == WHITE) {
+            if (pieceViews[i][j].getColor() == WHITE) {
                 // If player has already selected the piece, deselect it
                 if (board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
                     if (i % 2 == 0 && j % 2 == 1) {
@@ -386,14 +352,14 @@ public class ChessBoard extends Pane {
                 else {
                     board[i][j].setStroke(Color.LIGHTCORAL);
                     pieceselect = true;
-                    return pieces[i][j];
+                    return pieceViews[i][j];
                 }
             }
         }
 
         // If current player is black
         else {
-            if (pieces[i][j].getColor() == BLACK) {
+            if (pieceViews[i][j].getColor() == BLACK) {
                 if (board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
                     // Resets color
                     if (i % 2 == 0 && j % 2 == 1) {
@@ -415,13 +381,13 @@ public class ChessBoard extends Pane {
                 } else {
                     board[i][j].setStroke(Color.LIGHTCORAL);
                     pieceselect = true;
-                    return pieces[i][j];
+                    return pieceViews[i][j];
                 }
             }
         }
 
         // return something ..
-        return new Empty(NONE, i, j);
+        return new Empty(i, j);
     }
 
     // Draw the move and remove highlights
@@ -429,11 +395,11 @@ public class ChessBoard extends Pane {
         Image empty = new Image("empty.png");
         String piece = "???";
         piece = "black";
-        if (pieces[ti][tj].getColor() == WHITE) {
+        if (pieceViews[ti][tj].getColor() == WHITE) {
             piece = "white";
         }
-        piece = piece + pieces[ti][tj].getImageFilename();
-        //System.out.println("The new piece image filename: " + piece);
+        piece = piece + pieceViews[ti][tj].getImageFilename();
+        //System.out.println("The new piece getImage filename: " + piece);
         Image newimage = new Image("" + piece);
         imageviews[ti][tj].setImage(newimage);
         imageviews[si][sj].setImage(empty);
@@ -455,15 +421,15 @@ public class ChessBoard extends Pane {
     }
 
     // Returns state of the chess board ..
-    public Piece[][] getState() {
-        return pieces;
+    public PieceView[][] getState() {
+        return pieceViews;
     }
 
-    public void setBoard(Piece[][] newboard) {
+    public void setBoard(PieceView[][] newboard) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                pieces[x][y] = newboard[x][y];
-                //System.out.println(pieces[y][x].toString() + " " + pieces[y][x].icoord() + "," + pieces[y][x].jcoord());
+                pieceViews[x][y] = newboard[x][y];
+                //System.out.println(pieceViews[y][x].toString() + " " + pieceViews[y][x].icoord() + "," + pieceViews[y][x].jcoord());
             }
         }
     }

@@ -1,18 +1,19 @@
 package com.stolz.alexander.chessengine.engine.pieces;
 
-import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
-
-public abstract class Piece {
+/**
+ * Created by alexanderstolz on 12/7/16.
+ */
+public class Piece {
     protected PieceColor color;
-    protected String imgname;
+    protected PieceType type;
     protected int i;
     protected int j;
-    protected Piece[][] newboard;
-    protected boolean firstmove;
 
-    public Image image() {
-        return image();
+    public Piece(PieceType type, PieceColor color, int i, int j) {
+        this.type = type;
+        this.color = color;
+        this.i = i;
+        this.j = j;
     }
 
     public int icoord() {
@@ -41,23 +42,5 @@ public abstract class Piece {
         }
     }
 
-    public String getImageFilename() {
-        return imgname;
-    }
-
-    public Piece(PieceColor color) {
-        this.color = color;
-    }
-
-    public boolean firstmove() {
-        return firstmove;
-    }
-
     public PieceColor getColor() { return color; }
-
-    public Piece[][] move(Piece selectedpiece, Piece targetpiece, Piece[][] boardstate) {
-        return newboard;
-    }
-
-    public abstract void drawValidMoves(Piece[][] pieces, Rectangle[][] board);
 }

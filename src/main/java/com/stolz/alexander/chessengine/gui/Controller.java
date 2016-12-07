@@ -99,5 +99,4 @@ public class Controller {
         double bt = Double.parseDouble(timerblack.getText());
         return bt;
     }
-
 }

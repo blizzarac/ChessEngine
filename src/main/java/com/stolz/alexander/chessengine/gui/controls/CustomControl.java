@@ -2,7 +2,7 @@ package com.stolz.alexander.chessengine.gui.controls;
 
 import com.stolz.alexander.chessengine.gui.ChessBoard;
 import com.stolz.alexander.chessengine.GameLogic;
-import com.stolz.alexander.chessengine.engine.pieces.Piece;
+import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 
@@ -20,8 +20,8 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 public class CustomControl extends Control {
     private ChessBoard chessboard;
     private Translate pos;
-    private Piece selectedpiece;
-    private Piece targetpiece;
+    private PieceView selectedpiece;
+    private PieceView targetpiece;
     private GameLogic gamelogic;
     private boolean junkselection;
     private boolean winner = false;
@@ -100,7 +100,7 @@ public class CustomControl extends Control {
             }
 
             // Print current player..
-            if (chessboard.clicklogic() == "false" && winner == false && stale == false) {
+            if (chessboard.clicklogic() == "false" && !winner && !stale) {
                 if (chessboard.currentplayer() == WHITE) {
                     System.out.print("Current player: White");
                 } else {
@@ -112,7 +112,7 @@ public class CustomControl extends Control {
 
             // Second click
             if (chessboard.clicklogic() == "true") {
-                Piece[][] boardstate = chessboard.getState();
+                PieceView[][] boardstate = chessboard.getState();
 
                 //System.out.println("mousesec: " + xcoordmouse + "," + ycoordmouse);
                 targetpiece = chessboard.selectTarget(hash);
@@ -123,7 +123,7 @@ public class CustomControl extends Control {
                     if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) == true || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE) == true) {
                         // If check is false
                         if (gamelogic.checkstatus() == false) {
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -166,7 +166,7 @@ public class CustomControl extends Control {
                         // If in check ..
                         if (gamelogic.checkstatus() == true) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -218,11 +218,11 @@ public class CustomControl extends Control {
                 }
 
                 // If bishop selected ..
-                if (selectedpiece.toString().equals("Bishop") && selectedpiece != null && targetpiece != null && selectedpiece.equals(targetpiece) == false) {
-                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) == true || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE) == true) {
+                if (selectedpiece.toString().equals("Bishop") && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
+                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
                         // If check is false
                         if (!gamelogic.checkstatus()) {
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -261,9 +261,9 @@ public class CustomControl extends Control {
                         }
 
                         // If in check ..
-                        if (gamelogic.checkstatus() == true) {
+                        if (gamelogic.checkstatus()) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -271,7 +271,7 @@ public class CustomControl extends Control {
                             }
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // Check if still in check, if not, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -314,11 +314,11 @@ public class CustomControl extends Control {
                 }
 
                 // If queen selected ..
-                if (selectedpiece.toString().equals("Queen") && selectedpiece != null && targetpiece != null && selectedpiece.equals(targetpiece) == false) {
-                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) == true || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE) == true) {
+                if (selectedpiece.toString().equals("Queen") && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
+                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
                         // If check is false
                         if (gamelogic.checkstatus() == false) {
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -355,9 +355,9 @@ public class CustomControl extends Control {
                         }
 
                         // If in check ..
-                        if (gamelogic.checkstatus() == true) {
+                        if (gamelogic.checkstatus()) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -365,7 +365,7 @@ public class CustomControl extends Control {
                             }
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // Check if still in check, if not, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -411,8 +411,8 @@ public class CustomControl extends Control {
                 if (selectedpiece.toString().equals("Rook") && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
                     if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
                         // If check is false
-                        if (gamelogic.checkstatus() == false) {
-                            Piece[][] oldstate = new Piece[8][8];
+                        if (!gamelogic.checkstatus()) {
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -422,7 +422,7 @@ public class CustomControl extends Control {
                             // Do move
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // If move results in no check, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -453,7 +453,7 @@ public class CustomControl extends Control {
                         // If in check ..
                         if (gamelogic.checkstatus() == true) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -461,7 +461,7 @@ public class CustomControl extends Control {
                             }
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // Check if still in check, if not, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -504,11 +504,11 @@ public class CustomControl extends Control {
                 }
 
                 // If king selected ..
-                if (selectedpiece.toString().equals("King") && selectedpiece != null && targetpiece != null && selectedpiece.equals(targetpiece) == false) {
-                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) == true || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE) == true) {
+                if (selectedpiece.toString().equals("King") && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
+                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
                         // If check is false
                         if (gamelogic.checkstatus() == false) {
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -518,7 +518,7 @@ public class CustomControl extends Control {
                             // Do move
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // If move results in no check, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -547,9 +547,9 @@ public class CustomControl extends Control {
                         }
 
                         // If in check ..
-                        if (gamelogic.checkstatus() == true) {
+                        if (gamelogic.checkstatus()) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -557,7 +557,7 @@ public class CustomControl extends Control {
                             }
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // Check if still in check, if not, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -600,11 +600,11 @@ public class CustomControl extends Control {
                 }
 
                 // If knight selected ..
-                if (selectedpiece.toString().equals("Knight") && selectedpiece != null && targetpiece != null && selectedpiece.equals(targetpiece) == false) {
-                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE) == true) {
+                if (selectedpiece.toString().equals("Knight") && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
+                    if (chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboard.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
                         // If check is false
                         if (!gamelogic.checkstatus()) {
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             // Transfer pieces to backup variable
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
@@ -643,9 +643,9 @@ public class CustomControl extends Control {
                         }
 
                         // If in check ..
-                        if (gamelogic.checkstatus() == true) {
+                        if (gamelogic.checkstatus()) {
                             // Do move
-                            Piece[][] oldstate = new Piece[8][8];
+                            PieceView[][] oldstate = new PieceView[8][8];
                             for (int x = 0; x < 8; x++) {
                                 for (int y = 0; y < 8; y++) {
                                     oldstate[x][y] = boardstate[x][y];
@@ -653,7 +653,7 @@ public class CustomControl extends Control {
                             }
                             boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                             // Check if still in check, if not, do move
-                            if (gamelogic.check4check(chessboard.otherplayer(), boardstate) == false) {
+                            if (!gamelogic.check4check(chessboard.otherplayer(), boardstate)) {
                                 chessboard.setBoard(boardstate);
                                 chessboard.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                                 chessboard.changeplayer();
@@ -727,17 +727,17 @@ public class CustomControl extends Control {
 
                 selectedpiece = chessboard.selectPiece(hash);
 
-                if (selectedpiece.toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty") || chessboard.pieceselect() == false) {
+                if (selectedpiece.getColor() == NONE || chessboard.pieceselect() == false) {
                     junkselection = true;
                 } else {
                     junkselection = false;
                 }
 
                 if (!(selectedpiece.getColor() == NONE) && junkselection != true) {
-                    getScene().setCursor(new ImageCursor(selectedpiece.image()));
+                    getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
                     chessboard.changeclicktrue();
                     // Highlights valid moves.
-                    selectedpiece.drawValidMoves(chessboard.getPieces(), chessboard.getBoard());
+                    selectedpiece.drawValidMoves(chessboard.getPieceViews(), chessboard.getBoard());
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
                         gamelogic.check4check(chessboard.otherplayer(), chessboard.getState());
@@ -761,8 +761,8 @@ public class CustomControl extends Control {
         chessboard.checkhighlight(x, y);
     }
 
-    // com.stolz.alexander.chessengine.engine.pieces.Piece counting -- could expand on this but only need total number
-    public int whitepieces(Piece[][] boardstate) {
+    // com.stolz.alexander.chessengine.gui.pieces.PieceView counting -- could expand on this but only need total number
+    public int whitepieces(PieceView[][] boardstate) {
         int whitepieces = 0;
 
         // Count white pieces
@@ -777,7 +777,7 @@ public class CustomControl extends Control {
         return whitepieces;
     }
 
-    public int blackpieces(Piece[][] boardstate) {
+    public int blackpieces(PieceView[][] boardstate) {
         int blackpieces = 0;
 
         // Count white pieces
