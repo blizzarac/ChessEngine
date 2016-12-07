@@ -58,8 +58,9 @@ public class PieceQueen extends Piece {
 	public String imagefilename(){
 		return imgname;
 	}
-	
-	public Piece[][] movequeen(Piece q, Piece t, Piece[][] bs){
+
+	@Override
+	public Piece[][] move(Piece q, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceQueen(q.type(), t.icoord(), t.jcoord());

@@ -63,8 +63,9 @@ public class PiecePawn extends Piece {
 	public boolean firstmove(){
 		return firstmove;
 	}
-	
-	public Piece[][] movepawn(Piece p, Piece t, Piece[][] bs){
+
+	@Override
+	public Piece[][] move(Piece p, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		firstmove = false;

@@ -56,8 +56,9 @@ public class PieceRook extends Piece {
 	public String imagefilename(){
 		return imgname;
 	}
-	
-	public Piece[][] moverook(Piece r, Piece t, Piece[][] bs){
+
+	@Override
+	public Piece[][] move(Piece r, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceRook(r.type(), t.icoord(), t.jcoord());

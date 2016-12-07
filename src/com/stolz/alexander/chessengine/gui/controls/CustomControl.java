@@ -1,6 +1,6 @@
 package com.stolz.alexander.chessengine.gui.controls;
 
-import com.stolz.alexander.chessengine.ChessBoard;
+import com.stolz.alexander.chessengine.gui.ChessBoard;
 import com.stolz.alexander.chessengine.GameLogic;
 import com.stolz.alexander.chessengine.pieces.Piece;
 import javafx.event.EventHandler;
@@ -31,8 +31,10 @@ public class CustomControl extends Control {
 	private boolean stale=false;
 	private int stalecountblack=8;
 	private int stalecountwhite=8;
+	private MoveValidator moveValidator;
 	
 	public CustomControl(){
+		moveValidator = new MoveValidator();
 		pos = new Translate();
 		setSkin(new CustomControlSkin(this));
 		chessboard = new ChessBoard();
@@ -136,7 +138,7 @@ public class CustomControl extends Control {
 								}
 							}
 							// Do move
-							boardstate = selectedpiece.movepawn(selectedpiece, targetpiece, boardstate);
+							boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 							// If move results in no check, do move
 							if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 							chessboard.setBoard(boardstate);
@@ -177,7 +179,7 @@ public class CustomControl extends Control {
 									oldstate[x][y] = boardstate[x][y];
 								}
 							}
-							boardstate = selectedpiece.movepawn(selectedpiece, targetpiece, boardstate);
+							boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 							// Check if still in check, if not, do move
 							if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -237,7 +239,7 @@ public class CustomControl extends Control {
 									}
 								}
 								// Do move
-								boardstate = selectedpiece.movebishop(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// If move results in no check, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -276,7 +278,7 @@ public class CustomControl extends Control {
 										oldstate[x][y] = boardstate[x][y];
 									}
 								}
-								boardstate = selectedpiece.movebishop(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// Check if still in check, if not, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 									chessboard.setBoard(boardstate);
@@ -335,7 +337,7 @@ public class CustomControl extends Control {
 									}
 								}
 								// Do move
-								boardstate = selectedpiece.movequeen(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// If move results in no check, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -372,7 +374,7 @@ public class CustomControl extends Control {
 										oldstate[x][y] = boardstate[x][y];
 									}
 								}
-								boardstate = selectedpiece.movequeen(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// Check if still in check, if not, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 									chessboard.setBoard(boardstate);
@@ -431,7 +433,7 @@ public class CustomControl extends Control {
 									}
 								}
 								// Do move
-								boardstate = selectedpiece.moverook(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// If move results in no check, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -470,7 +472,7 @@ public class CustomControl extends Control {
 										oldstate[x][y] = boardstate[x][y];
 									}
 								}
-								boardstate = selectedpiece.moverook(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// Check if still in check, if not, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 									chessboard.setBoard(boardstate);
@@ -529,7 +531,7 @@ public class CustomControl extends Control {
 									}
 								}
 								// Do move
-								boardstate = selectedpiece.moveking(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// If move results in no check, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -568,7 +570,7 @@ public class CustomControl extends Control {
 										oldstate[x][y] = boardstate[x][y];
 									}
 								}
-								boardstate = selectedpiece.moveking(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// Check if still in check, if not, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 									chessboard.setBoard(boardstate);
@@ -627,7 +629,7 @@ public class CustomControl extends Control {
 									}
 								}
 								// Do move
-								boardstate = selectedpiece.moveknight(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// If move results in no check, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 								chessboard.setBoard(boardstate);
@@ -666,7 +668,7 @@ public class CustomControl extends Control {
 										oldstate[x][y] = boardstate[x][y];
 									}
 								}
-								boardstate = selectedpiece.moveknight(selectedpiece, targetpiece, boardstate);
+								boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
 								// Check if still in check, if not, do move
 								if(gamelogic.check4check(chessboard.otherplayer(), boardstate)==false){
 									chessboard.setBoard(boardstate);
@@ -751,9 +753,9 @@ public class CustomControl extends Control {
 				if(!selectedpiece.equals("com.stolz.alexander.chessengine.pieces.Empty") && junkselection!=true){
 				getScene().setCursor(new ImageCursor(selectedpiece.image()));
 				chessboard.changeclicktrue();
-				// Highlights valid moves..
-				chessboard.validMoves(selectedpiece);}
-				
+				// Highlights valid moves.
+				moveValidator.validMoves(selectedpiece, chessboard.getPieces(), chessboard.getBoard());}
+
 				// Check 4 check ..
 				if(gamelogic.checkstatus()!=true){
 				gamelogic.check4check(chessboard.otherplayer(), chessboard.getState());}

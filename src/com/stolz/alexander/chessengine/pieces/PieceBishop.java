@@ -24,7 +24,7 @@ public class PieceBishop extends Piece{
 	 else
 	 return new Image("file:resource/blackbishopcursor.png");
 	}
-	
+
 	@Override
 	public int icoord(){
 		return i;
@@ -44,8 +44,9 @@ public class PieceBishop extends Piece{
 	public String imagefilename(){
 		return imgname;
 	}
-	
-	public Piece[][] movebishop(Piece b, Piece t, Piece[][] bs){
+
+	@Override
+	public Piece[][] move(Piece b, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceBishop(b.type(), t.icoord(), t.jcoord());

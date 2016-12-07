@@ -48,7 +48,7 @@ public class PieceKnight extends Piece{
 		
 		else{return j;}
 	}
-	
+
 	@Override
 	public String toString(){
 		return name;
@@ -58,8 +58,9 @@ public class PieceKnight extends Piece{
 	public String imagefilename(){
 		return imgname;
 	}
-	
-	public Piece[][] moveknight(Piece kn, Piece t, Piece[][] bs){
+
+	@Override
+	public Piece[][] move(Piece kn, Piece t, Piece[][] bs){
 		boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceKnight(kn.type(), t.icoord(), t.jcoord());
