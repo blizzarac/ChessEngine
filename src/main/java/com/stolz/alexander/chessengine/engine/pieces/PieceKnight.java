@@ -1,17 +1,16 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static com.stolz.alexander.chessengine.pieces.PieceColor.NONE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
 
 public class PieceKnight extends Piece{
 	private Piece[][] boardstate;
 
 	public PieceKnight(PieceColor type, int ii, int jj) {
 		super(type);
-        name = "Knight";
         imgname = "knight.png";
 		this.color = type;
         this.i = ii;

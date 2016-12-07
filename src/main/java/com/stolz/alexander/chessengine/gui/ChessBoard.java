@@ -1,10 +1,6 @@
 package com.stolz.alexander.chessengine.gui;
 
-import com.stolz.alexander.chessengine.pieces.*;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import com.stolz.alexander.chessengine.engine.pieces.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -15,9 +11,9 @@ import javafx.scene.transform.Translate;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import static com.stolz.alexander.chessengine.pieces.PieceColor.BLACK;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.NONE;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 public class ChessBoard extends Pane {
 
@@ -219,7 +215,7 @@ public class ChessBoard extends Pane {
         pieces[1][6] = new PiecePawn(WHITE, 1, 6, true);
         pieces[0][6] = new PiecePawn(WHITE, 0, 6, true);
 
-        // com.stolz.alexander.chessengine.pieces.Empty Pieces
+        // com.stolz.alexander.chessengine.engine.pieces.Empty Pieces
         for (int x = 5; x > 1; x--) {
             for (int j = 0; j < 8; j++) {
                 pieces[j][x] = new Empty(NONE, j, x);

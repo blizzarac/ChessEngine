@@ -1,11 +1,10 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Piece {
     protected PieceColor color;
-    protected String name;
     protected String imgname;
     protected int i;
     protected int j;
@@ -40,11 +39,6 @@ public abstract class Piece {
         } else {
             return j;
         }
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 
     public String getImageFilename() {

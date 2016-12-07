@@ -1,4 +1,4 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 import javafx.scene.shape.Rectangle;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -7,7 +7,6 @@ public class Empty extends Piece {
 
 	public Empty(PieceColor type, int ii, int jj) {
 		super(type);
-		name = "com.stolz.alexander.chessengine.pieces.Empty";
 		i = ii;
 		j = jj;
 	}

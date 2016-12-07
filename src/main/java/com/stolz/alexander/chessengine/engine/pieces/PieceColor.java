@@ -1,4 +1,4 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 /**
  * Created by alexanderstolz on 12/7/16.

@@ -1,18 +1,17 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static com.stolz.alexander.chessengine.pieces.PieceColor.BLACK;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 public class PieceRook extends Piece {
 	private Piece[][] boardstate;
 
 	public PieceRook(PieceColor type, int ii, int jj) {
 		super(type);
-        name = "Rook";
         imgname = "rook.png";
 		this.color = type;
 		i = ii;
@@ -77,7 +76,7 @@ public class PieceRook extends Piece {
         if(p.toString() == "Rook" && p.getColor() == BLACK){
             // Look Up ..
             for(int y = p.jcoord()-1; y >= 0; y--){
-                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[p.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[p.icoord()][y].getColor()==WHITE){
@@ -93,7 +92,7 @@ public class PieceRook extends Piece {
 
             // Look Right ..
             for(int x = p.icoord()+1; x < 8; x++){
-                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[x][p.jcoord()].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[x][p.jcoord()].getColor()==WHITE){
@@ -109,7 +108,7 @@ public class PieceRook extends Piece {
 
             // Look Left ..
             for(int x = p.icoord()-1; x >= 0; x--){
-                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[x][p.jcoord()].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[x][p.jcoord()].getColor()==WHITE){
@@ -125,7 +124,7 @@ public class PieceRook extends Piece {
 
             // Look Down ..
             for(int y = p.jcoord()+1; y < 8; y++){
-                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[p.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[p.icoord()][y].getColor()==WHITE){
@@ -146,7 +145,7 @@ public class PieceRook extends Piece {
         if(p.toString() == "Rook" && p.getColor() == WHITE){
             // Look Up ..
             for(int y = p.jcoord()-1; y >= 0; y--){
-                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[p.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[p.icoord()][y].getColor() == BLACK){
@@ -162,7 +161,7 @@ public class PieceRook extends Piece {
 
             // Look Right ..
             for(int x = p.icoord()+1; x < 8; x++){
-                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[x][p.jcoord()].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[x][p.jcoord()].getColor() == BLACK){
@@ -178,7 +177,7 @@ public class PieceRook extends Piece {
 
             // Look Left ..
             for(int x = p.icoord()-1; x >= 0; x--){
-                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[x][p.jcoord()].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[x][p.jcoord()].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[x][p.jcoord()].getColor() == BLACK){
@@ -194,7 +193,7 @@ public class PieceRook extends Piece {
 
             // Look Down ..
             for(int y = p.jcoord()+1; y < 8; y++){
-                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.pieces.Empty")){
+                if(pieces[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty")){
                     board[p.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
                 }
                 if(pieces[p.icoord()][y].getColor() == BLACK){

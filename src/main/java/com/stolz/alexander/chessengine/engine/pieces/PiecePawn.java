@@ -1,12 +1,12 @@
-package com.stolz.alexander.chessengine.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static com.stolz.alexander.chessengine.pieces.PieceColor.BLACK;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.NONE;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 public class PiecePawn extends Piece {
 	boolean firstmove;
@@ -14,7 +14,6 @@ public class PiecePawn extends Piece {
 
 	public PiecePawn(PieceColor type, int ii, int jj, boolean fm) {
 		super(type);
-        name = "Pawn";
         imgname = "pawn.png";
 		this.color = type;
 		i = ii;
@@ -70,8 +69,10 @@ public class PiecePawn extends Piece {
 
     @Override
     public void drawValidMoves(Piece[][] pieces, Rectangle[][] board) {
-        blackPawns(this, pieces, board);
-        whitePawns(this, pieces, board);
+		if (color == BLACK)
+            blackPawns(this, pieces, board);
+		else
+            whitePawns(this, pieces, board);
     }
 
     private void blackPawns(Piece p, Piece[][] pieces, Rectangle[][] board) {

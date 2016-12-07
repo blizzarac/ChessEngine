@@ -2,21 +2,19 @@ package com.stolz.alexander.chessengine.gui.controls;
 
 import com.stolz.alexander.chessengine.gui.ChessBoard;
 import com.stolz.alexander.chessengine.GameLogic;
-import com.stolz.alexander.chessengine.pieces.Piece;
-import javafx.event.EventHandler;
+import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 
 import javafx.scene.control.Control;
 
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Translate;
 
-import static com.stolz.alexander.chessengine.pieces.PieceColor.BLACK;
-import static com.stolz.alexander.chessengine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 
 public class CustomControl extends Control {
@@ -729,19 +727,19 @@ public class CustomControl extends Control {
 
                 selectedpiece = chessboard.selectPiece(hash);
 
-                if (selectedpiece.toString().equals("com.stolz.alexander.chessengine.pieces.Empty") || chessboard.pieceselect() == false) {
+                if (selectedpiece.toString().equals("com.stolz.alexander.chessengine.engine.pieces.Empty") || chessboard.pieceselect() == false) {
                     junkselection = true;
                 } else {
                     junkselection = false;
                 }
 
-                if (!selectedpiece.equals("com.stolz.alexander.chessengine.pieces.Empty") && junkselection != true) {
+                if (!(selectedpiece.getColor() == NONE) && junkselection != true) {
                     getScene().setCursor(new ImageCursor(selectedpiece.image()));
                     chessboard.changeclicktrue();
                     // Highlights valid moves.
                     selectedpiece.drawValidMoves(chessboard.getPieces(), chessboard.getBoard());
                     // Check 4 check ..
-                    if (gamelogic.checkstatus() != true) {
+                    if (!gamelogic.checkstatus()) {
                         gamelogic.check4check(chessboard.otherplayer(), chessboard.getState());
                     }
                 }
@@ -763,7 +761,7 @@ public class CustomControl extends Control {
         chessboard.checkhighlight(x, y);
     }
 
-    // com.stolz.alexander.chessengine.pieces.Piece counting -- could expand on this but only need total number
+    // com.stolz.alexander.chessengine.engine.pieces.Piece counting -- could expand on this but only need total number
     public int whitepieces(Piece[][] boardstate) {
         int whitepieces = 0;
 
