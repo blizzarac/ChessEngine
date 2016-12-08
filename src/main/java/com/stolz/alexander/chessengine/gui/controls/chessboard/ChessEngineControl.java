@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
-import com.stolz.alexander.chessengine.GameLogic;
+import com.stolz.alexander.chessengine.engine.logic.CheckValidator;
+import com.stolz.alexander.chessengine.engine.logic.GameLogic;
 import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -26,6 +27,7 @@ public class ChessEngineControl extends Control {
     private PieceView selectedpiece;
     private PieceView targetpiece;
     private GameLogic gamelogic;
+    private CheckValidator checkValidator;
     private boolean junkselection;
     private boolean winner = false;
     private boolean stale = false;
@@ -37,6 +39,7 @@ public class ChessEngineControl extends Control {
         setSkin(new ChessEngineControlSkin(this));
         chessboardPane = new ChessBoardPane();
         gamelogic = new GameLogic();
+        checkValidator = gamelogic.getCheckValidator();
         getChildren().addAll(chessboardPane);
 
 
@@ -161,7 +164,7 @@ public class ChessEngineControl extends Control {
                     selectedpiece.drawValidMoves(chessboardPane.getPieceViews(), chessboardPane.getBoard());
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
-                        gamelogic.check4check(chessboardPane.otherplayer(), chessboardPane.getState());
+                        checkValidator.check4check(chessboardPane.otherplayer(), chessboardPane.getState());
                     }
                 }
 
@@ -192,7 +195,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -229,7 +232,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -294,7 +297,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -333,7 +336,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -393,7 +396,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -432,7 +435,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -492,7 +495,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -529,7 +532,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -589,7 +592,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -628,7 +631,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -688,7 +691,7 @@ public class ChessEngineControl extends Control {
                     // Do move
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // If move results in no check, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
@@ -727,7 +730,7 @@ public class ChessEngineControl extends Control {
                     }
                     boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
                     // Check if still in check, if not, do move
-                    if (!gamelogic.check4check(chessboardPane.otherplayer(), boardstate)) {
+                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
