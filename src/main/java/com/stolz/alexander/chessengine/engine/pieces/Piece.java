@@ -5,6 +5,9 @@ package com.stolz.alexander.chessengine.engine.pieces;
  */
 public class Piece {
     protected PieceColor color;
+
+
+
     protected PieceType type;
     protected int i;
     protected int j;
@@ -17,30 +20,16 @@ public class Piece {
     }
 
     public int icoord() {
-        // Bounds correction
-        if (i > 8) {
-            return 7;
-        }
-
-        if (i < 0) {
-            return 0;
-        } else {
-            return i;
-        }
+       return i;
     }
 
     public int jcoord() {
-        // Bounds correction
-        if (j > 8) {
-            return 7;
-        }
-
-        if (i < 0) {
-            return 0;
-        } else {
-            return j;
-        }
+       return j;
     }
 
     public PieceColor getColor() { return color; }
+
+    public PieceType getType() {
+        return type;
+    }
 }

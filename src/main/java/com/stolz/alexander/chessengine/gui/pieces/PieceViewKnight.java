@@ -7,9 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class PieceViewKnight extends PieceView {
-	private PieceView[][] boardstate;
 
-	public PieceViewKnight(PieceColor color, int ii, int jj) {
+    public PieceViewKnight(PieceColor color, int ii, int jj) {
 		super(PieceType.KNIGHT, color, ii, jj);
         imgname = "knight.png";
         switch (color){
@@ -25,7 +24,7 @@ public class PieceViewKnight extends PieceView {
 
 	@Override
 	public PieceView[][] move(PieceView kn, PieceView t, PieceView[][] bs){
-		boardstate = bs;
+        PieceView[][] boardstate = bs;
 		// Move pawn
 		boardstate[t.icoord()][t.jcoord()] = new PieceViewKnight(kn.getColor(), t.icoord(), t.jcoord());
 		boardstate[kn.icoord()][kn.jcoord()] = new Empty(kn.icoord(), kn.jcoord());

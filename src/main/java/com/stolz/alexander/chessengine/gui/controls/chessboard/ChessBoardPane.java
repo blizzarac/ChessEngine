@@ -1,4 +1,4 @@
-package com.stolz.alexander.chessengine.gui;
+package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.gui.pieces.*;
@@ -6,7 +6,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Translate;
 
 import javafx.scene.image.Image;
@@ -16,28 +15,29 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
-public class ChessBoard extends Pane {
+public class ChessBoardPane extends Pane {
 
-    //private fields
-    private int boardWidth = 8;
-    private int boardHeight = 8;
+
+
+    private ChessBoard chessBoard;
+
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
 
     public PieceView[][] getPieceViews() {
         return pieceViews;
     }
 
     public Rectangle[][] getBoard() {
-        return board;
+        return chessBoard.getBoard();
     }
 
     private PieceView[][] pieceViews;
-    private Rectangle[][] board;
     private Image[][] images;
     private ImageView[][] imageviews;
 
 
-    private double cell_width;
-    private double cell_height;
     private PieceColor current_player = WHITE;
     private String clicklogic = "false";
 
@@ -67,21 +67,17 @@ public class ChessBoard extends Pane {
     }
 
     public PieceColor otherplayer() {
-        if (current_player == WHITE) {
-            PieceColor otherplayer = BLACK;
-            return otherplayer;
-        } else {
-            PieceColor otherplayer = WHITE;
-            return otherplayer;
-        }
+        return current_player.mirror();
     }
 
     public boolean pieceselect() {
         return pieceselect;
     }
 
+    /**
+     * Reset imageviews array
+     */
     public void resetGame() {
-        // Reset imageviews array
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 imageviews[x][y].setImage(images[x][y]);
@@ -89,38 +85,12 @@ public class ChessBoard extends Pane {
         }
     }
 
-    public ChessBoard() {
+    public ChessBoardPane() {
+        chessBoard = new ChessBoard();
         pos = new Translate();
 
-        // Declares new board
-        board = new Rectangle[boardWidth][boardHeight];
-
         // Initializes new board
-        for (int x = 0; x < 8; x++) {
-            for (int j = 0; j < 8; j++) {
-                board[x][j] = new Rectangle();
-                board[x][j].setWidth(50);
-                board[x][j].setHeight(50);
-                board[x][j].setStroke(Color.TRANSPARENT);
-                board[x][j].setStrokeType(StrokeType.INSIDE);
-                board[x][j].setStrokeWidth(1);
-            }
-        }
-
-        // Generates colours for the chessboard backgrounds
-        for (int x = 0; x < 8; x++) {
-            for (int j = 0; j < 8; j++) {
-                if (x % 2 == 0 && j % 2 == 1) {
-                    board[x][j].setFill(Color.YELLOW);
-                } else if (x % 2 == 0 && j % 2 == 0) {
-                    board[x][j].setFill(Color.BROWN);
-                } else if (x % 2 == 1 && j % 2 == 1) {
-                    board[x][j].setFill(Color.BROWN);
-                } else if (x % 2 == 1 && j % 2 == 0) {
-                    board[x][j].setFill(Color.YELLOW);
-                }
-            }
-        }
+        chessBoard.setBoard(chessBoard.initializeNewBoard());
 
         pieceViews = initPiecesViews();
 
@@ -130,7 +100,6 @@ public class ChessBoard extends Pane {
                 images[x][y] = pieceViews[x][y].getImage();
             }
         }
-
 
         // Viewers for each getImage
         imageviews = new ImageView[8][8];
@@ -151,7 +120,7 @@ public class ChessBoard extends Pane {
                 imageviews[x][y].setPreserveRatio(true);
                 imageviews[x][y].setSmooth(true);
                 imageviews[x][y].setCache(true);
-                imageviews[x][y].setTranslateX(board[x][y].getWidth() / 8);
+                imageviews[x][y].setTranslateX(chessBoard.getBoard()[x][y].getWidth() / 8);
             }
         }
 
@@ -160,7 +129,7 @@ public class ChessBoard extends Pane {
 
     private PieceView[][] initPiecesViews() {
         //initialize the board: background, data structures, inital layout of pieceViews
-        PieceView[][] pieceViews = new PieceView[boardWidth][boardHeight];
+        PieceView[][] pieceViews = new PieceView[ChessBoard.boardWidth][ChessBoard.boardHeight];
 
         // White Pieces
         pieceViews[7][7] = new PieceViewRook(WHITE, 7, 7);
@@ -211,7 +180,7 @@ public class ChessBoard extends Pane {
     }
 
     public void placeboard(final int i, final int j) {
-        getChildren().add(board[i][j]);
+        getChildren().add(chessBoard.getBoard()[i][j]);
     }
 
     public void placeimages(final int i, final int j) {
@@ -220,31 +189,17 @@ public class ChessBoard extends Pane {
 
     // Returns stroke of board piece
     public boolean getStroke(final int i, final int j, Paint color) {
-        if (board[i][j].getStroke() == color) {
-            return true;
-        } else return false;
-    }
-
-    public void checkhighlight(int x, int y) {
-        board[x][y].setStroke(Color.RED);
+        return chessBoard.getBoard()[i][j].getStroke() == color;
     }
 
     //resize method
     @Override
     public void resize(double width, double height) {
         super.resize(width, height);
-        cell_width = width / 8;
-        cell_height = height / 8;
+        double cell_width = width / 8;
+        double cell_height = height / 8;
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                board[i][j].resize(i * cell_width, j * cell_height);
-                board[i][j].relocate(i * cell_width, j * cell_height);
-                board[i][j].setStrokeWidth(cell_width / 16);
-                board[i][j].setWidth(cell_width);
-                board[i][j].setHeight(cell_height);
-            }
-        }
+        chessBoard.resize(cell_width, cell_height);
 
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < 8; i++) {
@@ -254,7 +209,7 @@ public class ChessBoard extends Pane {
                     imageviews[i][j].relocate(i * cell_width, j * cell_height);
                     imageviews[i][j].setFitWidth(cell_width / 1.25);
                     imageviews[i][j].setFitHeight(cell_height / 1.25);
-                    imageviews[i][j].setTranslateX(board[i][j].getWidth() / 8);
+                    imageviews[i][j].setTranslateX(chessBoard.getBoard()[i][j].getWidth() / 8);
                 }
 
                 //White Royalty
@@ -263,13 +218,13 @@ public class ChessBoard extends Pane {
                     imageviews[i][j].relocate(i * cell_width, j * cell_height);
                     imageviews[i][j].setFitWidth(cell_width / 1.25);
                     imageviews[i][j].setFitHeight(cell_height / 1.25);
-                    imageviews[i][j].setTranslateX(board[i][j].getWidth() / 8);
+                    imageviews[i][j].setTranslateX(chessBoard.getBoard()[i][j].getWidth() / 8);
                 } else {
                     imageviews[i][j].resize(cell_width / 8, cell_height / 8);
                     imageviews[i][j].relocate(i * cell_width, j * cell_height);
                     imageviews[i][j].setFitWidth(cell_width / 1.25);
                     imageviews[i][j].setFitHeight(cell_height / 1.25);
-                    imageviews[i][j].setTranslateX(board[i][j].getWidth() / 8);
+                    imageviews[i][j].setTranslateX(chessBoard.getBoard()[i][j].getWidth() / 8);
                 }
             }
         }
@@ -289,7 +244,7 @@ public class ChessBoard extends Pane {
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                if (imageviews[x][y].hashCode() == hash || board[x][y].hashCode() == hash) {
+                if (imageviews[x][y].hashCode() == hash || chessBoard.getBoard()[x][y].hashCode() == hash) {
                     i = x;
                     j = y;
                 }
@@ -330,27 +285,27 @@ public class ChessBoard extends Pane {
         if (current_player == WHITE && winner == false) {
             if (pieceViews[i][j].getColor() == WHITE) {
                 // If player has already selected the piece, deselect it
-                if (board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
+                if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
                     if (i % 2 == 0 && j % 2 == 1) {
-                        board[i][j].setFill(Color.YELLOW);
+                        chessBoard.getBoard()[i][j].setFill(Color.YELLOW);
                         pieceselect = false;
                     }
                     if (i % 2 == 0 && j % 2 == 0) {
-                        board[i][j].setFill(Color.BROWN);
+                        chessBoard.getBoard()[i][j].setFill(Color.BROWN);
                         pieceselect = false;
                     }
                     if (i % 2 == 1 && j % 2 == 1) {
-                        board[i][j].setFill(Color.BROWN);
+                        chessBoard.getBoard()[i][j].setFill(Color.BROWN);
                         pieceselect = false;
                     }
                     if (i % 2 == 1 && j % 2 == 0) {
-                        board[i][j].setFill(Color.YELLOW);
+                        chessBoard.getBoard()[i][j].setFill(Color.YELLOW);
                         pieceselect = false;
                     }
                 }
                 // Otherwise select it and work out moves
                 else {
-                    board[i][j].setStroke(Color.LIGHTCORAL);
+                    chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
                     pieceselect = true;
                     return pieceViews[i][j];
                 }
@@ -360,26 +315,26 @@ public class ChessBoard extends Pane {
         // If current player is black
         else {
             if (pieceViews[i][j].getColor() == BLACK) {
-                if (board[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
+                if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
                     // Resets color
                     if (i % 2 == 0 && j % 2 == 1) {
-                        board[i][j].setFill(Color.YELLOW);
+                        chessBoard.getBoard()[i][j].setFill(Color.YELLOW);
                         pieceselect = false;
                     }
                     if (i % 2 == 0 && j % 2 == 0) {
-                        board[i][j].setFill(Color.BROWN);
+                        chessBoard.getBoard()[i][j].setFill(Color.BROWN);
                         pieceselect = false;
                     }
                     if (i % 2 == 1 && j % 2 == 1) {
-                        board[i][j].setFill(Color.BROWN);
+                        chessBoard.getBoard()[i][j].setFill(Color.BROWN);
                         pieceselect = false;
                     }
                     if (i % 2 == 1 && j % 2 == 0) {
-                        board[i][j].setFill(Color.YELLOW);
+                        chessBoard.getBoard()[i][j].setFill(Color.YELLOW);
                         pieceselect = false;
                     }
                 } else {
-                    board[i][j].setStroke(Color.LIGHTCORAL);
+                    chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
                     pieceselect = true;
                     return pieceViews[i][j];
                 }
@@ -404,18 +359,18 @@ public class ChessBoard extends Pane {
         imageviews[ti][tj].setImage(newimage);
         imageviews[si][sj].setImage(empty);
         // Remove highlight
-        if (board[si][sj].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
+        if (chessBoard.getBoard()[si][sj].getStroke() == Color.LIGHTCORAL && pieceselect == true) {
             if (si % 2 == 0 && sj % 2 == 1) {
-                board[si][sj].setFill(Color.YELLOW);
+                chessBoard.getBoard()[si][sj].setFill(Color.YELLOW);
             } else if (si % 2 == 0 && sj % 2 == 0) {
-                board[si][sj].setFill(Color.BROWN);
+                chessBoard.getBoard()[si][sj].setFill(Color.BROWN);
             } else if (si % 2 == 1 && sj % 2 == 1) {
-                board[si][sj].setFill(Color.BROWN);
+                chessBoard.getBoard()[si][sj].setFill(Color.BROWN);
             } else if (si % 2 == 1 && sj % 2 == 0) {
-                board[si][sj].setFill(Color.YELLOW);
+                chessBoard.getBoard()[si][sj].setFill(Color.YELLOW);
             }
         } else if (pieceselect == false) {
-            board[si][sj].setStroke(Color.LIGHTCORAL);
+            chessBoard.getBoard()[si][sj].setStroke(Color.LIGHTCORAL);
             pieceselect = true;
         }
     }
@@ -434,25 +389,20 @@ public class ChessBoard extends Pane {
         }
     }
 
-    public void hoverhighlight(int x, int y) {
-        int i = x;
-        int j = y;
-        // Set highlight color
-        board[i][j].setStroke(Color.CADETBLUE);
-    }
+   
 
     public void clearhighlights() {
         for (int x = 0; x < 8; x++) {
             for (int j = 0; j < 8; j++) {
-                board[x][j].setStroke(Color.TRANSPARENT);
+                chessBoard.getBoard()[x][j].setStroke(Color.TRANSPARENT);
                 if (x % 2 == 0 && j % 2 == 1) {
-                    board[x][j].setFill(Color.YELLOW);
+                    chessBoard.getBoard()[x][j].setFill(Color.YELLOW);
                 } else if (x % 2 == 0 && j % 2 == 0) {
-                    board[x][j].setFill(Color.BROWN);
+                    chessBoard.getBoard()[x][j].setFill(Color.BROWN);
                 } else if (x % 2 == 1 && j % 2 == 1) {
-                    board[x][j].setFill(Color.BROWN);
+                    chessBoard.getBoard()[x][j].setFill(Color.BROWN);
                 } else if (x % 2 == 1 && j % 2 == 0) {
-                    board[x][j].setFill(Color.YELLOW);
+                    chessBoard.getBoard()[x][j].setFill(Color.YELLOW);
                 }
             }
         }

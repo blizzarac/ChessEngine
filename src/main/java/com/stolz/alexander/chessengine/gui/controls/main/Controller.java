@@ -1,4 +1,4 @@
-package com.stolz.alexander.chessengine.gui;
+package com.stolz.alexander.chessengine.gui.controls.main;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

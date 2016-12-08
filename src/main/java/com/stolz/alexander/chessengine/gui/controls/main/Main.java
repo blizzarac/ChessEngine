@@ -1,4 +1,4 @@
-package com.stolz.alexander.chessengine.gui;
+package com.stolz.alexander.chessengine.gui.controls.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

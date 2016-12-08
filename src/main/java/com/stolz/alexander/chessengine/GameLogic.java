@@ -5,6 +5,7 @@ import com.stolz.alexander.chessengine.gui.pieces.*;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 
 public class GameLogic implements Cloneable {
 
@@ -40,9 +41,7 @@ public class GameLogic implements Cloneable {
     }
 
     public void flipcheck() {
-        if (check == true) {
-            check = false;
-        }
+        check = !check;
     }
 
     // Take current boardstate and evaluate check for all pieces in boardstate
@@ -57,7 +56,7 @@ public class GameLogic implements Cloneable {
                     // Create an array of possible moves for this piece
                     possiblemoves = checkMateMoves(boardstate[x][y], boardstate);
                     // If possiblemoves has a move that resolves check == false, flag=false
-                    if (check4check(currentplayer, possiblemoves) == false) {
+                    if (!check4check(currentplayer, possiblemoves)) {
                         checkmateflag = "false";
                     }
                 }
@@ -83,9 +82,7 @@ public class GameLogic implements Cloneable {
 
         // Move board into new array because java
         for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                possiblemoves[x][y] = pieceViews[x][y];
-            }
+            System.arraycopy(pieceViews[x], 0, possiblemoves[x], 0, 8);
         }
 
         //_____________________________________WHITEPAWNS_____________________________________//
@@ -97,7 +94,7 @@ public class GameLogic implements Cloneable {
                 }
             }
 
-            if (p.firstmove() == true) {
+            if (p.firstmove()) {
                 // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
                 if (pieceViews[p.icoord()][p.jcoord() - 2].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty") && pieceViews[p.icoord()][p.jcoord() - 1].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
                     possiblemoves[p.icoord()][p.jcoord() - 2] = new PieceViewPawn(WHITE, p.icoord(), p.jcoord() - 2, false);
@@ -120,7 +117,7 @@ public class GameLogic implements Cloneable {
         }
 
         //_____________________________________BLACKPAWNS_____________________________________//
-        if (p.toString() == "Pawn" && p.getColor() == BLACK) {
+        if (p.getType() == PAWN && p.getColor() == BLACK) {
             // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
             if (p.jcoord() + 1 < 8) { // Guard for bounds
                 if (pieceViews[p.icoord()][p.jcoord() + 1].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -128,7 +125,7 @@ public class GameLogic implements Cloneable {
                 }
             }
 
-            if (p.firstmove() == true) {
+            if (p.firstmove()) {
                 // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
                 if (pieceViews[p.icoord()][p.jcoord() + 2].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty") && pieceViews[p.icoord()][p.jcoord() + 1].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
                     possiblemoves[p.icoord()][p.jcoord() + 2] = new PieceViewPawn(BLACK, p.icoord(), p.jcoord() + 2, false);
@@ -151,7 +148,7 @@ public class GameLogic implements Cloneable {
         }
 
         //__________________________________________WHITEROOK_____________________________________//
-        if (p.toString() == "Rook" && p.getColor() == WHITE) {
+        if (p.getType() == ROOK && p.getColor() == WHITE) {
             // Look Up ..
             for (int y = p.jcoord() - 1; y >= 0; y--) {
                 if (pieceViews[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -219,7 +216,7 @@ public class GameLogic implements Cloneable {
 
         //__________________________________________BLACKROOK_____________________________________//
 
-        if (p.toString() == "Rook" && p.getColor() == BLACK) {
+        if (p.getType() == ROOK && p.getColor() == BLACK) {
             // Look Up ..
             for (int y = p.jcoord() - 1; y >= 0; y--) {
                 if (pieceViews[p.icoord()][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -286,7 +283,7 @@ public class GameLogic implements Cloneable {
         }
 
         //__________________________________________WHITEBISHOP_____________________________________//
-        if (p.toString() == "Bishop" && p.getColor() == WHITE) {
+        if (p.getType() == BISHOP && p.getColor() == WHITE) {
             // Look up .. (left)
             for (int y = p.jcoord() - 1, x = p.icoord() - 1; y >= 0 && x >= 0; y--, x--) {
                 if (pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -360,7 +357,7 @@ public class GameLogic implements Cloneable {
             }
         }
         //__________________________________________BLACKBISHOP_____________________________________//
-        if (p.toString() == "Bishop" && p.getColor() == BLACK) {
+        if (p.getType() == BISHOP && p.getColor() == BLACK) {
             // Look up .. (left)
             for (int y = p.jcoord() - 1, x = p.icoord() - 1; y >= 0 && x >= 0; y--, x--) {
                 if (pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -438,7 +435,7 @@ public class GameLogic implements Cloneable {
 
         // Assuming knights can jump regardless of what pieceViews are in the way
 
-        if (p.toString() == "Knight" && p.getColor() == WHITE) {
+        if (p.getType() == KNIGHT && p.getColor() == WHITE) {
             // Up and left (first)
             if (p.icoord() - 1 >= 0 && p.jcoord() - 2 >= 0) {                // Bound check
                 if (pieceViews[p.icoord() - 1][p.jcoord() - 2].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -521,7 +518,7 @@ public class GameLogic implements Cloneable {
         }
 
         //_________________________________BLACKKNIGHT_____________________________________//
-        if (p.toString() == "Knight" && p.getColor() == BLACK) {
+        if (p.getType() == KNIGHT && p.getColor() == BLACK) {
             // Up and left (first)
             if (p.icoord() - 1 >= 0 && p.jcoord() - 2 >= 0) {                // Bound check
                 if (pieceViews[p.icoord() - 1][p.jcoord() - 2].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -605,7 +602,7 @@ public class GameLogic implements Cloneable {
         }
 
         //______________________________WHITEQUEEN_____________________________________//
-        if (p.toString() == "Queen" && p.getColor() == WHITE) {
+        if (p.getType() == QUEEN && p.getColor() == WHITE) {
             // Look up .. (left)
             for (int y = p.jcoord() - 1, x = p.icoord() - 1; y >= 0 && x >= 0; y--, x--) {
                 if (pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -744,7 +741,7 @@ public class GameLogic implements Cloneable {
         }
 
         //______________________________BLACKQUEEN_____________________________________//
-        if (p.toString() == "Queen" && p.getColor() == BLACK) {
+        if (p.getType() == QUEEN && p.getColor() == BLACK) {
             // Look up .. (left)
             for (int y = p.jcoord() - 1, x = p.icoord() - 1; y >= 0 && x >= 0; y--, x--) {
                 if (pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -883,7 +880,7 @@ public class GameLogic implements Cloneable {
         }
 
         //_________________________________WHITEKING_____________________________________//
-        if (p.toString() == "King" && p.getColor() == WHITE) {
+        if (p.getType() == KING && p.getColor() == WHITE) {
             // Up
             if (p.jcoord() - 1 >= 0) {
                 if (pieceViews[p.icoord()][p.jcoord() - 1].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -966,7 +963,7 @@ public class GameLogic implements Cloneable {
         }
 
         //_________________________________BLACKKING_____________________________________//
-        if (p.toString() == "King" && p.getColor() == BLACK) {
+        if (p.getType() == KING && p.getColor() == BLACK) {
             // Up
             if (p.jcoord() - 1 >= 0) {
                 if (pieceViews[p.icoord()][p.jcoord() - 1].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")) {
@@ -1099,7 +1096,7 @@ public class GameLogic implements Cloneable {
                             y = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearc == true && y != -1) {
+                        if (clearc && y != -1) {
                             //System.out.println(clearc);
                             if (boardstate[xi][y].toString().equals("King") && boardstate[xi][y].getColor() == otherplayer) {
                                 //System.out.println("gotcha");
@@ -1120,7 +1117,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearc == true && x != 8) {
+                        if (clearc && x != 8) {
                             if (boardstate[x][yi].toString().equals("King") && boardstate[x][yi].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1139,7 +1136,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearc == true && x != -1) {
+                        if (clearc && x != -1) {
                             if (boardstate[x][yi].toString().equals("King") && boardstate[x][yi].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1158,7 +1155,7 @@ public class GameLogic implements Cloneable {
                             y = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearc == true && y != 8) {
+                        if (clearc && y != 8) {
                             if (boardstate[xi][y].toString().equals("King") && boardstate[xi][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = xi;
@@ -1181,7 +1178,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearb == true && y != -1 && x != -1) {
+                        if (clearb && y != -1 && x != -1) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1202,7 +1199,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearb == true && x != 8 && y != -1) {
+                        if (clearb && x != 8 && y != -1) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1223,7 +1220,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearb == true && y != 8 && x != -1) {
+                        if (clearb && y != 8 && x != -1) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1244,7 +1241,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearb == true && x != 8 && y != 8) {
+                        if (clearb && x != 8 && y != 8) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1372,7 +1369,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && x != 8) {
+                        if (clearq && x != 8) {
                             if (boardstate[x][yi].toString().equals("King") && boardstate[x][yi].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1391,7 +1388,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && x != -1) {
+                        if (clearq && x != -1) {
                             if (boardstate[x][yi].toString().equals("King") && boardstate[x][yi].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1410,7 +1407,7 @@ public class GameLogic implements Cloneable {
                             y = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && y != 8) {
+                        if (clearq && y != 8) {
                             if (boardstate[xi][y].toString().equals("King") && boardstate[xi][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = xi;
@@ -1430,7 +1427,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && y != -1 && x != -1) {
+                        if (clearq && y != -1 && x != -1) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1451,7 +1448,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && y != -1 && x != 8) {
+                        if (clearq && y != -1 && x != 8) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1472,7 +1469,7 @@ public class GameLogic implements Cloneable {
                             x = -1;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && y != 8 && x != -1) {
+                        if (clearq && y != 8 && x != -1) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;
@@ -1493,7 +1490,7 @@ public class GameLogic implements Cloneable {
                             x = 8;
                         }
                         // If path is clear, check for king ..
-                        if (clearq == true && y != 8 && x != 8) {
+                        if (clearq && y != 8 && x != 8) {
                             if (boardstate[x][y].toString().equals("King") && boardstate[x][y].getColor() == otherplayer) {
                                 check = true;
                                 checki = x;

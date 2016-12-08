@@ -8,9 +8,8 @@ import javafx.scene.shape.Rectangle;
 
 public class PieceViewPawn extends PieceView {
 	boolean firstmove;
-	private PieceView[][] boardstate;
 
-	public PieceViewPawn(PieceColor color, int ii, int jj, boolean fm) {
+    public PieceViewPawn(PieceColor color, int ii, int jj, boolean fm) {
 		super(PieceType.PAWN, color, ii, jj);
         imgname = "pawn.png";
 		firstmove = fm;
@@ -31,13 +30,11 @@ public class PieceViewPawn extends PieceView {
 
 	@Override
 	public PieceView[][] move(PieceView p, PieceView t, PieceView[][] bs){
-		boardstate = bs;
-		// Move pawn
 		firstmove = false;
-		boardstate[t.icoord()][t.jcoord()] = new PieceViewPawn(p.getColor(), t.icoord(), t.jcoord(), firstmove);
-		boardstate[p.icoord()][p.jcoord()] = new Empty(p.icoord(), p.jcoord());
-		// Return the new board
-		return boardstate;
+		bs[t.icoord()][t.jcoord()] = new PieceViewPawn(p.getColor(), t.icoord(), t.jcoord(), firstmove);
+		bs[p.icoord()][p.jcoord()] = new Empty(p.icoord(), p.jcoord());
+
+		return bs;
 	}
 
     @Override

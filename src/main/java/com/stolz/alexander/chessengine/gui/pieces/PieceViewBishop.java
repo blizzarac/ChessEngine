@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class PieceViewBishop extends PieceView {
-    private PieceView[][] boardstate;
 
     public PieceViewBishop(PieceColor color, int ii, int jj) {
         super(PieceType.BISHOP, color, ii, jj);
@@ -24,7 +23,7 @@ public class PieceViewBishop extends PieceView {
 
     @Override
     public PieceView[][] move(PieceView b, PieceView t, PieceView[][] bs) {
-        boardstate = bs;
+        PieceView[][] boardstate = bs;
         // Move pawn
         boardstate[t.icoord()][t.jcoord()] = new PieceViewBishop(b.getColor(), t.icoord(), t.jcoord());
         boardstate[b.icoord()][b.jcoord()] = new Empty(b.icoord(), b.jcoord());
