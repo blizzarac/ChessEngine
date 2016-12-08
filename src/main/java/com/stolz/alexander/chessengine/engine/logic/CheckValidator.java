@@ -40,7 +40,6 @@ public class CheckValidator {
     }
 
     private boolean check4CheckQueen(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
-        //______________________________QUEENS_____________________________________//
         if (boardstate[xi][yi].getType() == QUEEN && boardstate[xi][yi].getColor() == currentplayer) {
             // Look Up ..
             for (int y = yi - 1; y >= 0; y--) {

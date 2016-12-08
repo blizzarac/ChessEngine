@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
 import com.stolz.alexander.chessengine.engine.logic.CheckValidator;
+import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.logic.GameLogic;
 import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 import javafx.scene.Cursor;
@@ -84,12 +85,11 @@ public class ChessEngineControl extends Control {
                 winner = false;
                 stalecountwhite = 8;
                 stalecountblack = 8;
-                chessboardPane.changeclickfalse();
+                chessboardPane.setClickLogoc(ClickState.FIRSTCLICK);
             }
         });
 
         setOnMouseClicked(event -> {
-
             // Get has of what we clicked on ..
             int hash = event.getTarget().hashCode();
 
@@ -105,22 +105,10 @@ public class ChessEngineControl extends Control {
                 System.out.println("White time out: Black Wins!");
             }
 
-            // Print current player..
-            if (chessboardPane.clicklogic() == "false" && !winner && !stale) {
-                if (chessboardPane.currentplayer() == WHITE) {
-                    System.out.print("Current player: White");
-                } else {
-                    System.out.print("Current player: Black");
-                }
-            }
-
-            System.out.println("\n");
-
             // Second click
-            if (chessboardPane.clicklogic() == "true") {
+            if (chessboardPane.getClickState() == ClickState.SECONDCLICK) {
                 PieceView[][] boardstate = chessboardPane.getState();
 
-                //System.out.println("mousesec: " + xcoordmouse + "," + ycoordmouse);
                 targetpiece = chessboardPane.selectTarget(hash);
                 boardstate = pawnSelection(boardstate);
                 boardstate = bishopSelection(boardstate);
@@ -129,12 +117,11 @@ public class ChessEngineControl extends Control {
                 boardstate = kingSelection(boardstate);
                 knightSelection(boardstate);
 
-
                 chessboardPane.clearhighlights();
-                chessboardPane.changeclicknull();
+                chessboardPane.setClickLogoc(ClickState.NULL);
 
                 // Check for checkmate ..
-                if (gamelogic.check4checkmate(chessboardPane.otherplayer(), chessboardPane.getState()) == "true") {
+                if (gamelogic.check4checkmate(chessboardPane.otherplayer(), chessboardPane.getState())) {
                     winner = true;
                 }
 
@@ -146,20 +133,19 @@ public class ChessEngineControl extends Control {
                     if (!winner) {
                         System.out.println("CHECK!");
                     }
-                    chessboardPane.changeclicknull();
+                    chessboardPane.setClickLogoc(ClickState.NULL);
                 }
             }
 
             // First click
-            if (chessboardPane.clicklogic() == "false" && !stale && !winner) {
+            if (chessboardPane.getClickState() == ClickState.FIRSTCLICK && !stale && !winner) {
 
                 selectedpiece = chessboardPane.selectPiece(hash);
-
                 junkselection = selectedpiece.getColor() == NONE || !chessboardPane.pieceselect();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
                     getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
-                    chessboardPane.changeclicktrue();
+                    chessboardPane.setClickLogoc(ClickState.SECONDCLICK);
                     // Highlights valid moves.
                     selectedpiece.drawValidMoves(chessboardPane.getPieceViews(), chessboardPane.getBoard());
                     // Check 4 check ..
@@ -168,14 +154,9 @@ public class ChessEngineControl extends Control {
                     }
                 }
 
-                if (chessboardPane.clicklogic() == "true") {
-                    System.out.print("Whitepieces: " + countWhitePieces(chessboardPane.getState()) + " Blackpieces: " + countBlackPieces(chessboardPane.getState()));
-                    System.out.println("\n====================");
-                }
-
                 // If completed move, return to first click ..
-                if (chessboardPane.clicklogic() == "null") {
-                    chessboardPane.changeclickfalse();
+                if (chessboardPane.getClickState() == ClickState.NULL) {
+                    chessboardPane.setClickLogoc(ClickState.FIRSTCLICK);
                 }
             }
         });
@@ -199,13 +180,13 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -236,12 +217,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -276,7 +257,7 @@ public class ChessEngineControl extends Control {
 
         // If screw up ..
         else {
-            chessboardPane.changeclicknull();
+            chessboardPane.setClickLogoc(ClickState.NULL);
             chessboardPane.clearhighlights();
         }
     }
@@ -301,13 +282,13 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -340,12 +321,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -400,13 +381,13 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -439,12 +420,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -499,13 +480,13 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
                         if (selectedpiece.getColor() == WHITE) {
@@ -536,12 +517,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -596,13 +577,13 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -635,12 +616,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -695,14 +676,14 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         // Successful move
                         stalecountwhite = 8;
                         stalecountblack = 8;
                     }
                     // If check, reverse move
                     else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 
@@ -734,12 +715,12 @@ public class ChessEngineControl extends Control {
                         chessboardPane.setBoard(boardstate);
                         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
                         chessboardPane.changeplayer();
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         stalecountwhite = 8;
                         stalecountblack = 8;
                         // If still in check, undo move
                     } else {
-                        chessboardPane.changeclicknull();
+                        chessboardPane.setClickLogoc(ClickState.NULL);
                         chessboardPane.setBoard(oldstate);
                         gamelogic.flipcheck();
 

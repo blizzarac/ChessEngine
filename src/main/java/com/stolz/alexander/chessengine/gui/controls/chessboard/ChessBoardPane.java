@@ -1,5 +1,6 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
+import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.gui.pieces.*;
 import javafx.scene.layout.Pane;
@@ -39,31 +40,19 @@ public class ChessBoardPane extends Pane {
 
 
     private PieceColor current_player = WHITE;
-    private String clicklogic = "false";
+    private ClickState clickState = ClickState.FIRSTCLICK;
 
     private boolean pieceselect = false;
     private boolean winner = false;
 
     private Translate pos;
 
-    public String clicklogic() {
-        return clicklogic;
+    public ClickState getClickState() {
+        return clickState;
     }
 
-    public void changeclicktrue() {
-        clicklogic = "true";
-    }
-
-    public void changeclickfalse() {
-        clicklogic = "false";
-    }
-
-    public void changeclicknull() {
-        clicklogic = "null";
-    }
-
-    public PieceColor currentplayer() {
-        return current_player;
+    public void setClickLogoc(ClickState state) {
+        this.clickState = state;
     }
 
     public PieceColor otherplayer() {
