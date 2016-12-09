@@ -1,10 +1,14 @@
 package com.stolz.alexander.chessengine.gui.pieces;
 
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 
@@ -34,7 +38,9 @@ public class PieceViewKing extends PieceView {
 	}
 
     @Override
-    public void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+    public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+        List<PiecePosition> validMoves = new ArrayList<>();
+
         // Up
         if(this.jcoord()-1 >= 0){
             if(pieceViews[this.icoord()][this.jcoord()-1].getColor() == PieceColor.NONE){
@@ -114,6 +120,8 @@ public class PieceViewKing extends PieceView {
                 board[this.icoord()+1][this.jcoord()+1].setStroke(Color.AQUAMARINE);
             }
         }
+
+        return validMoves;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Main extends Application {
         final StackPane sp_mainlayout = FXMLLoader.load(getClass().getResource("main.fxml"));
         // set the title and scene, and show the stage
         primaryStage.setTitle("Chess");
-        primaryStage.setScene(new Scene(sp_mainlayout, 1000, 800));
+        primaryStage.setScene(new Scene(sp_mainlayout, 300, 300));
 
         primaryStage.setMaxHeight(800);
         primaryStage.setMaxWidth(1000);

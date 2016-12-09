@@ -5,26 +5,21 @@ package com.stolz.alexander.chessengine.engine.pieces;
  */
 public class Piece {
     protected PieceColor color;
-
-
-
     protected PieceType type;
-    protected int i;
-    protected int j;
+    protected PiecePosition piecePosition;
 
     public Piece(PieceType type, PieceColor color, int i, int j) {
         this.type = type;
         this.color = color;
-        this.i = i;
-        this.j = j;
+        piecePosition = new PiecePosition(i,j);
     }
 
     public int icoord() {
-       return i;
+       return piecePosition.i ;
     }
 
     public int jcoord() {
-       return j;
+       return piecePosition.i ;
     }
 
     public PieceColor getColor() { return color; }

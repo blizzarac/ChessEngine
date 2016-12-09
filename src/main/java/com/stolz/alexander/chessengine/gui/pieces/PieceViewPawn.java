@@ -1,15 +1,18 @@
 package com.stolz.alexander.chessengine.gui.pieces;
 
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.PAWN;
 
 public class PieceViewPawn extends PieceView {
 	boolean firstmove;
@@ -43,11 +46,14 @@ public class PieceViewPawn extends PieceView {
 	}
 
     @Override
-    public void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+    public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+        List<PiecePosition> validMoves = new ArrayList<>();
 		if (color == PieceColor.BLACK)
             drawBlackMoves(this, pieceViews, board);
 		else
             drawWhiteMoves(this, pieceViews, board);
+
+        return validMoves;
     }
 
     private void drawBlackMoves(PieceView p, PieceView[][] pieceViews, Rectangle[][] board) {

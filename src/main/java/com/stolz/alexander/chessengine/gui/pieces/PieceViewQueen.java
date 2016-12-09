@@ -1,10 +1,14 @@
 package com.stolz.alexander.chessengine.gui.pieces;
 
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 
@@ -34,10 +38,12 @@ public class PieceViewQueen extends PieceView {
 	}
 
     @Override
-    public void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+    public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+	    List<PiecePosition> validMoves = new ArrayList<>();
+
         // Look up .. (left)
         for(int y=this.jcoord()-1, x=this.icoord()-1; y >= 0 && x >= 0; y--,x--){
-            if(pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][y].getType() == NOTYPE){
                 board[x][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][y].getColor()== this.color.mirror()){
@@ -53,7 +59,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look up .. (right)
         for(int y=this.jcoord()-1, x=this.icoord()+1; y >= 0 && x < 8; y--,x++){
-            if(pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][y].getType() == NOTYPE){
                 board[x][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][y].getColor()== this.color.mirror()){
@@ -69,7 +75,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look down .. (left)
         for(int y=this.jcoord()+1, x=this.icoord()-1; y < 8 && x >= 0; y++,x--){
-            if(pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][y].getType() == NOTYPE){
                 board[x][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][y].getColor()== this.color.mirror()){
@@ -85,7 +91,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look down .. (right)
         for(int y=this.jcoord()+1, x=this.icoord()+1; y < 8 && x < 8; y++,x++){
-            if(pieceViews[x][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][y].getType() == NOTYPE){
                 board[x][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][y].getColor()== this.color.mirror()){
@@ -101,7 +107,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look Up ..
         for(int y = this.jcoord()-1; y >= 0; y--){
-            if(pieceViews[this.icoord()][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[this.icoord()][y].getType() == NOTYPE){
                 board[this.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[this.icoord()][y].getColor()== this.color.mirror()){
@@ -117,7 +123,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look Right ..
         for(int x = this.icoord()+1; x < 8; x++){
-            if(pieceViews[x][this.jcoord()].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][this.jcoord()].getType() == NOTYPE){
                 board[x][this.jcoord()].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][this.jcoord()].getColor()== this.color.mirror()){
@@ -133,7 +139,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look Left ..
         for(int x = this.icoord()-1; x >= 0; x--){
-            if(pieceViews[x][this.jcoord()].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[x][this.jcoord()].getType() == NOTYPE){
                 board[x][this.jcoord()].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[x][this.jcoord()].getColor()== this.color.mirror()){
@@ -149,7 +155,7 @@ public class PieceViewQueen extends PieceView {
 
         // Look Down ..
         for(int y = this.jcoord()+1; y < 8; y++){
-            if(pieceViews[this.icoord()][y].toString().equals("com.stolz.alexander.chessengine.gui.pieceViews.Empty")){
+            if(pieceViews[this.icoord()][y].getType() == NOTYPE){
                 board[this.icoord()][y].setStroke(Color.CORNFLOWERBLUE);
             }
             if(pieceViews[this.icoord()][y].getColor()== this.color.mirror()){
@@ -162,6 +168,8 @@ public class PieceViewQueen extends PieceView {
                 y=8;
             }
         }
+
+        return validMoves;
     }
 
     @Override

@@ -123,11 +123,6 @@ public class ChessEngineControl extends Control {
                         checkValidator.check4check(chessboardPane.otherPlayerColor(), chessboardPane.getState());
                     }
                 }
-
-                // If completed move, return to first click ..
-                if (chessboardPane.getClickState() == ClickState.NULL) {
-                    chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
-                }
             } else if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
                 PieceView[][] boardstate = chessboardPane.getState();
 

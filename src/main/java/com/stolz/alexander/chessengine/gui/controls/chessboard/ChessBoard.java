@@ -1,11 +1,8 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
-import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-
-import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 /**
  * Created by alexanderstolz on 12/8/16.

@@ -2,9 +2,12 @@ package com.stolz.alexander.chessengine.gui.pieces;
 
 import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+
+import java.util.List;
 
 public abstract class PieceView extends Piece {
 
@@ -33,7 +36,7 @@ public abstract class PieceView extends Piece {
         return newboard;
     }
 
-    public abstract void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board);
+    public abstract List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board);
 
     public abstract PieceView[][] findPossibleMoves(PieceView[][] pieceViews);
 }
