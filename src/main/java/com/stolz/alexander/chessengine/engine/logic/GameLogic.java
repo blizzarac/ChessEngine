@@ -3,9 +3,14 @@ package com.stolz.alexander.chessengine.engine.logic;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.gui.pieces.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 
 public class GameLogic {
+
+    private static Logger logger = Logger.getLogger(GameLogic.class.getName());
 
     private boolean check = false;
 
@@ -35,6 +40,7 @@ public class GameLogic {
 
     // Take current boardstate and evaluate check for all pieces in boardstate
     public boolean check4checkmate(PieceColor currentplayer, PieceView[][] boardstate) {
+        logger.log(Level.FINE, "check4checkmate");
         boolean checkmateflag = true;
         // For loop to check every piece on current board
         for (int x = 0; x < 8; x++) {
@@ -51,6 +57,7 @@ public class GameLogic {
             }
         }
 
+        logger.log(Level.FINE, "check4checkmate result: " + checkmateflag);
         return checkmateflag;
     }
 

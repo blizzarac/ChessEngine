@@ -13,6 +13,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Translate;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
@@ -21,6 +24,7 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 
 public class ChessEngineControl extends Control {
 
+    private static Logger logger = Logger.getLogger(ChessEngineControl.class.getName());
 
     private ChessBoardPane chessboardPane;
 
@@ -94,13 +98,13 @@ public class ChessEngineControl extends Control {
             // Checks if black timer has hit zero
             if (11 == 0) {
                 winner = true;
-                System.out.println("Black time out: White Wins!");
+                logger.log(Level.FINE, "Black time out: White Wins!");
             }
 
             // Checks if white timer has hit zero
             if (1 == 0) {
                 winner = true;
-                System.out.println("White time out: Black Wins!");
+                logger.log(Level.FINE, "White time out: Black Wins!");
             }
 
             // Second click
@@ -112,14 +116,21 @@ public class ChessEngineControl extends Control {
                         && selectedpiece != null
                         && targetpiece != null
                         && !selectedpiece.equals(targetpiece)) {
-                    doSelection(boardstate);
+
+                    if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
+                            || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
+                        PieceView[][] oldstate = backupBoardState(boardstate);
+                        tryMoveAndReverseOnCheck(boardstate, oldstate);
+                    } else {
+                        stalemateCheck();
+                    }
                 }
 
                 chessboardPane.clearhighlights();
                 chessboardPane.setClickLogoc(ClickState.NULL);
 
                 // Check for checkmate ..
-                if (gamelogic.check4checkmate(chessboardPane.otherplayer(), chessboardPane.getState())) {
+                if (gamelogic.check4checkmate(chessboardPane.otherPlayerColor(), chessboardPane.getState())) {
                     winner = true;
                 }
 
@@ -129,7 +140,7 @@ public class ChessEngineControl extends Control {
                 if (gamelogic.checkstatus()) {
                     chessboardPane.getChessBoard().checkhighlight(gamelogic.checki(), gamelogic.checkj());
                     if (!winner) {
-                        System.out.println("CHECK!");
+                        logger.log(Level.FINE, "CHECK!");
                     }
                     chessboardPane.setClickLogoc(ClickState.NULL);
                 }
@@ -139,7 +150,7 @@ public class ChessEngineControl extends Control {
             if (chessboardPane.getClickState() == ClickState.FIRSTCLICK && !stale && !winner) {
 
                 selectedpiece = chessboardPane.selectPiece(hash);
-                junkselection = selectedpiece.getColor() == NONE || !chessboardPane.pieceselect();
+                junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
                     getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
@@ -148,7 +159,7 @@ public class ChessEngineControl extends Control {
                     selectedpiece.drawValidMoves(chessboardPane.getPieceViews(), chessboardPane.getBoard());
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
-                        checkValidator.check4check(chessboardPane.otherplayer(), chessboardPane.getState());
+                        checkValidator.check4check(chessboardPane.otherPlayerColor(), chessboardPane.getState());
                     }
                 }
 
@@ -160,44 +171,19 @@ public class ChessEngineControl extends Control {
         });
     }
 
-    private PieceView[][] doSelection(PieceView[][] boardstate) {
-        if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
-                || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-            // If check is false
-            if (!gamelogic.checkstatus()) {
-                PieceView[][] oldstate = backupBoardState(boardstate);
-                boardstate = tryMoveAndReverseOnCheck(boardstate, oldstate);
-            } else {
-                handleCheck(boardstate);
-            }
-        } else {
-            stalemateCheck();
-        }
-        return boardstate;
-    }
-
-    private void handleCheck(PieceView[][] boardstate) {
-        // If in check ..
-        if (gamelogic.checkstatus()) {
-            PieceView[][] oldstate = backupBoardState(boardstate);
-            tryMoveAndReverseOnCheck(boardstate, oldstate);
-        }
-    }
-
     private PieceView[][] backupBoardState(PieceView[][] boardstate) {
-        PieceView[][] oldstate = new PieceView[8][8];
-        // Transfer pieces to backup variable
+        PieceView[][] backup = new PieceView[8][8];
         for (int x = 0; x < 8; x++) {
-            System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
+            System.arraycopy(boardstate[x], 0, backup[x], 0, 8);
         }
-        return oldstate;
+        return backup;
     }
 
     private PieceView[][] tryMoveAndReverseOnCheck(PieceView[][] boardstate, PieceView[][] oldstate) {
         // Do move
         boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
         // If move results in no check, do move
-        if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
+        if (!checkValidator.check4check(chessboardPane.otherPlayerColor(), boardstate)) {
             doMoveOnBoard(boardstate);
         } else {
             reverseMove(oldstate);
@@ -208,12 +194,12 @@ public class ChessEngineControl extends Control {
 
     public void blacktimeout() {
         winner = true;
-        System.out.println("\nBlack timeout: White wins!");
+        logger.log(Level.FINE, "\nBlack timeout: White wins!");
     }
 
     public void whitetimeout() {
         winner = true;
-        System.out.println("\nWhite timeout: Black wins!");
+        logger.log(Level.FINE, "\nWhite timeout: Black wins!");
     }
 
     @Override
@@ -253,7 +239,7 @@ public class ChessEngineControl extends Control {
             stalecountblack--;
         }
         if (stalecountwhite == 0 || stalecountblack == 0) {
-            System.out.println("STALEMATE!");
+            logger.log(Level.FINE, "STALEMATE!");
             stale = true;
         }
     }
