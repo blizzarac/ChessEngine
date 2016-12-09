@@ -87,7 +87,7 @@ public class ChessEngineControl extends Control {
                 winner = false;
                 stalecountwhite = 8;
                 stalecountblack = 8;
-                chessboardPane.setClickLogoc(ClickState.FIRSTCLICK);
+                chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
             }
         });
 
@@ -108,7 +108,7 @@ public class ChessEngineControl extends Control {
             }
 
             // Second click
-            if (chessboardPane.getClickState() == ClickState.SECONDCLICK) {
+            if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
                 PieceView[][] boardstate = chessboardPane.getState();
 
                 targetpiece = chessboardPane.selectTarget(hash);
@@ -126,8 +126,8 @@ public class ChessEngineControl extends Control {
                     }
                 }
 
-                chessboardPane.clearhighlights();
-                chessboardPane.setClickLogoc(ClickState.NULL);
+                chessboardPane.chessBoard.resetColorsOnBoard();
+                chessboardPane.setClickLogic(ClickState.NULL);
 
                 // Check for checkmate ..
                 if (gamelogic.check4checkmate(chessboardPane.otherPlayerColor(), chessboardPane.getState())) {
@@ -142,21 +142,21 @@ public class ChessEngineControl extends Control {
                     if (!winner) {
                         logger.log(Level.FINE, "CHECK!");
                     }
-                    chessboardPane.setClickLogoc(ClickState.NULL);
+                    chessboardPane.setClickLogic(ClickState.NULL);
                 }
             }
 
             // First click
-            if (chessboardPane.getClickState() == ClickState.FIRSTCLICK && !stale && !winner) {
+            if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
 
                 selectedpiece = chessboardPane.selectPiece(hash);
                 junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
                     getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
-                    chessboardPane.setClickLogoc(ClickState.SECONDCLICK);
+                    chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
-                    selectedpiece.drawValidMoves(chessboardPane.getPieceViews(), chessboardPane.getBoard());
+                    selectedpiece.drawValidMoves(chessboardPane.chessBoardPiecesView.pieceViews, chessboardPane.chessBoard.getBoard());
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
                         checkValidator.check4check(chessboardPane.otherPlayerColor(), chessboardPane.getState());
@@ -165,7 +165,7 @@ public class ChessEngineControl extends Control {
 
                 // If completed move, return to first click ..
                 if (chessboardPane.getClickState() == ClickState.NULL) {
-                    chessboardPane.setClickLogoc(ClickState.FIRSTCLICK);
+                    chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
                 }
             }
         });
@@ -216,17 +216,17 @@ public class ChessEngineControl extends Control {
     }
 
     private void doMoveOnBoard(PieceView[][] boardstate) {
-        chessboardPane.setBoard(boardstate);
+        chessboardPane.chessBoardPiecesView.replacePieceViews(boardstate);
         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
         chessboardPane.changeplayer();
-        chessboardPane.setClickLogoc(ClickState.NULL);
+        chessboardPane.setClickLogic(ClickState.NULL);
         stalecountwhite = 8;
         stalecountblack = 8;
     }
 
     private void reverseMove(PieceView[][] oldstate) {
-        chessboardPane.setClickLogoc(ClickState.NULL);
-        chessboardPane.setBoard(oldstate);
+        chessboardPane.setClickLogic(ClickState.NULL);
+        chessboardPane.chessBoardPiecesView.replacePieceViews(oldstate);
         gamelogic.flipcheck();
     }
 

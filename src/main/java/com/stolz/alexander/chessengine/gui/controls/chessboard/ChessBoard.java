@@ -75,4 +75,26 @@ public class ChessBoard {
             }
         }
     }
+
+    void resetColorsOnBoard() {
+        for (int x = 0; x < 8; x++) {
+            for (int j = 0; j < 8; j++) {
+                resetColorsOnField(x, j);
+            }
+        }
+    }
+
+    void resetColorsOnField(int i, int j) {
+        board[i][j].setStroke(Color.TRANSPARENT);
+
+        if (i % 2 == 0 && j % 2 == 1) {
+            board[i][j].setFill(Color.YELLOW);
+        } else if (i % 2 == 0 && j % 2 == 0) {
+            board[i][j].setFill(Color.BROWN);
+        } else if (i % 2 == 1 && j % 2 == 1) {
+            board[i][j].setFill(Color.BROWN);
+        } else if (i % 2 == 1 && j % 2 == 0) {
+            board[i][j].setFill(Color.YELLOW);
+        }
+    }
 }
