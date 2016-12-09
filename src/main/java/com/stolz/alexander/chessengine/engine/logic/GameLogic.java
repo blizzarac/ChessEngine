@@ -15,11 +15,9 @@ public class GameLogic {
     private boolean check = false;
 
     private CheckValidator checkValidator;
-    private MoveCalculator moveCalculator;
 
     public GameLogic() {
         this.checkValidator = new CheckValidator();
-        this.moveCalculator = new MoveCalculator();
     }
 
     public int checki() {
@@ -48,9 +46,9 @@ public class GameLogic {
                 // No need to run check on empty pieces and enemy pieces
                 if (!(boardstate[x][y].getType() == NOTYPE) && boardstate[x][y].getColor() == currentplayer.mirror()) {
                     // Create an array of possible moves for this piece
-                    PieceView[][] possiblemoves = moveCalculator.findPossibleMoves(boardstate[x][y], boardstate);
+                    PieceView[][] possibleMoves = boardstate[x][y].findPossibleMoves(boardstate);
                     // If possiblemoves has a move that resolves check == false, flag=false
-                    if (!checkValidator.check4check(currentplayer, possiblemoves)) {
+                    if (!checkValidator.check4check(currentplayer, possibleMoves)) {
                         checkmateflag = false;
                     }
                 }

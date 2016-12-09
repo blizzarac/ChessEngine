@@ -27,15 +27,6 @@
             </ChessEngineControl>
         </center>
 
-        <right>
-            <VBox prefWidth="200">
-                <TextArea editable="false" promptText="Status Updates" style="-fx-font-size: 12;" prefWidth="200"
-                          prefHeight="800">
-
-                </TextArea>
-            </VBox>
-        </right>
-
         <bottom>
             <HBox fx:id="hb2" alignment="CENTER" spacing="50" style="-fx-background-color: #D3D3D3" layoutY="30">
                 <Button fx:id="btn1" text="START" onAction="#Button1Action"></Button>

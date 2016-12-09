@@ -19,18 +19,8 @@ public class ChessBoard {
     public Rectangle[][] getBoard() {
         return board;
     }
-
     public void setBoard(Rectangle[][] board) {
         this.board = board;
-    }
-
-
-
-    public void hoverhighlight(int x, int y) {
-        int i = x;
-        int j = y;
-        // Set highlight color
-        board[i][j].setStroke(Color.CADETBLUE);
     }
 
     /**
@@ -70,11 +60,11 @@ public class ChessBoard {
         return board;
     }
 
-    public void checkhighlight(int x, int y) {
-        board[x][y].setStroke(Color.RED);
+    public void setFieldHightlightColor(int x, int y, Color color) {
+        board[x][y].setStroke(color);
     }
 
-    void resize(double cell_width, double cell_height) {
+    public void resize(double cell_width, double cell_height) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board[i][j].resize(i * cell_width, j * cell_height);

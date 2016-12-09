@@ -138,7 +138,7 @@ public class ChessEngineControl extends Control {
 
                 // highlight check..
                 if (gamelogic.checkstatus()) {
-                    chessboardPane.getChessBoard().checkhighlight(gamelogic.checki(), gamelogic.checkj());
+                    chessboardPane.chessBoard.setFieldHightlightColor(gamelogic.checki(), gamelogic.checkj(), Color.RED);
                     if (!winner) {
                         logger.log(Level.FINE, "CHECK!");
                     }

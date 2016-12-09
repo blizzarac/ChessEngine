@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
+
 public class PieceViewKnight extends PieceView {
 
     public PieceViewKnight(PieceColor color, int ii, int jj) {
@@ -113,5 +115,100 @@ public class PieceViewKnight extends PieceView {
                     board[this.icoord()-2][this.jcoord()+1].setStroke(Color.AQUAMARINE);
                 }
             }
+    }
+
+    @Override
+    public PieceView[][] findPossibleMoves(PieceView[][] pieceViews) {
+        PieceView[][] possiblemoves = new PieceView[8][8];
+        for (int x = 0; x < 8; x++) {
+            System.arraycopy(pieceViews[x], 0, possiblemoves[x], 0, 8);
+        }
+
+        findPossibleMovesInternal(this, pieceViews, possiblemoves);
+
+        return possiblemoves;
+	}
+
+    private void findPossibleMovesInternal(PieceView p, PieceView[][] pieceViews, PieceView[][] possiblemoves) {
+            // Up and left (first)
+            if (p.icoord() - 1 >= 0 && p.jcoord() - 2 >= 0) {                // Bound check
+                if (pieceViews[p.icoord() - 1][p.jcoord() - 2].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() - 2] = new PieceViewKnight(p.getColor(), p.icoord() - 1, p.jcoord() - 2);
+                }
+                if (pieceViews[p.icoord() - 1][p.jcoord() - 2].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() - 2] = new PieceViewKnight(p.getColor(), p.icoord() - 1, p.jcoord() - 2);
+                }
+            }
+
+            // Up and left (second)
+            if (p.icoord() - 2 >= 0 && p.jcoord() - 1 >= 0) {                // Bound check
+                if (pieceViews[p.icoord() - 2][p.jcoord() - 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() - 2][p.jcoord() - 1] = new PieceViewKnight(p.getColor(), p.icoord() - 2, p.jcoord() - 1);
+                }
+                if (pieceViews[p.icoord() - 2][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 2][p.jcoord() - 1] = new PieceViewKnight(p.getColor(), p.icoord() - 2, p.jcoord() - 1);
+                }
+            }
+
+            // Up and right (first)
+            if (p.icoord() + 1 < 8 && p.jcoord() - 2 >= 0) {                // Bound check
+                if (pieceViews[p.icoord() + 1][p.jcoord() - 2].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() - 2] = new PieceViewKnight(p.getColor(), p.icoord() + 1, p.jcoord() - 2);
+                }
+                if (pieceViews[p.icoord() + 1][p.jcoord() - 2].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() - 2] = new PieceViewKnight(p.getColor(), p.icoord() + 1, p.jcoord() - 2);
+                }
+            }
+
+            // Up and right (second)
+            if (p.icoord() + 2 < 8 && p.jcoord() - 1 >= 0) {                // Bound check
+                if (pieceViews[p.icoord() + 2][p.jcoord() - 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() + 2][p.jcoord() - 1] = new PieceViewKnight(p.getColor(), p.icoord() + 2, p.jcoord() - 1);
+                }
+                if (pieceViews[p.icoord() + 2][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 2][p.jcoord() - 1] = new PieceViewKnight(p.getColor(), p.icoord() + 2, p.jcoord() - 1);
+                }
+            }
+
+            // Bottom and right (first)
+            if (p.icoord() + 1 < 8 && p.jcoord() + 2 < 8) {                // Bound check
+                if (pieceViews[p.icoord() + 1][p.jcoord() + 2].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() + 2] = new PieceViewKnight(p.getColor(), p.icoord() + 1, p.jcoord() + 2);
+                }
+                if (pieceViews[p.icoord() + 1][p.jcoord() + 2].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() + 2] = new PieceViewKnight(p.getColor(), p.icoord() + 1, p.jcoord() + 2);
+                }
+            }
+
+            // Bottom and right (second)
+            if (p.icoord() + 2 < 8 && p.jcoord() + 1 < 8) {                // Bound check
+                if (pieceViews[p.icoord() + 2][p.jcoord() + 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() + 2][p.jcoord() + 1] = new PieceViewKnight(p.getColor(), p.icoord() + 2, p.jcoord() + 1);
+                }
+                if (pieceViews[p.icoord() + 2][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 2][p.jcoord() + 1] = new PieceViewKnight(p.getColor(), p.icoord() + 2, p.jcoord() + 1);
+                }
+            }
+
+            // Bottom and left (first)
+            if (p.icoord() - 1 >= 0 && p.jcoord() + 2 < 8) {                // Bound check
+                if (pieceViews[p.icoord() - 1][p.jcoord() + 2].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() + 2] = new PieceViewKnight(p.getColor(), p.icoord() - 1, p.jcoord() + 2);
+                }
+                if (pieceViews[p.icoord() - 1][p.jcoord() + 2].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() + 2] = new PieceViewKnight(p.getColor(), p.icoord() - 1, p.jcoord() + 2);
+                }
+            }
+
+            // Bottom and left (second)
+            if (p.icoord() - 2 >= 0 && p.jcoord() + 1 < 8) {                // Bound check
+                if (pieceViews[p.icoord() - 2][p.jcoord() + 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord() - 2][p.jcoord() + 1] = new PieceViewKnight(p.getColor(), p.icoord() - 2, p.jcoord() + 1);
+                }
+                if (pieceViews[p.icoord() - 2][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 2][p.jcoord() + 1] = new PieceViewKnight(p.getColor(), p.icoord() - 2, p.jcoord() + 1);
+                }
+            }
+
     }
 }

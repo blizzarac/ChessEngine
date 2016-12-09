@@ -34,4 +34,6 @@ public abstract class PieceView extends Piece {
     }
 
     public abstract void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board);
+
+    public abstract PieceView[][] findPossibleMoves(PieceView[][] pieceViews);
 }

@@ -17,14 +17,7 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 public class ChessBoardPane extends Pane {
-
-
-
-    private ChessBoard chessBoard;
-
-    public ChessBoard getChessBoard() {
-        return chessBoard;
-    }
+    public final ChessBoard chessBoard;
 
     public PieceView[][] getPieceViews() {
         return pieceViews;

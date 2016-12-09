@@ -17,4 +17,9 @@ public class Empty extends PieceView {
 	public void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
 		throw new NotImplementedException();
 	}
+
+    @Override
+    public PieceView[][] findPossibleMoves(PieceView[][] pieceViews) {
+        throw new NotImplementedException();
+    }
 }

@@ -6,6 +6,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.PAWN;
+
 public class PieceViewPawn extends PieceView {
 	boolean firstmove;
 
@@ -40,12 +45,12 @@ public class PieceViewPawn extends PieceView {
     @Override
     public void drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
 		if (color == PieceColor.BLACK)
-            blackPawns(this, pieceViews, board);
+            drawBlackMoves(this, pieceViews, board);
 		else
-            whitePawns(this, pieceViews, board);
+            drawWhiteMoves(this, pieceViews, board);
     }
 
-    private void blackPawns(PieceView p, PieceView[][] pieceViews, Rectangle[][] board) {
+    private void drawBlackMoves(PieceView p, PieceView[][] pieceViews, Rectangle[][] board) {
             // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
             if(p.jcoord()+1 < 8){ // Guard for bounds
                 if(pieceViews[p.icoord()][p.jcoord()+1].getColor() == PieceColor.NONE){
@@ -71,7 +76,7 @@ public class PieceViewPawn extends PieceView {
                 }}
     }
 
-    private void whitePawns(PieceView p, PieceView[][] pieceViews, Rectangle[][] board) {
+    private void drawWhiteMoves(PieceView p, PieceView[][] pieceViews, Rectangle[][] board) {
             // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
             if(p.jcoord()-1 >= 0){ // Guard for bounds
                 if(pieceViews[p.icoord()][p.jcoord()-1].getColor() == PieceColor.NONE){
@@ -96,4 +101,80 @@ public class PieceViewPawn extends PieceView {
                     board[p.icoord()+1][p.jcoord()-1].setStroke(Color.AQUAMARINE);
                 }}
         }
+
+    @Override
+    public PieceView[][] findPossibleMoves(PieceView[][] pieceViews) {
+        PieceView[][] possiblemoves = new PieceView[8][8];
+        for (int x = 0; x < 8; x++) {
+            System.arraycopy(pieceViews[x], 0, possiblemoves[x], 0, 8);
+        }
+
+        whitePawnsMovement(this, pieceViews, possiblemoves);
+        blackPawnsMovement(this, pieceViews, possiblemoves);
+        return possiblemoves;
+    }
+
+    private void blackPawnsMovement(PieceView p, PieceView[][] pieceViews, PieceView[][] possiblemoves) {
+        if (p.getColor() == BLACK) {
+            // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
+            if (p.jcoord() + 1 < 8) { // Guard for bounds
+                if (pieceViews[p.icoord()][p.jcoord() + 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord()][p.jcoord() + 1] = new PieceViewPawn(p.getColor(), p.icoord(), p.jcoord() + 1, false);
+                }
+            }
+
+            if (p.firstmove()) {
+                // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
+                if (pieceViews[p.icoord()][p.jcoord() + 2].getType() == NOTYPE && pieceViews[p.icoord()][p.jcoord() + 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord()][p.jcoord() + 2] = new PieceViewPawn(p.getColor(), p.icoord(), p.jcoord() + 2, false);
+                }
+            }
+
+            // LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
+            if (p.icoord() - 1 >= 0 && p.jcoord() + 1 < 8) {
+                if (pieceViews[p.icoord() - 1][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() + 1] = new PieceViewPawn(p.getColor(), p.icoord() - 1, p.jcoord() + 1, false);
+                }
+            }
+
+            // LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
+            if (p.icoord() + 1 < 8 && p.jcoord() + 1 < 8) {
+                if (pieceViews[p.icoord() + 1][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() + 1] = new PieceViewPawn(p.getColor(), p.icoord() + 1, p.jcoord() + 1, false);
+                }
+            }
+        }
+    }
+
+    private void whitePawnsMovement(PieceView p, PieceView[][] pieceViews, PieceView[][] possiblemoves) {
+        if (p.getColor() == WHITE) {
+            // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
+            if (p.jcoord() - 1 >= 0) { // Guard for bounds
+                if (pieceViews[p.icoord()][p.jcoord() - 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord()][p.jcoord() - 1] = new PieceViewPawn(p.getColor(), p.icoord(), p.jcoord() - 1, false);
+                }
+            }
+
+            if (p.firstmove()) {
+                // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
+                if (pieceViews[p.icoord()][p.jcoord() - 2].getType() == NOTYPE && pieceViews[p.icoord()][p.jcoord() - 1].getType() == NOTYPE) {
+                    possiblemoves[p.icoord()][p.jcoord() - 2] = new PieceViewPawn(p.getColor(), p.icoord(), p.jcoord() - 2, false);
+                }
+            }
+
+            // LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
+            if (p.icoord() - 1 >= 0 && p.jcoord() - 1 >= 0) {
+                if (pieceViews[p.icoord() - 1][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() - 1][p.jcoord() - 1] = new PieceViewPawn(p.getColor(), p.icoord() - 1, p.jcoord() - 1, false);
+                }
+            }
+
+            // LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
+            if (p.icoord() + 1 < 8 && p.jcoord() - 1 >= 0) {
+                if (pieceViews[p.icoord() + 1][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
+                    possiblemoves[p.icoord() + 1][p.jcoord() - 1] = new PieceViewPawn(p.getColor(), p.icoord() + 1, p.jcoord() - 1, false);
+                }
+            }
+        }
+    }
 }
