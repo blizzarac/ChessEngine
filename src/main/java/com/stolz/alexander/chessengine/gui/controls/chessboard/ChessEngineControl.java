@@ -107,45 +107,6 @@ public class ChessEngineControl extends Control {
                 logger.log(Level.FINE, "White time out: Black Wins!");
             }
 
-            // Second click
-            if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
-                PieceView[][] boardstate = chessboardPane.getState();
-
-                targetpiece = chessboardPane.selectTarget(hash);
-                if (selectedpiece.getType() != NOTYPE
-                        && selectedpiece != null
-                        && targetpiece != null
-                        && !selectedpiece.equals(targetpiece)) {
-
-                    if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
-                            || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                        PieceView[][] oldstate = backupBoardState(boardstate);
-                        tryMoveAndReverseOnCheck(boardstate, oldstate);
-                    } else {
-                        stalemateCheck();
-                    }
-                }
-
-                chessboardPane.chessBoard.resetColorsOnBoard();
-                chessboardPane.setClickLogic(ClickState.NULL);
-
-                // Check for checkmate ..
-                if (gamelogic.check4checkmate(chessboardPane.otherPlayerColor(), chessboardPane.getState())) {
-                    winner = true;
-                }
-
-                getScene().setCursor(Cursor.DEFAULT);
-
-                // highlight check..
-                if (gamelogic.checkstatus()) {
-                    chessboardPane.chessBoard.setFieldHightlightColor(gamelogic.checki(), gamelogic.checkj(), Color.RED);
-                    if (!winner) {
-                        logger.log(Level.FINE, "CHECK!");
-                    }
-                    chessboardPane.setClickLogic(ClickState.NULL);
-                }
-            }
-
             // First click
             if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
 
@@ -167,7 +128,45 @@ public class ChessEngineControl extends Control {
                 if (chessboardPane.getClickState() == ClickState.NULL) {
                     chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
                 }
+            } else if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
+                PieceView[][] boardstate = chessboardPane.getState();
+
+                targetpiece = chessboardPane.selectTarget(hash);
+                if (selectedpiece.getType() != NOTYPE
+                        && selectedpiece != null
+                        && targetpiece != null
+                        && !selectedpiece.equals(targetpiece)) {
+
+                    if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
+                            || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
+                        PieceView[][] oldstate = backupBoardState(boardstate);
+                        tryMoveAndReverseOnCheck(boardstate, oldstate);
+                    } else {
+                        stalemateCheck();
+                    }
+                }
+
+                chessboardPane.chessBoard.resetColorsOnBoard();
+                chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
+
+                // Check for checkmate ..
+                if (gamelogic.check4checkmate(chessboardPane.otherPlayerColor(), chessboardPane.getState())) {
+                    winner = true;
+                }
+
+                getScene().setCursor(Cursor.DEFAULT);
+
+                // highlight check..
+                if (gamelogic.checkstatus()) {
+                    chessboardPane.chessBoard.setFieldHightlightColor(gamelogic.checki(), gamelogic.checkj(), Color.RED);
+                    if (!winner) {
+                        logger.log(Level.FINE, "CHECK!");
+                    }
+                    chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
+                }
             }
+
+
         });
     }
 
