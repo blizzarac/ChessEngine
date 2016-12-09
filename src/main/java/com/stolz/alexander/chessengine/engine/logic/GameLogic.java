@@ -7,7 +7,6 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 
 public class GameLogic {
 
-    private String secondclick = "false";
     private boolean check = false;
 
     private CheckValidator checkValidator;
@@ -16,18 +15,6 @@ public class GameLogic {
     public GameLogic() {
         this.checkValidator = new CheckValidator();
         this.moveCalculator = new MoveCalculator();
-    }
-
-    // Keep track of mouse clicks
-
-    public String changeclick() {
-        if (secondclick == "true") {
-            secondclick = "false";
-        } else {
-            secondclick = "true";
-        }
-
-        return secondclick;
     }
 
     public int checki() {

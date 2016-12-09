@@ -61,8 +61,6 @@ public class ChessEngineControl extends Control {
         // Spacebar to reset game ..
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
-                System.out.println("Game Reset!");
-
                 chessboardPane = new ChessBoardPane();
                 getChildren().addAll(chessboardPane);
 
@@ -110,12 +108,12 @@ public class ChessEngineControl extends Control {
                 PieceView[][] boardstate = chessboardPane.getState();
 
                 targetpiece = chessboardPane.selectTarget(hash);
-                boardstate = pawnSelection(boardstate);
-                boardstate = bishopSelection(boardstate);
-                boardstate = queenSelection(boardstate);
-                boardstate = rookSelection(boardstate);
-                boardstate = kingSelection(boardstate);
-                knightSelection(boardstate);
+                if (selectedpiece.getType() != NOTYPE
+                        && selectedpiece != null
+                        && targetpiece != null
+                        && !selectedpiece.equals(targetpiece)) {
+                    doSelection(boardstate);
+                }
 
                 chessboardPane.clearhighlights();
                 chessboardPane.setClickLogoc(ClickState.NULL);
@@ -162,628 +160,50 @@ public class ChessEngineControl extends Control {
         });
     }
 
-    private void knightSelection(PieceView[][] boardstate) {
-        // If knight selected ..
-        if (selectedpiece.getType() == KNIGHT && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
-                    }
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
+    private PieceView[][] doSelection(PieceView[][] boardstate) {
+        if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
+                || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
+            // If check is false
+            if (!gamelogic.checkstatus()) {
+                PieceView[][] oldstate = backupBoardState(boardstate);
+                boardstate = tryMoveAndReverseOnCheck(boardstate, oldstate);
             } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
+                handleCheck(boardstate);
             }
-        }
-
-        // If screw up ..
-        else {
-            chessboardPane.setClickLogoc(ClickState.NULL);
-            chessboardPane.clearhighlights();
-        }
-    }
-
-    private PieceView[][] kingSelection(PieceView[][] boardstate) {
-        // If king selected ..
-        if (selectedpiece.getType() == KING && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-            } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
-            }
+        } else {
+            stalemateCheck();
         }
         return boardstate;
     }
 
-    private PieceView[][] rookSelection(PieceView[][] boardstate) {
-        // If rook selected ..
-        if (selectedpiece.getType() == ROOK && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-            } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
-            }
+    private void handleCheck(PieceView[][] boardstate) {
+        // If in check ..
+        if (gamelogic.checkstatus()) {
+            PieceView[][] oldstate = backupBoardState(boardstate);
+            tryMoveAndReverseOnCheck(boardstate, oldstate);
         }
-        return boardstate;
     }
 
-    private PieceView[][] queenSelection(PieceView[][] boardstate) {
-        // If queen selected ..
-        if (selectedpiece.getType() == QUEEN && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                    }
-                    if (stalecountwhite == 0 || stalecountblack == 0) {
-                        System.out.println("STALEMATE!");
-                        stale = true;
-                    }
-                }
-            } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
-            }
-        }
-        return boardstate;
-    }
-
-    private PieceView[][] bishopSelection(PieceView[][] boardstate) {
-        // If bishop selected ..
-        if (selectedpiece.getType() == BISHOP && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        for (int y = 0; y < 8; y++) {
-                            oldstate[x][y] = boardstate[x][y];
-                        }
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-            } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
-            }
-        }
-        return boardstate;
-    }
-
-    private PieceView[][] pawnSelection(PieceView[][] boardstate) {
-        // If pawn selected ..
-        if (selectedpiece.getType() == PAWN && selectedpiece != null && targetpiece != null && !selectedpiece.equals(targetpiece)) {
-            // Only executes if legal move ..
-            if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE) || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
-                // If check is false
-                if (!gamelogic.checkstatus()) {
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    // Transfer pieces to backup variable
-                    for (int x = 0; x < 8; x++) {
-                        System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
-                    }
-
-                    // Do move
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // If move results in no check, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        // Successful move
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                    }
-                    // If check, reverse move
-                    else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-
-                    }
-                }
-
-                // If in check ..
-                if (gamelogic.checkstatus()) {
-                    // Do move
-                    PieceView[][] oldstate = new PieceView[8][8];
-                    for (int x = 0; x < 8; x++) {
-                        System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
-                    }
-                    boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
-                    // Check if still in check, if not, do move
-                    if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
-                        chessboardPane.setBoard(boardstate);
-                        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
-                        chessboardPane.changeplayer();
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        stalecountwhite = 8;
-                        stalecountblack = 8;
-                        // If still in check, undo move
-                    } else {
-                        chessboardPane.setClickLogoc(ClickState.NULL);
-                        chessboardPane.setBoard(oldstate);
-                        gamelogic.flipcheck();
-
-                        // Stalemate check
-                        if (selectedpiece.getColor() == WHITE) {
-                            stalecountwhite--;
-                        }
-                        if (selectedpiece.getColor() == BLACK) {
-                            stalecountblack--;
-                        }
-                        if (stalecountwhite == 0 || stalecountblack == 0) {
-                            System.out.println("STALEMATE!");
-                            stale = true;
-                        }
-                    }
-                }
-
-            } else {
-
-                // Stalemate check
-                if (selectedpiece.getColor() == WHITE) {
-                    stalecountwhite--;
-                }
-                if (selectedpiece.getColor() == BLACK) {
-                    stalecountblack--;
-                }
-                if (stalecountwhite == 0 || stalecountblack == 0) {
-                    System.out.println("STALEMATE!");
-                    stale = true;
-                }
-            }
-        }
-        return boardstate;
-    }
-
-    public int countWhitePieces(PieceView[][] boardstate) {
-        int whitepieces = 0;
-
-        // Count white pieces
+    private PieceView[][] backupBoardState(PieceView[][] boardstate) {
+        PieceView[][] oldstate = new PieceView[8][8];
+        // Transfer pieces to backup variable
         for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                if (boardstate[x][y].getColor() == WHITE) {
-                    whitepieces++;
-                }
-            }
+            System.arraycopy(boardstate[x], 0, oldstate[x], 0, 8);
         }
-        // Return int
-        return whitepieces;
+        return oldstate;
     }
 
-    public int countBlackPieces(PieceView[][] boardstate) {
-        int blackpieces = 0;
-
-        // Count white pieces
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                if (boardstate[x][y].getColor() == BLACK) {
-                    blackpieces++;
-                }
-            }
+    private PieceView[][] tryMoveAndReverseOnCheck(PieceView[][] boardstate, PieceView[][] oldstate) {
+        // Do move
+        boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
+        // If move results in no check, do move
+        if (!checkValidator.check4check(chessboardPane.otherplayer(), boardstate)) {
+            doMoveOnBoard(boardstate);
+        } else {
+            reverseMove(oldstate);
+            stalemateCheck();
         }
-        // Return int
-        return blackpieces;
+        return boardstate;
     }
 
     public void blacktimeout() {
@@ -807,5 +227,34 @@ public class ChessEngineControl extends Control {
         super.relocate(x, y);
         pos.setX(x);
         pos.setY(x);
+    }
+
+    private void doMoveOnBoard(PieceView[][] boardstate) {
+        chessboardPane.setBoard(boardstate);
+        chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
+        chessboardPane.changeplayer();
+        chessboardPane.setClickLogoc(ClickState.NULL);
+        stalecountwhite = 8;
+        stalecountblack = 8;
+    }
+
+    private void reverseMove(PieceView[][] oldstate) {
+        chessboardPane.setClickLogoc(ClickState.NULL);
+        chessboardPane.setBoard(oldstate);
+        gamelogic.flipcheck();
+    }
+
+    private void stalemateCheck() {
+        // Stalemate check
+        if (selectedpiece.getColor() == WHITE) {
+            stalecountwhite--;
+        }
+        if (selectedpiece.getColor() == BLACK) {
+            stalecountblack--;
+        }
+        if (stalecountwhite == 0 || stalecountblack == 0) {
+            System.out.println("STALEMATE!");
+            stale = true;
+        }
     }
 }
