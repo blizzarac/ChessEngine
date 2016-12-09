@@ -3,6 +3,7 @@ package com.stolz.alexander.chessengine.gui.controls.chessboard;
 import com.stolz.alexander.chessengine.engine.logic.CheckValidator;
 import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.logic.GameLogic;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -11,8 +12,8 @@ import javafx.scene.control.Control;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Translate;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,10 +26,10 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 public class ChessEngineControl extends Control {
 
     private static Logger logger = Logger.getLogger(ChessEngineControl.class.getName());
+    private List<PiecePosition> validMoves;
 
     private ChessBoardPane chessboardPane;
 
-    private Translate pos;
     private PieceView selectedpiece;
     private PieceView targetpiece;
     private GameLogic gamelogic;
@@ -40,7 +41,6 @@ public class ChessEngineControl extends Control {
     private int stalecountwhite = 8;
 
     public ChessEngineControl() {
-        pos = new Translate();
         setSkin(new ChessEngineControlSkin(this));
         chessboardPane = new ChessBoardPane();
         gamelogic = new GameLogic();
@@ -107,17 +107,22 @@ public class ChessEngineControl extends Control {
                 logger.log(Level.FINE, "White time out: Black Wins!");
             }
 
+
+
             // First click
             if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
-
                 selectedpiece = chessboardPane.selectPiece(hash);
+                validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoardPiecesView.pieceViews);
+
                 junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
                     getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
-                    selectedpiece.drawValidMoves(chessboardPane.chessBoardPiecesView.pieceViews, chessboardPane.chessBoard.getBoard());
+                    for (PiecePosition p: validMoves) {
+                        chessboardPane.chessBoard.getBoard()[p.i][p.j].setStroke(Color.RED);
+                    }
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
                         checkValidator.check4check(chessboardPane.otherPlayerColor(), chessboardPane.getState());
@@ -132,8 +137,7 @@ public class ChessEngineControl extends Control {
                         && targetpiece != null
                         && !selectedpiece.equals(targetpiece)) {
 
-                    if (chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.CORNFLOWERBLUE)
-                            || chessboardPane.getStroke(targetpiece.icoord(), targetpiece.jcoord(), Color.AQUAMARINE)) {
+                    if (validMoves.stream().anyMatch(pos -> pos.i == targetpiece.icoord() && pos.j == targetpiece.jcoord())) {
                         PieceView[][] oldstate = backupBoardState(boardstate);
                         tryMoveAndReverseOnCheck(boardstate, oldstate);
                     } else {
@@ -200,13 +204,6 @@ public class ChessEngineControl extends Control {
     public void resize(double width, double height) {
         super.resize(width, height);
         chessboardPane.resize(width, height);
-    }
-
-    @Override
-    public void relocate(double x, double y) {
-        super.relocate(x, y);
-        pos.setX(x);
-        pos.setY(x);
     }
 
     private void doMoveOnBoard(PieceView[][] boardstate) {

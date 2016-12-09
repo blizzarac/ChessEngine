@@ -4,7 +4,6 @@ import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class Empty extends PieceView {
 	}
 
 	@Override
-	public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+	public List<PiecePosition> findValidMoves(PieceView[][] pieceViews) {
 		throw new NotImplementedException();
 	}
 

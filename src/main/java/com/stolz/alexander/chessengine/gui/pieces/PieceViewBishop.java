@@ -4,13 +4,9 @@ import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 
 public class PieceViewBishop extends PieceView {
 
@@ -38,15 +34,15 @@ public class PieceViewBishop extends PieceView {
     }
 
     @Override
-    public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+    public List<PiecePosition> findValidMoves(PieceView[][] pieceViews) {
         List<PiecePosition> validMoves = new ArrayList<>();
         // Look up .. (left)
         for(int y=this.jcoord()-1, x=this.icoord()-1; y >= 0 && x >= 0; y--,x--){
             if(pieceViews[x][y].getColor() == PieceColor.NONE){
-                board[x][y].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(x,y));
             }
             if(pieceViews[x][y].getColor() == this.color.mirror()){
-                board[x][y].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(x,y));
                 // Stop Looking
                 x=-1; y=-1;
             }
@@ -59,10 +55,10 @@ public class PieceViewBishop extends PieceView {
         // Look up .. (right)
         for(int y=this.jcoord()-1, x=this.icoord()+1; y >= 0 && x < 8; y--,x++){
             if(pieceViews[x][y].getColor() == PieceColor.NONE){
-                board[x][y].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(x,y));
             }
             if(pieceViews[x][y].getColor() == this.color.mirror()){
-                board[x][y].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(x,y));
                 // Stop Looking
                 x=8; y=-1;
             }
@@ -75,10 +71,10 @@ public class PieceViewBishop extends PieceView {
         // Look down .. (left)
         for(int y=this.jcoord()+1, x=this.icoord()-1; y < 8 && x >= 0; y++,x--){
             if(pieceViews[x][y].getColor() == PieceColor.NONE){
-                board[x][y].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(x,y));
             }
             if(pieceViews[x][y].getColor() == this.color.mirror()){
-                board[x][y].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(x,y));
                 // Stop Looking
                 x=-1; y=8;
             }
@@ -91,10 +87,10 @@ public class PieceViewBishop extends PieceView {
         // Look down .. (right)
         for(int y=this.jcoord()+1, x=this.icoord()+1; y < 8 && x < 8; y++,x++){
             if(pieceViews[x][y].getColor() == PieceColor.NONE){
-                board[x][y].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(x,y));
             }
             if(pieceViews[x][y].getColor() == this.color.mirror()){
-                board[x][y].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(x,y));
                 // Stop Looking
                 x=8;y=8;
             }
@@ -114,83 +110,11 @@ public class PieceViewBishop extends PieceView {
             System.arraycopy(pieceViews[x], 0, possiblemoves[x], 0, 8);
         }
 
-        findPossiblemovesInternal(this, pieceViews, possiblemoves);
+        final List<PiecePosition> validMoves = findValidMoves(pieceViews);
+        validMoves.stream().forEach(move ->
+                possiblemoves[move.i][move.i] = new PieceViewBishop(color, move.i, move.j)
+        );
 
         return possiblemoves;
     }
-
-    private void findPossiblemovesInternal(PieceView p, PieceView[][] pieceViews, PieceView[][] possiblemoves) {
-            // Look up .. (left)
-            for (int y = p.jcoord() - 1, x = p.icoord() - 1; y >= 0 && x >= 0; y--, x--) {
-                if (pieceViews[x][y].getType() == NOTYPE) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                }
-                if (pieceViews[x][y].getColor() == p.getColor().mirror()) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                    // Stop Looking
-                    x = -1;
-                    y = -1;
-                }
-                if (x != -1 && y != -1 && pieceViews[x][y].getColor() == p.getColor()) {
-                    // Stop Looking
-                    x = -1;
-                    y = -1;
-                }
-            }
-
-            // Look up .. (right)
-            for (int y = p.jcoord() - 1, x = p.icoord() + 1; y >= 0 && x < 8; y--, x++) {
-                if (pieceViews[x][y].getType() == NOTYPE) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                }
-                if (pieceViews[x][y].getColor() == p.getColor().mirror()) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                    // Stop Looking
-                    x = 8;
-                    y = -1;
-                }
-                if (x != 8 && y != -1 && pieceViews[x][y].getColor() == p.getColor()) {
-                    // Stop Looking
-                    x = 8;
-                    y = -1;
-                }
-            }
-
-            // Look down .. (left)
-            for (int y = p.jcoord() + 1, x = p.icoord() - 1; y < 8 && x >= 0; y++, x--) {
-                if (pieceViews[x][y].getType() == NOTYPE) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                }
-                if (pieceViews[x][y].getColor() == p.getColor().mirror()) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                    // Stop Looking
-                    x = -1;
-                    y = 8;
-                }
-                if (x != -1 && y != 8 && pieceViews[x][y].getColor() == p.getColor()) {
-                    // Stop Looking
-                    x = -1;
-                    y = 8;
-                }
-            }
-
-            // Look down .. (right)
-            for (int y = p.jcoord() + 1, x = p.icoord() + 1; y < 8 && x < 8; y++, x++) {
-                if (pieceViews[x][y].getType() == NOTYPE) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                }
-                if (pieceViews[x][y].getColor() == p.getColor().mirror()) {
-                    possiblemoves[x][y] = new PieceViewBishop(p.getColor(), x, y);
-                    // Stop Looking
-                    x = 8;
-                    y = 8;
-                }
-                if (x != 8 && y != 8 && pieceViews[x][y].getColor() == p.getColor()) {
-                    // Stop Looking
-                    x = 8;
-                    y = 8;
-                }
-            }
-    }
-
 }

@@ -19,7 +19,7 @@ public class Piece {
     }
 
     public int jcoord() {
-       return piecePosition.i ;
+       return piecePosition.j ;
     }
 
     public PieceColor getColor() { return color; }

@@ -4,13 +4,9 @@ import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 
 public class PieceViewKing extends PieceView {
 
@@ -38,86 +34,86 @@ public class PieceViewKing extends PieceView {
 	}
 
     @Override
-    public List<PiecePosition> drawValidMoves(PieceView[][] pieceViews, Rectangle[][] board) {
+    public List<PiecePosition> findValidMoves(PieceView[][] pieceViews) {
         List<PiecePosition> validMoves = new ArrayList<>();
 
         // Up
         if(this.jcoord()-1 >= 0){
             if(pieceViews[this.icoord()][this.jcoord()-1].getColor() == PieceColor.NONE){
-                board[this.icoord()][this.jcoord()-1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()-1));
             }
             if(pieceViews[this.icoord()][this.jcoord()-1].getColor()==this.color.mirror()){
-                board[this.icoord()][this.jcoord()-1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()-1));
             }
         }
 
         // Up - right
         if(this.jcoord()-1 >= 0 && this.icoord()+1 < 8){
             if(pieceViews[this.icoord()+1][this.jcoord()-1].getColor() == PieceColor.NONE){
-                board[this.icoord()+1][this.jcoord()-1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-1));
             }
             if(pieceViews[this.icoord()+1][this.jcoord()-1].getColor()==this.color.mirror()){
-                board[this.icoord()+1][this.jcoord()-1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-1));
             }
         }
 
         // Up - left
         if(this.jcoord()-1 >= 0 && this.icoord()-1 >= 0){
             if(pieceViews[this.icoord()-1][this.jcoord()-1].getColor() == PieceColor.NONE){
-                board[this.icoord()-1][this.jcoord()-1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-1));
             }
             if(pieceViews[this.icoord()-1][this.jcoord()-1].getColor()==this.color.mirror()){
-                board[this.icoord()-1][this.jcoord()-1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-1));
             }
         }
 
         // Left
         if(this.icoord()-1 >= 0){
             if(pieceViews[this.icoord()-1][this.jcoord()].getColor() == PieceColor.NONE){
-                board[this.icoord()-1][this.jcoord()].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()));
             }
             if(pieceViews[this.icoord()-1][this.jcoord()].getColor()==this.color.mirror()){
-                board[this.icoord()-1][this.jcoord()].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()));
             }
         }
 
         // Right
         if(this.icoord()+1 < 8){
             if(pieceViews[this.icoord()+1][this.jcoord()].getColor() == PieceColor.NONE){
-                board[this.icoord()+1][this.jcoord()].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()));
             }
             if(pieceViews[this.icoord()+1][this.jcoord()].getColor()==this.color.mirror()){
-                board[this.icoord()+1][this.jcoord()].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()));
             }
         }
 
         // Down
         if(this.jcoord()+1 < 8){
             if(pieceViews[this.icoord()][this.jcoord()+1].getColor() == PieceColor.NONE){
-                board[this.icoord()][this.jcoord()+1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()+1));
             }
             if(pieceViews[this.icoord()][this.jcoord()+1].getColor()==this.color.mirror()){
-                board[this.icoord()][this.jcoord()+1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()+1));
             }
         }
 
         // Down - left
         if(this.jcoord()+1 < 8 && this.icoord()-1 >= 0){
             if(pieceViews[this.icoord()-1][this.jcoord()+1].getColor() == PieceColor.NONE){
-                board[this.icoord()-1][this.jcoord()+1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+1));
             }
             if(pieceViews[this.icoord()-1][this.jcoord()+1].getColor()==this.color.mirror()){
-                board[this.icoord()-1][this.jcoord()+1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+1));
             }
         }
 
         // Down - right
         if(this.jcoord()+1 < 8 && this.icoord()+1 < 8){
             if(pieceViews[this.icoord()+1][this.jcoord()+1].getColor() == PieceColor.NONE){
-                board[this.icoord()+1][this.jcoord()+1].setStroke(Color.CORNFLOWERBLUE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+1));
             }
             if(pieceViews[this.icoord()+1][this.jcoord()+1].getColor()==this.color.mirror()){
-                board[this.icoord()+1][this.jcoord()+1].setStroke(Color.AQUAMARINE);
+                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+1));
             }
         }
 
@@ -131,90 +127,11 @@ public class PieceViewKing extends PieceView {
             System.arraycopy(pieceViews[x], 0, possiblemoves[x], 0, 8);
         }
 
-        findPossibleMovesInternal(this, pieceViews, possiblemoves);
+        final List<PiecePosition> validMoves = findValidMoves(pieceViews);
+        validMoves.stream().forEach(move ->
+                possiblemoves[move.i][move.i] = new PieceViewKing(color, move.i, move.j)
+        );
 
         return possiblemoves;
-    }
-
-    private void findPossibleMovesInternal(PieceView p, PieceView[][] pieceViews, PieceView[][] possiblemoves) {
-            // Up
-            if (p.jcoord() - 1 >= 0) {
-                if (pieceViews[p.icoord()][p.jcoord() - 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord()][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord(), p.jcoord() - 1);
-                }
-                if (pieceViews[p.icoord()][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord()][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord(), p.jcoord() - 1);
-                }
-            }
-
-            // Up - right
-            if (p.jcoord() - 1 >= 0 && p.icoord() + 1 < 8) {
-                if (pieceViews[p.icoord() + 1][p.jcoord() - 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() + 1][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord() - 1);
-                }
-                if (pieceViews[p.icoord() + 1][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() + 1][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord() - 1);
-                }
-            }
-
-            // Up - left
-            if (p.jcoord() - 1 >= 0 && p.icoord() - 1 >= 0) {
-                if (pieceViews[p.icoord() - 1][p.jcoord() - 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() - 1][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord() - 1);
-                }
-                if (pieceViews[p.icoord() - 1][p.jcoord() - 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() - 1][p.jcoord() - 1] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord() - 1);
-                }
-            }
-
-            // Left
-            if (p.icoord() - 1 >= 0) {
-                if (pieceViews[p.icoord() - 1][p.jcoord()].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() - 1][p.jcoord()] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord());
-                }
-                if (pieceViews[p.icoord() - 1][p.jcoord()].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() - 1][p.jcoord()] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord());
-                }
-            }
-
-            // Right
-            if (p.icoord() + 1 < 8) {
-                if (pieceViews[p.icoord() + 1][p.jcoord()].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() + 1][p.jcoord()] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord());
-                }
-                if (pieceViews[p.icoord() + 1][p.jcoord()].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() + 1][p.jcoord()] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord());
-                }
-            }
-
-            // Down
-            if (p.jcoord() + 1 < 8) {
-                if (pieceViews[p.icoord()][p.jcoord() + 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord()][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord(), p.jcoord() + 1);
-                }
-                if (pieceViews[p.icoord()][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord()][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord(), p.jcoord() + 1);
-                }
-            }
-
-            // Down - left
-            if (p.jcoord() + 1 < 8 && p.icoord() - 1 >= 0) {
-                if (pieceViews[p.icoord() - 1][p.jcoord() + 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() - 1][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord() + 1);
-                }
-                if (pieceViews[p.icoord() - 1][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() - 1][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord() - 1, p.jcoord() + 1);
-                }
-            }
-
-            // Down - right
-            if (p.jcoord() + 1 < 8 && p.icoord() + 1 < 8) {
-                if (pieceViews[p.icoord() + 1][p.jcoord() + 1].getType() == NOTYPE) {
-                    possiblemoves[p.icoord() + 1][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord() + 1);
-                }
-                if (pieceViews[p.icoord() + 1][p.jcoord() + 1].getColor() == p.getColor().mirror()) {
-                    possiblemoves[p.icoord() + 1][p.jcoord() + 1] = new PieceViewKing(p.getColor(), p.icoord() + 1, p.jcoord() + 1);
-                }
-        }
     }
 }
