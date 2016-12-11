@@ -15,7 +15,12 @@ public class Empty extends PieceView {
         image = new Image("empty.png");
 	}
 
-	@Override
+    @Override
+    public PieceView[][] move(PieceView selectedpiece, PieceView targetpiece, PieceView[][] boardstate) {
+        throw new NotImplementedException();
+    }
+
+    @Override
 	public List<PiecePosition> findValidMoves(PieceView[][] pieceViews) {
 		throw new NotImplementedException();
 	}

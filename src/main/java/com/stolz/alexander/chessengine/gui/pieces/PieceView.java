@@ -23,17 +23,11 @@ public abstract class PieceView extends Piece {
         return image;
     }
 
-    public String getImageFilename() {
-        return imgname;
-    }
-
     public boolean firstmove() {
         return firstmove;
     }
 
-    public PieceView[][] move(PieceView selectedpiece, PieceView targetpiece, PieceView[][] boardstate) {
-        return newboard;
-    }
+    public abstract PieceView[][] move(PieceView selectedpiece, PieceView targetpiece, PieceView[][] boardstate);
 
     public abstract List<PiecePosition> findValidMoves(PieceView[][] pieceViews);
 
