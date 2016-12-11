@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.util.List;
+import java.util.ServiceConfigurationError;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,10 +92,9 @@ public class ChessEngineControl extends Control {
             }
         });
 
-        setOnMouseClicked(event -> {
-            // Get has of what we clicked on ..
-            int hash = event.getTarget().hashCode();
-
+        setOnDragDetected(event -> {
+            logger.log(Level.SEVERE, "setOnMouseDragged");
+            startFullDrag();
             // Checks if black timer has hit zero
             if (11 == 0) {
                 winner = true;
@@ -107,16 +107,16 @@ public class ChessEngineControl extends Control {
                 logger.log(Level.FINE, "White time out: Black Wins!");
             }
 
+            // Get has of what we clicked on ..
+            int hash = event.getTarget().hashCode();
 
-
-            // First click
             if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
                 selectedpiece = chessboardPane.selectPiece(hash);
-                validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoardPiecesView.pieceViews);
 
                 junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
+                    validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoardPiecesView.pieceViews);
                     getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
@@ -128,7 +128,17 @@ public class ChessEngineControl extends Control {
                         checkValidator.check4check(chessboardPane.otherPlayerColor(), chessboardPane.getState());
                     }
                 }
-            } else if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
+            }
+
+            event.consume();
+        });
+
+
+        setOnMouseReleased(event -> {
+            logger.log(Level.SEVERE, "setOnMouseReleased");
+            int hash = event.getPickResult().getIntersectedNode().hashCode();
+
+            if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
                 PieceView[][] boardstate = chessboardPane.getState();
 
                 targetpiece = chessboardPane.selectTarget(hash);
@@ -164,8 +174,6 @@ public class ChessEngineControl extends Control {
                     chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
                 }
             }
-
-
         });
     }
 
