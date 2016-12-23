@@ -3,8 +3,9 @@ package com.stolz.alexander.chessengine.gui.controls.chessboard;
 import com.stolz.alexander.chessengine.engine.logic.CheckValidator;
 import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.logic.GameLogic;
+import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
-import com.stolz.alexander.chessengine.gui.pieces.PieceView;
+import com.stolz.alexander.chessengine.gui.pieces.PieceImageProvider;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 
@@ -14,7 +15,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.util.List;
-import java.util.ServiceConfigurationError;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +31,8 @@ public class ChessEngineControl extends Control {
 
     private ChessBoardPane chessboardPane;
 
-    private PieceView selectedpiece;
-    private PieceView targetpiece;
+    private Piece selectedpiece;
+    private Piece targetpiece;
     private GameLogic gamelogic;
     private CheckValidator checkValidator;
     private boolean junkselection;
@@ -116,12 +116,12 @@ public class ChessEngineControl extends Control {
                 junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
 
                 if (!(selectedpiece.getColor() == NONE) && !junkselection) {
-                    validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoardPiecesView.pieceViews);
-                    getScene().setCursor(new ImageCursor(selectedpiece.getImage()));
+                    validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoardPiecesView.pieces);
+                    getScene().setCursor(new ImageCursor(PieceImageProvider.INSTANCE.getImageForPiece(selectedpiece)));
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
                     for (PiecePosition p: validMoves) {
-                        chessboardPane.chessBoard.getBoard()[p.i][p.j].setStroke(Color.RED);
+                        chessboardPane.chessBoard.getBoard()[p.x][p.y].setStroke(Color.RED);
                     }
                     // Check 4 check ..
                     if (!gamelogic.checkstatus()) {
@@ -139,7 +139,7 @@ public class ChessEngineControl extends Control {
             int hash = event.getPickResult().getIntersectedNode().hashCode();
 
             if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
-                PieceView[][] boardstate = chessboardPane.getState();
+                Piece[][] boardstate = chessboardPane.getState();
 
                 targetpiece = chessboardPane.selectTarget(hash);
                 if (selectedpiece.getType() != NOTYPE
@@ -147,8 +147,8 @@ public class ChessEngineControl extends Control {
                         && targetpiece != null
                         && !selectedpiece.equals(targetpiece)) {
 
-                    if (validMoves.stream().anyMatch(pos -> pos.i == targetpiece.icoord() && pos.j == targetpiece.jcoord())) {
-                        PieceView[][] oldstate = backupBoardState(boardstate);
+                    if (validMoves.stream().anyMatch(pos -> pos.x == targetpiece.icoord() && pos.y == targetpiece.jcoord())) {
+                        Piece[][] oldstate = backupBoardState(boardstate);
                         tryMoveAndReverseOnCheck(boardstate, oldstate);
                     } else {
                         stalemateCheck();
@@ -177,15 +177,15 @@ public class ChessEngineControl extends Control {
         });
     }
 
-    private PieceView[][] backupBoardState(PieceView[][] boardstate) {
-        PieceView[][] backup = new PieceView[8][8];
+    private Piece[][] backupBoardState(Piece[][] boardstate) {
+        Piece[][] backup = new Piece[8][8];
         for (int x = 0; x < 8; x++) {
             System.arraycopy(boardstate[x], 0, backup[x], 0, 8);
         }
         return backup;
     }
 
-    private PieceView[][] tryMoveAndReverseOnCheck(PieceView[][] boardstate, PieceView[][] oldstate) {
+    private Piece[][] tryMoveAndReverseOnCheck(Piece[][] boardstate, Piece[][] oldstate) {
         // Do move
         boardstate = selectedpiece.move(selectedpiece, targetpiece, boardstate);
         // If move results in no check, do move
@@ -214,7 +214,7 @@ public class ChessEngineControl extends Control {
         chessboardPane.resize(width, height);
     }
 
-    private void doMoveOnBoard(PieceView[][] boardstate) {
+    private void doMoveOnBoard(Piece[][] boardstate) {
         chessboardPane.chessBoardPiecesView.replacePieceViews(boardstate);
         chessboardPane.drawmove(selectedpiece.icoord(), selectedpiece.jcoord(), targetpiece.icoord(), targetpiece.jcoord());
         chessboardPane.changeplayer();
@@ -223,7 +223,7 @@ public class ChessEngineControl extends Control {
         stalecountblack = 8;
     }
 
-    private void reverseMove(PieceView[][] oldstate) {
+    private void reverseMove(Piece[][] oldstate) {
         chessboardPane.setClickLogic(ClickState.NULL);
         chessboardPane.chessBoardPiecesView.replacePieceViews(oldstate);
         gamelogic.flipcheck();

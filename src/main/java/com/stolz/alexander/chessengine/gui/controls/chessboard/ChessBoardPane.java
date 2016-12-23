@@ -1,6 +1,8 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
 import com.stolz.alexander.chessengine.engine.logic.ClickState;
+import com.stolz.alexander.chessengine.engine.pieces.Empty;
+import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.gui.pieces.*;
 import javafx.scene.layout.Pane;
@@ -64,7 +66,8 @@ public class ChessBoardPane extends Pane {
         // Puts images into imageviewers
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                imageviews[x][y].setImage(chessBoardPiecesView.pieceViews[x][y].getImage());
+                Image pieceImage = PieceImageProvider.INSTANCE.getImageForPiece(chessBoardPiecesView.pieces[x][y]);
+                imageviews[x][y].setImage(pieceImage);
                 imageviews[x][y].setFitWidth(50);
                 imageviews[x][y].setFitHeight(80);
                 imageviews[x][y].setPreserveRatio(true);
@@ -110,7 +113,7 @@ public class ChessBoardPane extends Pane {
         }
     }
 
-    public PieceView selectTarget(int hash) {
+    public Piece selectTarget(int hash) {
 
         int i = 0;
         int j = 0;
@@ -125,16 +128,16 @@ public class ChessBoardPane extends Pane {
         }
 
         if (!winner) {
-            if (chessBoardPiecesView.pieceViews[i][j].getColor() == NONE
-                    || chessBoardPiecesView.pieceViews[i][j].getColor() == currentPlayerColor.mirror()) {
-                return chessBoardPiecesView.pieceViews[i][j];
+            if (chessBoardPiecesView.pieces[i][j].getColor() == NONE
+                    || chessBoardPiecesView.pieces[i][j].getColor() == currentPlayerColor.mirror()) {
+                return chessBoardPiecesView.pieces[i][j];
             }
         }
-        return chessBoardPiecesView.pieceViews[i][j];
+        return chessBoardPiecesView.pieces[i][j];
     }
 
     //select piece method
-    public PieceView selectPiece(int hash) {
+    public Piece selectPiece(int hash) {
         // Determine what piece was selected and if it can be selected
         int i = 0;
         int j = 0;
@@ -149,7 +152,7 @@ public class ChessBoardPane extends Pane {
         }
 
         if (currentPlayerColor == WHITE && !winner) {
-            if (chessBoardPiecesView.pieceViews[i][j].getColor() == WHITE) {
+            if (chessBoardPiecesView.pieces[i][j].getColor() == WHITE) {
                 // If player has already selected the piece, deselect it
                 if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
                     chessBoard.resetColorsOnField(i, j);
@@ -158,21 +161,21 @@ public class ChessBoardPane extends Pane {
                 else {
                     chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
                     isPieceSelected = true;
-                    return chessBoardPiecesView.pieceViews[i][j];
+                    return chessBoardPiecesView.pieces[i][j];
                 }
             }
         }
 
         // If current player is black
         else {
-            if (chessBoardPiecesView.pieceViews[i][j].getColor() == BLACK) {
+            if (chessBoardPiecesView.pieces[i][j].getColor() == BLACK) {
                 if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
                     // Resets color
                     chessBoard.resetColorsOnField(i, j);
                 } else {
                     chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
                     isPieceSelected = true;
-                    return chessBoardPiecesView.pieceViews[i][j];
+                    return chessBoardPiecesView.pieces[i][j];
                 }
             }
         }
@@ -183,7 +186,7 @@ public class ChessBoardPane extends Pane {
 
     // Draw the move and remove highlights
     public void drawmove(final int si, int sj, int ti, int tj) {
-        imageviews[ti][tj].setImage(chessBoardPiecesView.pieceViews[ti][tj].getImage());
+        imageviews[ti][tj].setImage(PieceImageProvider.INSTANCE.getImageForPiece(chessBoardPiecesView.pieces[ti][tj]));
         imageviews[si][sj].setImage(new Image("empty.png"));
 
         // Remove highlight
@@ -196,8 +199,8 @@ public class ChessBoardPane extends Pane {
     }
 
     // Returns state of the chess board ..
-    public PieceView[][] getState() {
-        return chessBoardPiecesView.pieceViews;
+    public Piece[][] getState() {
+        return chessBoardPiecesView.pieces;
     }
 
     public void changeplayer() {

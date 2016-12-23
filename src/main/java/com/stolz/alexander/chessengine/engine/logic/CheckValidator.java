@@ -1,13 +1,11 @@
 package com.stolz.alexander.chessengine.engine.logic;
 
+import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
-import com.stolz.alexander.chessengine.gui.pieces.PieceView;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.KING;
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
-import static com.stolz.alexander.chessengine.engine.pieces.PieceType.QUEEN;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.*;
 
 /**
  * Created by alexanderstolz on 12/8/16.
@@ -18,7 +16,7 @@ public class CheckValidator {
     public int checkj;
 
     // Check if player is in check
-    public boolean check4check(PieceColor currentplayer, PieceView[][] boardstate) {
+    public boolean check4check(PieceColor currentplayer, Piece[][] boardstate) {
         if (currentplayer == WHITE) {
             otherplayer = BLACK;
         } else {
@@ -39,7 +37,7 @@ public class CheckValidator {
         return false;
     }
 
-    private boolean check4CheckQueen(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
+    private boolean check4CheckQueen(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         if (boardstate[xi][yi].getType() == QUEEN && boardstate[xi][yi].getColor() == currentplayer) {
             // Look Up ..
             for (int y = yi - 1; y >= 0; y--) {
@@ -196,7 +194,7 @@ public class CheckValidator {
         return false;
     }
 
-    private boolean check4CheckKnight(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
+    private boolean check4CheckKnight(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         //_________________________________KNIGHTS_____________________________________//
 
         // Assuming knights can jump regardless of what pieces are in the way
@@ -277,7 +275,7 @@ public class CheckValidator {
         return false;
     }
 
-    private boolean check4CheckBishop(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
+    private boolean check4CheckBishop(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         //__________________________________________BISHOPS_____________________________________//
         if (boardstate[xi][yi].toString().equals("Bishop") && boardstate[xi][yi].getColor() == currentplayer) {
             // Look up .. (left)
@@ -363,7 +361,7 @@ public class CheckValidator {
         return false;
     }
 
-    private boolean check4CheckRook(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
+    private boolean check4CheckRook(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         //__________________________________________ROOKS_____________________________________//
         if (boardstate[xi][yi].toString().equals("Rook") && boardstate[xi][yi].getColor() == currentplayer) {
             // Look Up ..
@@ -443,7 +441,7 @@ public class CheckValidator {
         return false;
     }
 
-    private boolean check4CheckPawn(PieceColor currentplayer, PieceView[][] boardstate, int xi, int yi) {
+    private boolean check4CheckPawn(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         //_____________________________________PAWNS_____________________________________//
         if (boardstate[xi][yi].toString().equals("Pawn") && boardstate[xi][yi].getColor() == currentplayer) {
             // LOOK ONE SQUARE LEFT DIAGONALLY IF KING PRESENT HIGHLIGHT

@@ -1,32 +1,31 @@
-package com.stolz.alexander.chessengine.gui.pieces;
+package com.stolz.alexander.chessengine.engine.pieces;
 
+import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.engine.pieces.PieceType;
-import javafx.scene.image.Image;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
-public class Empty extends PieceView {
+public class Empty extends Piece {
 
 	public Empty(int ii, int jj) {
 		super(PieceType.NOTYPE, PieceColor.NONE, ii, jj);
-        image = new Image("empty.png");
 	}
 
     @Override
-    public PieceView[][] move(PieceView selectedpiece, PieceView targetpiece, PieceView[][] boardstate) {
+    public Piece[][] move(Piece source, Piece target, Piece[][] boardstate) {
         throw new NotImplementedException();
     }
 
     @Override
-	public List<PiecePosition> findValidMoves(PieceView[][] pieceViews) {
+	public List<PiecePosition> findValidMoves(Piece[][] pieces) {
 		throw new NotImplementedException();
 	}
 
     @Override
-    public PieceView[][] findPossibleMoves(PieceView[][] pieceViews) {
+    public Piece[][] findPossibleMoves(Piece[][] pieces) {
         throw new NotImplementedException();
     }
 }
