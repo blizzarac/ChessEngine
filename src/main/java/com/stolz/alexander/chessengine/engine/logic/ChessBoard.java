@@ -1,7 +1,7 @@
 package com.stolz.alexander.chessengine.engine.logic;
 
 import com.stolz.alexander.chessengine.engine.pieces.*;
-import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardView;
+import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardFields;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
@@ -16,12 +16,12 @@ public class ChessBoard {
 
 
     /**
-     * initialize the board: background, data structures, inital layout of pieces
+     * initialize the fields: background, data structures, inital layout of pieces
      *
      * @return
      */
     public void init() {
-        pieces = new Piece[ChessBoardView.boardWidth][ChessBoardView.boardHeight];
+        pieces = new Piece[ChessBoardFields.boardWidth][ChessBoardFields.boardHeight];
 
         // White Pieces
         pieces[7][7] = new PieceRook(WHITE, 7, 7);

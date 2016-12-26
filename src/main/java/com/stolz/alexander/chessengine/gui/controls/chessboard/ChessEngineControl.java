@@ -78,7 +78,7 @@ public class ChessEngineControl extends Control {
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
                     for (PiecePosition p: validMoves) {
-                        chessboardPane.chessBoardView.getBoard()[p.x][p.y].setStroke(Color.RED);
+                        chessboardPane.chessBoardFields.getFields()[p.x][p.y].setStroke(Color.RED);
                     }
                 }
             }
@@ -92,7 +92,7 @@ public class ChessEngineControl extends Control {
             int hash = event.getPickResult().getIntersectedNode().hashCode();
 
             if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
-                Piece[][] boardstate = chessboardPane.getState();
+                final Piece[][] boardstate = chessboardPane.getState();
 
                 targetpiece = chessboardPane.selectTarget(hash);
                 if (selectedpiece.getType() != NOTYPE
@@ -101,14 +101,14 @@ public class ChessEngineControl extends Control {
                         && !selectedpiece.equals(targetpiece)) {
 
                     if (validMoves.stream().anyMatch(pos -> pos.x == targetpiece.x() && pos.y == targetpiece.y())) {
-                        Piece[][] oldstate = chessboardPane.chessBoard.backupPieces(boardstate);
-                        tryMoveAndReverseOnCheck(boardstate, oldstate);
+                        final Piece[][] oldState = chessboardPane.chessBoard.backupPieces(boardstate);
+                        tryMoveAndReverseOnCheck(boardstate, oldState);
                     } else {
                         stalemateCheck();
                     }
                 }
 
-                chessboardPane.chessBoardView.resetColorsOnBoard();
+                chessboardPane.chessBoardFields.resetColorsOnBoard();
                 chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
 
                 // Check for checkmate ..
@@ -118,7 +118,7 @@ public class ChessEngineControl extends Control {
 
                 // highlight check..
                 if (checkValidator.checkstate() != null) {
-                    chessboardPane.chessBoardView.setFieldHightlightColor(checkValidator.checkstate().x, checkValidator.checkstate().y, Color.RED);
+                    chessboardPane.chessBoardFields.setFieldHightlightColor(checkValidator.checkstate().x, checkValidator.checkstate().y, Color.RED);
                     if (!winner) {
                         logger.log(Level.FINE, "CHECK!");
                     }
@@ -132,13 +132,20 @@ public class ChessEngineControl extends Control {
 
 
     private Piece[][] tryMoveAndReverseOnCheck(Piece[][] boardstate, Piece[][] oldstate) {
-        // Do move
         boardstate = selectedpiece.move(boardstate, targetpiece.getPiecePosition());
+
         // If move results in no check, do move
         if (checkValidator.check4check(chessboardPane.otherPlayerColor(), boardstate) == null) {
-            doMoveOnBoard(boardstate);
+            chessboardPane.chessBoard.replacePieces(boardstate);
+            chessboardPane.buildBoard();
+            chessboardPane.changeplayer();
+            chessboardPane.setClickLogic(ClickState.NULL);
+            stalecountwhite = 8;
+            stalecountblack = 8;
         } else {
-            reverseMove(oldstate);
+            chessboardPane.setClickLogic(ClickState.NULL);
+            chessboardPane.chessBoard.replacePieces(oldstate);
+            checkValidator.flipcheck();
             stalemateCheck();
         }
         return boardstate;
@@ -148,21 +155,6 @@ public class ChessEngineControl extends Control {
     public void resize(double width, double height) {
         super.resize(width, height);
         chessboardPane.resize(width, height);
-    }
-
-    private void doMoveOnBoard(Piece[][] boardstate) {
-        chessboardPane.chessBoard.replacePieces(boardstate);
-        chessboardPane.buildBoard();
-        chessboardPane.changeplayer();
-        chessboardPane.setClickLogic(ClickState.NULL);
-        stalecountwhite = 8;
-        stalecountblack = 8;
-    }
-
-    private void reverseMove(Piece[][] oldstate) {
-        chessboardPane.setClickLogic(ClickState.NULL);
-        chessboardPane.chessBoard.replacePieces(oldstate);
-        checkValidator.flipcheck();
     }
 
     private void stalemateCheck() {

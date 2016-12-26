@@ -25,7 +25,7 @@ public class CheckValidator {
     public boolean check4checkmate(PieceColor currentplayer, Piece[][] boardstate) {
         logger.log(Level.FINE, "check4checkmate");
         boolean checkmateflag = true;
-        // For loop to check every piece on current board
+        // For loop to check every piece on current fields
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 // No need to run check on empty pieces and enemy pieces
