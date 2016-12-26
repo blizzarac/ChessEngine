@@ -16,7 +16,7 @@ public class PieceQueen extends Piece {
 	    List<PiecePosition> validMoves = new ArrayList<>();
 
         // Look up .. (left)
-        for(int y=this.jcoord()-1, x=this.icoord()-1; y >= 0 && x >= 0; y--,x--){
+        for(int y = this.y()-1, x = this.x()-1; y >= 0 && x >= 0; y--,x--){
             if(pieces[x][y].getType() == NOTYPE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -32,7 +32,7 @@ public class PieceQueen extends Piece {
         }
 
         // Look up .. (right)
-        for(int y=this.jcoord()-1, x=this.icoord()+1; y >= 0 && x < 8; y--,x++){
+        for(int y = this.y()-1, x = this.x()+1; y >= 0 && x < 8; y--,x++){
             if(pieces[x][y].getType() == NOTYPE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -48,7 +48,7 @@ public class PieceQueen extends Piece {
         }
 
         // Look down .. (left)
-        for(int y=this.jcoord()+1, x=this.icoord()-1; y < 8 && x >= 0; y++,x--){
+        for(int y = this.y()+1, x = this.x()-1; y < 8 && x >= 0; y++,x--){
             if(pieces[x][y].getType() == NOTYPE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -64,7 +64,7 @@ public class PieceQueen extends Piece {
         }
 
         // Look down .. (right)
-        for(int y=this.jcoord()+1, x=this.icoord()+1; y < 8 && x < 8; y++,x++){
+        for(int y = this.y()+1, x = this.x()+1; y < 8 && x < 8; y++,x++){
             if(pieces[x][y].getType() == NOTYPE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -80,64 +80,64 @@ public class PieceQueen extends Piece {
         }
 
         // Look Up ..
-        for(int y = this.jcoord()-1; y >= 0; y--){
-            if(pieces[this.icoord()][y].getType() == NOTYPE){
-                validMoves.add(new PiecePosition(this.icoord(),y));
+        for(int y = this.y()-1; y >= 0; y--){
+            if(pieces[this.x()][y].getType() == NOTYPE){
+                validMoves.add(new PiecePosition(this.x(),y));
             }
-            if(pieces[this.icoord()][y].getColor()== this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord(),y));
+            if(pieces[this.x()][y].getColor()== this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x(),y));
                 // Stop looking
                 y=-1;
             }
-            if(y!=-1 && pieces[this.icoord()][y].getColor() == this.color){
+            if(y!=-1 && pieces[this.x()][y].getColor() == this.color){
                 // Stop looking
                 y=-1;
             }
         }
 
         // Look Right ..
-        for(int x = this.icoord()+1; x < 8; x++){
-            if(pieces[x][this.jcoord()].getType() == NOTYPE){
-                validMoves.add(new PiecePosition(x,this.jcoord()));
+        for(int x = this.x()+1; x < 8; x++){
+            if(pieces[x][this.y()].getType() == NOTYPE){
+                validMoves.add(new PiecePosition(x,this.y()));
             }
-            if(pieces[x][this.jcoord()].getColor()== this.color.mirror()){
-                validMoves.add(new PiecePosition(x,this.jcoord()));
+            if(pieces[x][this.y()].getColor()== this.color.mirror()){
+                validMoves.add(new PiecePosition(x,this.y()));
                 // Stop looking
                 x=8;
             }
-            if(x!=8 && pieces[x][this.jcoord()].getColor() == this.color){
+            if(x!=8 && pieces[x][this.y()].getColor() == this.color){
                 // Stop looking
                 x=8;
             }
         }
 
         // Look Left ..
-        for(int x = this.icoord()-1; x >= 0; x--){
-            if(pieces[x][this.jcoord()].getType() == NOTYPE){
-                validMoves.add(new PiecePosition(x,this.jcoord()));
+        for(int x = this.x()-1; x >= 0; x--){
+            if(pieces[x][this.y()].getType() == NOTYPE){
+                validMoves.add(new PiecePosition(x,this.y()));
             }
-            if(pieces[x][this.jcoord()].getColor()== this.color.mirror()){
-                validMoves.add(new PiecePosition(x,this.jcoord()));
+            if(pieces[x][this.y()].getColor()== this.color.mirror()){
+                validMoves.add(new PiecePosition(x,this.y()));
                 // Stop looking
                 x=-1;
             }
-            if(x!=-1 && pieces[x][this.jcoord()].getColor() == this.color){
+            if(x!=-1 && pieces[x][this.y()].getColor() == this.color){
                 // Stop looking
                 x=-1;
             }
         }
 
         // Look Down ..
-        for(int y = this.jcoord()+1; y < 8; y++){
-            if(pieces[this.icoord()][y].getType() == NOTYPE){
-                validMoves.add(new PiecePosition(this.icoord(),y));
+        for(int y = this.y()+1; y < 8; y++){
+            if(pieces[this.x()][y].getType() == NOTYPE){
+                validMoves.add(new PiecePosition(this.x(),y));
             }
-            if(pieces[this.icoord()][y].getColor()== this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord(),y));
+            if(pieces[this.x()][y].getColor()== this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x(),y));
                 // Stop looking
                 y=8;
             }
-            if(y!=8 && pieces[this.icoord()][y].getColor() == this.color && y!=8){
+            if(y!=8 && pieces[this.x()][y].getColor() == this.color && y!=8){
                 // Stop looking
                 y=8;
             }

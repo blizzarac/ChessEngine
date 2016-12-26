@@ -1,9 +1,11 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
+import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.pieces.Empty;
 import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 import com.stolz.alexander.chessengine.gui.pieces.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,8 +19,8 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 public class ChessBoardPane extends Pane {
+    public final ChessBoardView chessBoardView;
     public final ChessBoard chessBoard;
-    public final ChessBoardPiecesView chessBoardPiecesView;
 
     private ImageView[][] imageviews;
 
@@ -46,12 +48,20 @@ public class ChessBoardPane extends Pane {
     }
 
     public ChessBoardPane() {
+        chessBoardView = new ChessBoardView();
         chessBoard = new ChessBoard();
-        chessBoardPiecesView = new ChessBoardPiecesView();
+        chessBoard.init();
 
         // Initializes new board
-        chessBoard.setBoard(chessBoard.initializeNewBoard());
+        chessBoardView.setBoard(chessBoardView.initializeNewBoard());
 
+        buildBoard();
+
+        currentPlayerColor = WHITE;
+    }
+
+    public void buildBoard() {
+        getChildren().clear();
 
         // Viewers for each getImage
         imageviews = new ImageView[8][8];
@@ -63,44 +73,42 @@ public class ChessBoardPane extends Pane {
             }
         }
 
+        // Places background squares
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                getChildren().add(chessBoardView.getBoard()[i][j]);
+            }
+        }
+
+        // Places chess piece images
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                getChildren().addAll(imageviews[i][j]);
+            }
+        }
+
         // Puts images into imageviewers
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                Image pieceImage = PieceImageProvider.INSTANCE.getImageForPiece(chessBoardPiecesView.pieces[x][y]);
+                Image pieceImage = PieceImageProvider.INSTANCE.getImageForPiece(chessBoard.pieces[x][y]);
                 imageviews[x][y].setImage(pieceImage);
                 imageviews[x][y].setFitWidth(50);
                 imageviews[x][y].setFitHeight(80);
                 imageviews[x][y].setPreserveRatio(true);
                 imageviews[x][y].setSmooth(true);
                 imageviews[x][y].setCache(true);
-                imageviews[x][y].setTranslateX(chessBoard.getBoard()[x][y].getWidth() / 8);
+                imageviews[x][y].setTranslateX(chessBoardView.getBoard()[x][y].getWidth() / 8);
             }
         }
-
-        currentPlayerColor = WHITE;
     }
 
-    public void placeboard(final int i, final int j) {
-        getChildren().add(chessBoard.getBoard()[i][j]);
-    }
-
-    public void placeimages(final int i, final int j) {
-        getChildren().addAll(imageviews[i][j]);
-    }
-
-    // Returns stroke of board piece
-    public boolean getStroke(final int i, final int j, Paint color) {
-        return chessBoard.getBoard()[i][j].getStroke() == color;
-    }
-
-    //resize method
     @Override
     public void resize(double width, double height) {
         super.resize(width, height);
         double cell_width = width / 8;
         double cell_height = height / 8;
 
-        chessBoard.resize(cell_width, cell_height);
+        chessBoardView.resize(cell_width, cell_height);
 
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < 8; i++) {
@@ -108,7 +116,7 @@ public class ChessBoardPane extends Pane {
                 imageviews[i][j].relocate(i * cell_width, j * cell_height);
                 imageviews[i][j].setFitWidth(cell_width / 1.25);
                 imageviews[i][j].setFitHeight(cell_height / 1.25);
-                imageviews[i][j].setTranslateX(chessBoard.getBoard()[i][j].getWidth() / 8);
+                imageviews[i][j].setTranslateX(chessBoardView.getBoard()[i][j].getWidth() / 8);
             }
         }
     }
@@ -120,7 +128,7 @@ public class ChessBoardPane extends Pane {
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                if (imageviews[x][y].hashCode() == hash || chessBoard.getBoard()[x][y].hashCode() == hash) {
+                if (imageviews[x][y].hashCode() == hash || chessBoardView.getBoard()[x][y].hashCode() == hash) {
                     i = x;
                     j = y;
                 }
@@ -128,79 +136,64 @@ public class ChessBoardPane extends Pane {
         }
 
         if (!winner) {
-            if (chessBoardPiecesView.pieces[i][j].getColor() == NONE
-                    || chessBoardPiecesView.pieces[i][j].getColor() == currentPlayerColor.mirror()) {
-                return chessBoardPiecesView.pieces[i][j];
+            if (chessBoard.pieces[i][j].getColor() == NONE
+                    || chessBoard.pieces[i][j].getColor() == currentPlayerColor.mirror()) {
+                return chessBoard.pieces[i][j];
             }
         }
-        return chessBoardPiecesView.pieces[i][j];
+        return chessBoard.pieces[i][j];
     }
 
     //select piece method
     public Piece selectPiece(int hash) {
+        PiecePosition selectedPiece = new PiecePosition(0,0);
         // Determine what piece was selected and if it can be selected
-        int i = 0;
-        int j = 0;
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (imageviews[x][y].hashCode() == hash && imageviews[x][y] != null) {
-                    i = x;
-                    j = y;
+                    selectedPiece.x = x;
+                    selectedPiece.y = y;
                 }
             }
         }
 
         if (currentPlayerColor == WHITE && !winner) {
-            if (chessBoardPiecesView.pieces[i][j].getColor() == WHITE) {
+            if (chessBoard.pieces[selectedPiece.x][selectedPiece.y].getColor() == WHITE) {
                 // If player has already selected the piece, deselect it
-                if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
-                    chessBoard.resetColorsOnField(i, j);
+                if (chessBoardView.getBoard()[selectedPiece.x][selectedPiece.y].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
+                    chessBoardView.resetColorsOnField(selectedPiece.x, selectedPiece.y);
                 }
                 // Otherwise select it and work out moves
                 else {
-                    chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
+                    chessBoardView.getBoard()[selectedPiece.x][selectedPiece.y].setStroke(Color.LIGHTCORAL);
                     isPieceSelected = true;
-                    return chessBoardPiecesView.pieces[i][j];
+                    return chessBoard.pieces[selectedPiece.x][selectedPiece.y];
                 }
             }
         }
 
         // If current player is black
         else {
-            if (chessBoardPiecesView.pieces[i][j].getColor() == BLACK) {
-                if (chessBoard.getBoard()[i][j].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
+            if (chessBoard.pieces[selectedPiece.x][selectedPiece.y].getColor() == BLACK) {
+                if (chessBoardView.getBoard()[selectedPiece.x][selectedPiece.y].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
                     // Resets color
-                    chessBoard.resetColorsOnField(i, j);
+                    chessBoardView.resetColorsOnField(selectedPiece.x, selectedPiece.y);
                 } else {
-                    chessBoard.getBoard()[i][j].setStroke(Color.LIGHTCORAL);
+                    chessBoardView.getBoard()[selectedPiece.x][selectedPiece.y].setStroke(Color.LIGHTCORAL);
                     isPieceSelected = true;
-                    return chessBoardPiecesView.pieces[i][j];
+                    return chessBoard.pieces[selectedPiece.x][selectedPiece.y];
                 }
             }
         }
 
         // return something ..
-        return new Empty(i, j);
-    }
-
-    // Draw the move and remove highlights
-    public void drawmove(final int si, int sj, int ti, int tj) {
-        imageviews[ti][tj].setImage(PieceImageProvider.INSTANCE.getImageForPiece(chessBoardPiecesView.pieces[ti][tj]));
-        imageviews[si][sj].setImage(new Image("empty.png"));
-
-        // Remove highlight
-        if (chessBoard.getBoard()[si][sj].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
-            chessBoard.resetColorsOnField(si, sj);
-        } else if (!isPieceSelected) {
-            chessBoard.getBoard()[si][sj].setStroke(Color.LIGHTCORAL);
-            isPieceSelected = true;
-        }
+        return new Empty(selectedPiece.x, selectedPiece.y);
     }
 
     // Returns state of the chess board ..
     public Piece[][] getState() {
-        return chessBoardPiecesView.pieces;
+        return chessBoard.pieces;
     }
 
     public void changeplayer() {

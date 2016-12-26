@@ -1,6 +1,7 @@
-package com.stolz.alexander.chessengine.gui.controls.chessboard;
+package com.stolz.alexander.chessengine.engine.logic;
 
 import com.stolz.alexander.chessengine.engine.pieces.*;
+import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardView;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
@@ -8,19 +9,19 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 /**
  * Created by alexanderstolz on 12/9/16.
  */
-public class ChessBoardPiecesView {
-    public final Piece[][] pieces;
+public class ChessBoard {
+    public Piece[][] pieces;
+
+    public ChessBoard() {}
 
 
-    public ChessBoardPiecesView() {
-        pieces = initPiecesViews();
-    }
-
-
-
-    public Piece[][] initPiecesViews() {
-        //initialize the board: background, data structures, inital layout of pieces
-        Piece[][] pieces = new Piece[ChessBoard.boardWidth][ChessBoard.boardHeight];
+    /**
+     * initialize the board: background, data structures, inital layout of pieces
+     *
+     * @return
+     */
+    public void init() {
+        pieces = new Piece[ChessBoardView.boardWidth][ChessBoardView.boardHeight];
 
         // White Pieces
         pieces[7][7] = new PieceRook(WHITE, 7, 7);
@@ -31,7 +32,7 @@ public class ChessBoardPiecesView {
         pieces[2][7] = new PieceBishop(WHITE, 2, 7);
         pieces[1][7] = new PieceKnight(WHITE, 1, 7);
         pieces[0][7] = new PieceRook(WHITE, 0, 7);
-        // Pawns
+        // White Pawns
         pieces[7][6] = new PiecePawn(WHITE, 7, 6, true);
         pieces[6][6] = new PiecePawn(WHITE, 6, 6, true);
         pieces[5][6] = new PiecePawn(WHITE, 5, 6, true);
@@ -41,7 +42,7 @@ public class ChessBoardPiecesView {
         pieces[1][6] = new PiecePawn(WHITE, 1, 6, true);
         pieces[0][6] = new PiecePawn(WHITE, 0, 6, true);
 
-        // com.stolz.alexander.chessengine.engine.pieces.Empty Pieces
+        // Empty Pieces
         for (int x = 5; x > 1; x--) {
             for (int j = 0; j < 8; j++) {
                 pieces[j][x] = new Empty(j, x);
@@ -66,13 +67,42 @@ public class ChessBoardPiecesView {
         pieces[2][1] = new PiecePawn(BLACK, 2, 1, true);
         pieces[1][1] = new PiecePawn(BLACK, 1, 1, true);
         pieces[0][1] = new PiecePawn(BLACK, 0, 1, true);
-
-        return pieces;
     }
 
-    public void replacePieceViews(Piece[][] newboard) {
+    public void replacePieces(Piece[][] newboard) {
         for (int x = 0; x < 8; x++) {
             System.arraycopy(newboard[x], 0, pieces[x], 0, 8);
+        }
+    }
+
+    public Piece[][] backupPieces(Piece[][] boardstate) {
+        final Piece[][] backup = new Piece[8][8];
+        for (int x = 0; x < 8; x++) {
+            System.arraycopy(boardstate[x], 0, backup[x], 0, 8);
+        }
+        return backup;
+    }
+
+    public void printBoard() {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (pieces[y][x].getType() == PieceType.NOTYPE) {
+                    System.out.print("_");
+                } else if (pieces[y][x].getType() == PieceType.PAWN) {
+                    System.out.print("P");
+                } else if (pieces[y][x].getType() == PieceType.KING) {
+                    System.out.print("K");
+                } else if (pieces[y][x].getType() == PieceType.QUEEN) {
+                    System.out.print("Q");
+                } else if (pieces[y][x].getType() == PieceType.BISHOP) {
+                    System.out.print("B");
+                } else if (pieces[y][x].getType() == PieceType.KNIGHT) {
+                    System.out.print("N");
+                } else if (pieces[y][x].getType() == PieceType.ROOK) {
+                    System.out.print("R");
+                }
+            }
+            System.out.println();
         }
     }
 }

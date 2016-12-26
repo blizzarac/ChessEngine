@@ -15,11 +15,6 @@ public class Empty extends Piece {
 	}
 
     @Override
-    public Piece[][] move(Piece source, Piece target, Piece[][] boardstate) {
-        throw new NotImplementedException();
-    }
-
-    @Override
 	public List<PiecePosition> findValidMoves(Piece[][] pieces) {
 		throw new NotImplementedException();
 	}

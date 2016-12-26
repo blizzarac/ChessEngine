@@ -14,82 +14,82 @@ public class PieceKing extends Piece {
         List<PiecePosition> validMoves = new ArrayList<>();
 
         // Up
-        if(this.jcoord()-1 >= 0){
-            if(pieces[this.icoord()][this.jcoord()-1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()-1));
+        if(this.y()-1 >= 0){
+            if(pieces[this.x()][this.y()-1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x(),this.y()-1));
             }
-            if(pieces[this.icoord()][this.jcoord()-1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()-1));
+            if(pieces[this.x()][this.y()-1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x(),this.y()-1));
             }
         }
 
         // Up - right
-        if(this.jcoord()-1 >= 0 && this.icoord()+1 < 8){
-            if(pieces[this.icoord()+1][this.jcoord()-1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-1));
+        if(this.y()-1 >= 0 && this.x()+1 < 8){
+            if(pieces[this.x()+1][this.y()-1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()-1));
             }
-            if(pieces[this.icoord()+1][this.jcoord()-1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-1));
+            if(pieces[this.x()+1][this.y()-1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()-1));
             }
         }
 
         // Up - left
-        if(this.jcoord()-1 >= 0 && this.icoord()-1 >= 0){
-            if(pieces[this.icoord()-1][this.jcoord()-1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-1));
+        if(this.y()-1 >= 0 && this.x()-1 >= 0){
+            if(pieces[this.x()-1][this.y()-1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()-1));
             }
-            if(pieces[this.icoord()-1][this.jcoord()-1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-1));
+            if(pieces[this.x()-1][this.y()-1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()-1));
             }
         }
 
         // Left
-        if(this.icoord()-1 >= 0){
-            if(pieces[this.icoord()-1][this.jcoord()].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()));
+        if(this.x()-1 >= 0){
+            if(pieces[this.x()-1][this.y()].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()));
             }
-            if(pieces[this.icoord()-1][this.jcoord()].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()));
+            if(pieces[this.x()-1][this.y()].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()));
             }
         }
 
         // Right
-        if(this.icoord()+1 < 8){
-            if(pieces[this.icoord()+1][this.jcoord()].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()));
+        if(this.x()+1 < 8){
+            if(pieces[this.x()+1][this.y()].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()));
             }
-            if(pieces[this.icoord()+1][this.jcoord()].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()));
+            if(pieces[this.x()+1][this.y()].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()));
             }
         }
 
         // Down
-        if(this.jcoord()+1 < 8){
-            if(pieces[this.icoord()][this.jcoord()+1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()+1));
+        if(this.y()+1 < 8){
+            if(pieces[this.x()][this.y()+1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x(),this.y()+1));
             }
-            if(pieces[this.icoord()][this.jcoord()+1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord(),this.jcoord()+1));
+            if(pieces[this.x()][this.y()+1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x(),this.y()+1));
             }
         }
 
         // Down - left
-        if(this.jcoord()+1 < 8 && this.icoord()-1 >= 0){
-            if(pieces[this.icoord()-1][this.jcoord()+1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+1));
+        if(this.y()+1 < 8 && this.x()-1 >= 0){
+            if(pieces[this.x()-1][this.y()+1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()+1));
             }
-            if(pieces[this.icoord()-1][this.jcoord()+1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+1));
+            if(pieces[this.x()-1][this.y()+1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()-1,this.y()+1));
             }
         }
 
         // Down - right
-        if(this.jcoord()+1 < 8 && this.icoord()+1 < 8){
-            if(pieces[this.icoord()+1][this.jcoord()+1].getColor() == PieceColor.NONE){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+1));
+        if(this.y()+1 < 8 && this.x()+1 < 8){
+            if(pieces[this.x()+1][this.y()+1].getColor() == PieceColor.NONE){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()+1));
             }
-            if(pieces[this.icoord()+1][this.jcoord()+1].getColor()==this.color.mirror()){
-                validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+1));
+            if(pieces[this.x()+1][this.y()+1].getColor()==this.color.mirror()){
+                validMoves.add(new PiecePosition(this.x()+1,this.y()+1));
             }
         }
 

@@ -7,7 +7,7 @@ import javafx.scene.shape.StrokeType;
 /**
  * Created by alexanderstolz on 12/8/16.
  */
-public class ChessBoard {
+public class ChessBoardView {
     public static final int boardWidth = 8;
     public static final int boardHeight = 8;
 

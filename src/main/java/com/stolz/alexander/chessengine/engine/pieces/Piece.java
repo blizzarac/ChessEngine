@@ -25,17 +25,28 @@ public abstract class Piece {
     /**
      *
      *
-     * @param source
      * @param target
      * @param boardstate
      * @return
      */
-    public Piece[][] move(Piece source, Piece target, Piece[][] boardstate) {
+    public Piece[][] move(Piece[][] boardstate, PiecePosition target) {
         final Piece[][] bs = Arrays.copyOf(boardstate, boardstate.length);
 
-        final Piece tmp =  bs[target.icoord()][target.jcoord()]; // Saving target
-        bs[target.icoord()][target.jcoord()] = bs[source.icoord()][source.jcoord()];
-        bs[source.icoord()][source.jcoord()] = tmp;
+        int currX = this.x();
+        int currY = this.y();
+        int targetX = target.x;
+        int targetY = target.y;
+
+        final Piece tmp =  bs[targetX][targetY]; // Saving target
+        // Update target piece
+        bs[targetX][targetY] = bs[currX][currY];
+        bs[targetX][targetY].piecePosition.x = targetX;
+        bs[targetX][targetY].piecePosition.y = targetY;
+
+        // Update this
+        bs[currX][currY] = tmp;
+        bs[currX][currY].piecePosition.x = currX;
+        bs[currX][currY].piecePosition.y = currY;
 
         return bs;
     }
@@ -44,11 +55,11 @@ public abstract class Piece {
 
     public abstract Piece[][] findPossibleMoves(Piece[][] pieces);
 
-    public int icoord() {
+    public int x() {
        return piecePosition.x;
     }
 
-    public int jcoord() {
+    public int y() {
        return piecePosition.y;
     }
 

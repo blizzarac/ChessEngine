@@ -13,82 +13,82 @@ public class PieceKnight extends Piece {
     public List<PiecePosition> findValidMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();
             // Up and left (first)
-            if(this.icoord()-1 >= 0 && this.jcoord()-2 >= 0){				// Bound check
-                if(pieces[this.icoord()-1][this.jcoord()-2].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-2));
+            if(this.x()-1 >= 0 && this.y()-2 >= 0){				// Bound check
+                if(pieces[this.x()-1][this.y()-2].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()-1,this.y()-2));
                 }
-                if(pieces[this.icoord()-1][this.jcoord()-2].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()-2));
+                if(pieces[this.x()-1][this.y()-2].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()-1,this.y()-2));
                 }
             }
 
             // Up and left (second)
-            if(this.icoord()-2 >= 0 && this.jcoord()-1 >= 0){				// Bound check
-                if(pieces[this.icoord()-2][this.jcoord()-1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()-2,this.jcoord()-1));
+            if(this.x()-2 >= 0 && this.y()-1 >= 0){				// Bound check
+                if(pieces[this.x()-2][this.y()-1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()-2,this.y()-1));
                 }
-                if(pieces[this.icoord()-2][this.jcoord()-1].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()-2,this.jcoord()-1));
+                if(pieces[this.x()-2][this.y()-1].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()-2,this.y()-1));
                 }
             }
 
             // Up and right (first)
-            if(this.icoord()+1 < 8 && this.jcoord()-2 >= 0){				// Bound check
-                if(pieces[this.icoord()+1][this.jcoord()-2].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-2));
+            if(this.x()+1 < 8 && this.y()-2 >= 0){				// Bound check
+                if(pieces[this.x()+1][this.y()-2].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()+1,this.y()-2));
                 }
-                if(pieces[this.icoord()+1][this.jcoord()-2].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()-2));
+                if(pieces[this.x()+1][this.y()-2].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()+1,this.y()-2));
                 }
             }
 
             // Up and right (second)
-            if(this.icoord()+2 < 8 && this.jcoord()-1 >= 0){				// Bound check
-                if(pieces[this.icoord()+2][this.jcoord()-1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()+2,this.jcoord()-1));
+            if(this.x()+2 < 8 && this.y()-1 >= 0){				// Bound check
+                if(pieces[this.x()+2][this.y()-1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()+2,this.y()-1));
                 }
-                if(pieces[this.icoord()+2][this.jcoord()-1].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()+2,this.jcoord()-1));
+                if(pieces[this.x()+2][this.y()-1].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()+2,this.y()-1));
                 }
             }
 
             // Bottom and right (first)
-            if(this.icoord()+1 < 8 && this.jcoord()+2 < 8){				// Bound check
-                if(pieces[this.icoord()+1][this.jcoord()+2].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+2));
+            if(this.x()+1 < 8 && this.y()+2 < 8){				// Bound check
+                if(pieces[this.x()+1][this.y()+2].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()+1,this.y()+2));
                 }
-                if(pieces[this.icoord()+1][this.jcoord()+2].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()+1,this.jcoord()+2));
+                if(pieces[this.x()+1][this.y()+2].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()+1,this.y()+2));
                 }
             }
 
             // Bottom and right (second)
-            if(this.icoord()+2 < 8 && this.jcoord()+1 < 8){				// Bound check
-                if(pieces[this.icoord()+2][this.jcoord()+1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()+2,this.jcoord()+1));
+            if(this.x()+2 < 8 && this.y()+1 < 8){				// Bound check
+                if(pieces[this.x()+2][this.y()+1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()+2,this.y()+1));
                 }
-                if(pieces[this.icoord()+2][this.jcoord()+1].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()+2,this.jcoord()+1));
+                if(pieces[this.x()+2][this.y()+1].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()+2,this.y()+1));
                 }
             }
 
             // Bottom and left (first)
-            if(this.icoord()-1 >= 0 && this.jcoord()+2 < 8){				// Bound check
-                if(pieces[this.icoord()-1][this.jcoord()+2].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+2));
+            if(this.x()-1 >= 0 && this.y()+2 < 8){				// Bound check
+                if(pieces[this.x()-1][this.y()+2].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()-1,this.y()+2));
                 }
-                if(pieces[this.icoord()-1][this.jcoord()+2].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()-1,this.jcoord()+2));
+                if(pieces[this.x()-1][this.y()+2].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()-1,this.y()+2));
                 }
             }
 
             // Bottom and left (second)
-            if(this.icoord()-2 >= 0 && this.jcoord()+1 < 8){				// Bound check
-                if(pieces[this.icoord()-2][this.jcoord()+1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(this.icoord()-2,this.jcoord()+1));
+            if(this.x()-2 >= 0 && this.y()+1 < 8){				// Bound check
+                if(pieces[this.x()-2][this.y()+1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x()-2,this.y()+1));
                 }
-                if(pieces[this.icoord()-2][this.jcoord()+1].getColor()==this.color.mirror()){
-                    validMoves.add(new PiecePosition(this.icoord()-2,this.jcoord()+1));
+                if(pieces[this.x()-2][this.y()+1].getColor()==this.color.mirror()){
+                    validMoves.add(new PiecePosition(this.x()-2,this.y()+1));
                 }
             }
 

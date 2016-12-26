@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
@@ -63,17 +62,14 @@ public class Controller {
         } else {
             timeline2 = new Timeline(
                     new KeyFrame(Duration.millis(1),
-                            new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent t) {
-                                    Duration duration = ((KeyFrame) t.getSource()).getTime();
-                                    if (Time2.greaterThan(Duration.ZERO)) {
-                                        Time2 = Time2.subtract(duration);
-                                    } else {
-                                        Time2 = Duration.ZERO;
-                                    }
-                                    TimeSeconds.set(Time2.toMinutes());
+                            event -> {
+                                Duration duration = ((KeyFrame) event.getSource()).getTime();
+                                if (Time2.greaterThan(Duration.ZERO)) {
+                                    Time2 = Time2.subtract(duration);
+                                } else {
+                                    Time2 = Duration.ZERO;
                                 }
+                                TimeSeconds.set(Time2.toMinutes());
                             })
             );
 

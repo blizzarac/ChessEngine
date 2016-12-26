@@ -13,7 +13,7 @@ public class PieceBishop extends Piece {
     public List<PiecePosition> findValidMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();
         // Look up .. (left)
-        for(int y=this.jcoord()-1, x=this.icoord()-1; y >= 0 && x >= 0; y--,x--){
+        for(int y = this.y()-1, x = this.x()-1; y >= 0 && x >= 0; y--,x--){
             if(pieces[x][y].getColor() == PieceColor.NONE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -29,7 +29,7 @@ public class PieceBishop extends Piece {
         }
 
         // Look up .. (right)
-        for(int y=this.jcoord()-1, x=this.icoord()+1; y >= 0 && x < 8; y--,x++){
+        for(int y = this.y()-1, x = this.x()+1; y >= 0 && x < 8; y--,x++){
             if(pieces[x][y].getColor() == PieceColor.NONE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -45,7 +45,7 @@ public class PieceBishop extends Piece {
         }
 
         // Look down .. (left)
-        for(int y=this.jcoord()+1, x=this.icoord()-1; y < 8 && x >= 0; y++,x--){
+        for(int y = this.y()+1, x = this.x()-1; y < 8 && x >= 0; y++,x--){
             if(pieces[x][y].getColor() == PieceColor.NONE){
                 validMoves.add(new PiecePosition(x,y));
             }
@@ -61,7 +61,7 @@ public class PieceBishop extends Piece {
         }
 
         // Look down .. (right)
-        for(int y=this.jcoord()+1, x=this.icoord()+1; y < 8 && x < 8; y++,x++){
+        for(int y = this.y()+1, x = this.x()+1; y < 8 && x < 8; y++,x++){
             if(pieces[x][y].getColor() == PieceColor.NONE){
                 validMoves.add(new PiecePosition(x,y));
             }

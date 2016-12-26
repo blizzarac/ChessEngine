@@ -14,9 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
-        <junit.jupiter.version>5.0.0-M3</junit.jupiter.version>
-        <junit.vintage.version>${junit.version}.0-M3</junit.vintage.version>
-        <junit.platform.version>1.0.0-M3</junit.platform.version>
+        <junit.jupiter.version>5.0.0-M2</junit.jupiter.version>
+        <junit.vintage.version>${junit.version}.0-M2</junit.vintage.version>
+        <junit.platform.version>1.0.0-M2</junit.platform.version>
     </properties>
 
     <build>
@@ -60,11 +60,11 @@
                         <artifactId>junit-jupiter-engine</artifactId>
                         <version>${junit.jupiter.version}</version>
                     </dependency>
-                    <dependency>
-                        <groupId>org.junit.vintage</groupId>
-                        <artifactId>junit-vintage-engine</artifactId>
-                        <version>${junit.vintage.version}</version>
-                    </dependency>
+                    <!--<dependency>-->
+                        <!--<groupId>org.junit.vintage</groupId>-->
+                        <!--<artifactId>junit-vintage-engine</artifactId>-->
+                        <!--<version>${junit.vintage.version}</version>-->
+                    <!--</dependency>-->
                 </dependencies>
             </plugin>
         </plugins>
@@ -78,11 +78,11 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>junit</groupId>-->
+            <!--<artifactId>junit</artifactId>-->
+            <!--<version>${junit.version}</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
     </dependencies>
 </project>
