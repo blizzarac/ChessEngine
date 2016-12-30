@@ -73,9 +73,9 @@ public class ChessEngineControl extends Control {
             if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
                 selectedpiece = chessboardPane.selectPiece(hash);
 
-                junkselection = selectedpiece.getColor() == NONE || !chessboardPane.isPieceSelected();
+                junkselection = selectedpiece == null || !chessboardPane.isPieceSelected();
 
-                if (!(selectedpiece.getColor() == NONE) && !junkselection) {
+                if (!junkselection) {
                     validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoard.pieces);
                     getScene().setCursor(new ImageCursor(PieceImageProvider.INSTANCE.getImageForPiece(selectedpiece)));
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);

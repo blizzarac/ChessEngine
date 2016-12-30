@@ -140,19 +140,23 @@ public class ChessBoardPane extends Pane {
 
     //select piece method
     public Piece selectPiece(int hash) {
-        PiecePosition selectedPiece = new PiecePosition(0,0);
+        PiecePosition selectedPiece = null;
         // Determine what piece was selected and if it can be selected
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                if (imageviews[x][y].hashCode() == hash && imageviews[x][y] != null) {
-                    selectedPiece.x = x;
-                    selectedPiece.y = y;
+                if (imageviews[x][y].hashCode() == hash) {
+                    if (imageviews[x][y] != null) {
+                        selectedPiece = new PiecePosition(x, y);
+                    } else {
+                        return null;
+                    }
+
                 }
             }
         }
 
-        if (currentPlayerColor == WHITE && !winner) {
+        if (selectedPiece != null && currentPlayerColor == WHITE && !winner) {
             if (chessBoard.pieces[selectedPiece.x][selectedPiece.y].getColor() == WHITE) {
                 // If player has already selected the piece, deselect it
                 if (chessBoardFields.fields[selectedPiece.x][selectedPiece.y].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
@@ -165,11 +169,7 @@ public class ChessBoardPane extends Pane {
                     return chessBoard.pieces[selectedPiece.x][selectedPiece.y];
                 }
             }
-        }
-
-        // If current player is black
-        else {
-            if (chessBoard.pieces[selectedPiece.x][selectedPiece.y].getColor() == BLACK) {
+        } else if (selectedPiece != null && chessBoard.pieces[selectedPiece.x][selectedPiece.y].getColor() == BLACK) {
                 if (chessBoardFields.fields[selectedPiece.x][selectedPiece.y].getStroke() == Color.LIGHTCORAL && isPieceSelected) {
                     // Resets color
                     chessBoardFields.resetColorsOnField(selectedPiece.x, selectedPiece.y);
@@ -179,10 +179,9 @@ public class ChessBoardPane extends Pane {
                     return chessBoard.pieces[selectedPiece.x][selectedPiece.y];
                 }
             }
-        }
 
-        // return something ..
-        return new Empty(selectedPiece.x, selectedPiece.y);
+
+        return null;
     }
 
     // Returns state of the chess fields ..

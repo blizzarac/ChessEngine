@@ -2,7 +2,6 @@ package com.stolz.alexander.chessengine.engine.logic;
 
 import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
-import com.stolz.alexander.chessengine.engine.pieces.PiecePawn;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
 
 import java.util.logging.Level;
@@ -23,18 +22,18 @@ public class CheckValidator {
 
 
     // Take current boardstate and evaluate check for all pieces in boardstate
-    public boolean check4checkmate(PieceColor currentplayer, Piece[][] boardstate) {
+    public boolean check4checkmate(PieceColor currentPlayer, Piece[][] boardstate) {
         logger.log(Level.FINE, "check4checkmate");
         boolean checkmateflag = true;
         // For loop to check every piece on current fields
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 // No need to run check on empty pieces and enemy pieces
-                if (!(boardstate[x][y].getType() == NOTYPE) && boardstate[x][y].getColor() == currentplayer.mirror()) {
+                if (!(boardstate[x][y].getType() == NOTYPE) && boardstate[x][y].getColor() == currentPlayer.mirror()) {
                     // Create an array of possible moves for this piece
                     Piece[][] possibleMoves = findBoardWithPossiblePiecePositions(boardstate[x][y], boardstate);
                     // If possiblemoves has a move that resolves check == false, flag=false
-                    check = check4check(currentplayer, possibleMoves);
+                    check = check4check(currentPlayer, possibleMoves);
                     if (check == null) {
                         checkmateflag = false;
                     }

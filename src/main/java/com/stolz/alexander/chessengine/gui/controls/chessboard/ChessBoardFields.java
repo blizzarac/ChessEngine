@@ -5,6 +5,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 /**
+ * Visual representation of fields of a board.
+ * Basically a 2d array of rectangles with sizes, colors and positions.
+ * Also handles highlighting of fields.
+ *
  * Created by alexanderstolz on 12/8/16.
  */
 public class ChessBoardFields {
@@ -12,13 +16,13 @@ public class ChessBoardFields {
     public static final int boardHeight = 8;
 
     public final Rectangle[][] fields;
-    private final Color first;
-    private final Color second;
+    private final Color color1;
+    private final Color color2;
 
 
-    public ChessBoardFields(Color first, Color second) {
-        this.first = first;
-        this.second = second;
+    public ChessBoardFields(Color color1, Color color2) {
+        this.color1 = color1;
+        this.color2 = color2;
         this.fields = new Rectangle[boardWidth][boardHeight];
 
         for (int x = 0; x < 8; x++) {
@@ -36,13 +40,13 @@ public class ChessBoardFields {
         for (int x = 0; x < 8; x++) {
             for (int j = 0; j < 8; j++) {
                 if (x % 2 == 0 && j % 2 == 1) {
-                    fields[x][j].setFill(first);
+                    fields[x][j].setFill(color1);
                 } else if (x % 2 == 0 && j % 2 == 0) {
-                    fields[x][j].setFill(second);
+                    fields[x][j].setFill(color2);
                 } else if (x % 2 == 1 && j % 2 == 1) {
-                    fields[x][j].setFill(second);
+                    fields[x][j].setFill(color2);
                 } else if (x % 2 == 1 && j % 2 == 0) {
-                    fields[x][j].setFill(first);
+                    fields[x][j].setFill(color1);
                 }
             }
         }
@@ -77,13 +81,13 @@ public class ChessBoardFields {
         fields[i][j].setStroke(Color.TRANSPARENT);
 
         if (i % 2 == 0 && j % 2 == 1) {
-            fields[i][j].setFill(this.first);
+            fields[i][j].setFill(this.color1);
         } else if (i % 2 == 0 && j % 2 == 0) {
-            fields[i][j].setFill(this.second);
+            fields[i][j].setFill(this.color2);
         } else if (i % 2 == 1 && j % 2 == 1) {
-            fields[i][j].setFill(this.second);
+            fields[i][j].setFill(this.color2);
         } else if (i % 2 == 1 && j % 2 == 0) {
-            fields[i][j].setFill(this.first);
+            fields[i][j].setFill(this.color1);
         }
     }
 }
