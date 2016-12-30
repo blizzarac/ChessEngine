@@ -11,8 +11,12 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
  */
 public class ChessBoard {
     public Piece[][] pieces;
+    public PieceColor currentPlayer;
+    public boolean winner = false;
 
-    public ChessBoard() {}
+    public ChessBoard() {
+        currentPlayer = WHITE;
+    }
 
 
     /**

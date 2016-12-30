@@ -34,6 +34,7 @@ public class ChessEngineControl extends Control {
     private boolean stale = false;
     private int stalecountblack = 8;
     private int stalecountwhite = 8;
+    private ClickState clickState = ClickState.NOTHING_CLICKED;
 
     public ChessEngineControl() {
         setSkin(new ChessEngineControlSkin(this));
@@ -59,7 +60,7 @@ public class ChessEngineControl extends Control {
                 winner = false;
                 stalecountwhite = 8;
                 stalecountblack = 8;
-                chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
+                clickState = ClickState.NOTHING_CLICKED;
             }
         });
 
@@ -70,7 +71,7 @@ public class ChessEngineControl extends Control {
             // Get hash of what we clicked on ..
             int hash = event.getTarget().hashCode();
 
-            if (chessboardPane.getClickState() == ClickState.NOTHING_CLICKED && !stale && !winner) {
+            if (clickState == ClickState.NOTHING_CLICKED && !stale && !winner) {
                 selectedpiece = chessboardPane.selectPiece(hash);
 
                 junkselection = selectedpiece == null || !chessboardPane.isPieceSelected();
@@ -78,7 +79,7 @@ public class ChessEngineControl extends Control {
                 if (!junkselection) {
                     validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoard.pieces);
                     getScene().setCursor(new ImageCursor(PieceImageProvider.INSTANCE.getImageForPiece(selectedpiece)));
-                    chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
+                    clickState = ClickState.PIECE_PICKED_UP;
                     // Highlights valid moves.
                     for (PiecePosition p: validMoves) {
                         chessboardPane.chessBoardFields.fields[p.x][p.y].setStroke(Color.RED);
@@ -94,10 +95,10 @@ public class ChessEngineControl extends Control {
             logger.log(Level.SEVERE, "setOnMouseReleased");
             int hash = event.getPickResult().getIntersectedNode().hashCode();
 
-            if (chessboardPane.getClickState() == ClickState.PIECE_PICKED_UP) {
-                final Piece[][] boardstate = chessboardPane.getState();
+            if (clickState == ClickState.PIECE_PICKED_UP) {
+                final Piece[][] boardstate = chessboardPane.getLogicalPieces();
 
-                targetpiece = chessboardPane.selectTarget(hash);
+                targetpiece = chessboardPane.selectTargetLocation(hash);
                 if (selectedpiece.getType() != NOTYPE
                         && selectedpiece != null
                         && targetpiece != null
@@ -112,10 +113,10 @@ public class ChessEngineControl extends Control {
                 }
 
                 chessboardPane.chessBoardFields.resetColorsOnBoard();
-                chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
+                clickState = ClickState.NOTHING_CLICKED;
 
                 // Check for checkmate ..
-                winner = checkValidator.check4checkmate(chessboardPane.otherPlayerColor(), chessboardPane.getState());
+                winner = checkValidator.check4checkmate(chessboardPane.chessBoard.currentPlayer.mirror(), chessboardPane.getLogicalPieces());
 
                 getScene().setCursor(Cursor.DEFAULT);
 
@@ -126,7 +127,7 @@ public class ChessEngineControl extends Control {
                         logger.log(Level.FINE, "CHECK!");
                     }
 
-                    chessboardPane.setClickLogic(ClickState.NOTHING_CLICKED);
+                    clickState = ClickState.NOTHING_CLICKED;
                 }
             }
         });
@@ -138,10 +139,10 @@ public class ChessEngineControl extends Control {
         boardstate = selectedpiece.move(boardstate, targetpiece.getPiecePosition());
 
         // If move results in no check, do move
-        if (checkValidator.check4check(chessboardPane.otherPlayerColor(), boardstate) == null) {
+        if (checkValidator.check4check(chessboardPane.chessBoard.currentPlayer.mirror(), boardstate) == null) {
             chessboardPane.chessBoard.replacePieces(boardstate);
             chessboardPane.buildBoard();
-            chessboardPane.changeplayer();
+            chessboardPane.chessBoard.currentPlayer = chessboardPane.chessBoard.currentPlayer.mirror();
             stalecountwhite = 8;
             stalecountblack = 8;
         } else {
@@ -150,7 +151,7 @@ public class ChessEngineControl extends Control {
             stalemateCheck();
         }
 
-        chessboardPane.setClickLogic(ClickState.NULL);
+        clickState = ClickState.NULL;
         return boardstate;
     }
 
