@@ -147,17 +147,7 @@ public class PieceQueen extends Piece {
     }
 
     @Override
-    public Piece[][] findPossibleMoves(Piece[][] pieces) {
-        Piece[][] possiblemoves = new Piece[8][8];
-        for (int x = 0; x < 8; x++) {
-            System.arraycopy(pieces[x], 0, possiblemoves[x], 0, 8);
-        }
-
-        final List<PiecePosition> validMoves = findValidMoves(pieces);
-        validMoves.stream().forEach(move ->
-                possiblemoves[move.x][move.y] = new PieceQueen(color, move.x, move.y)
-        );
-
-        return possiblemoves;
+    public PieceQueen copy() {
+        return new PieceQueen(this.getColor(), this.x(), this.y());
     }
 }

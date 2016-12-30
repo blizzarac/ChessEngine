@@ -20,7 +20,7 @@ public class Empty extends Piece {
 	}
 
     @Override
-    public Piece[][] findPossibleMoves(Piece[][] pieces) {
+    public Piece copy() {
         throw new NotImplementedException();
     }
 }

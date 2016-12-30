@@ -39,6 +39,8 @@ public class ChessEngineControl extends Control {
         setSkin(new ChessEngineControlSkin(this));
         chessboardPane = new ChessBoardPane();
         checkValidator = new CheckValidator();
+
+        getChildren().clear();
         getChildren().addAll(chessboardPane);
 
         chessboardPane.buildBoard();
@@ -47,6 +49,7 @@ public class ChessEngineControl extends Control {
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
                 chessboardPane = new ChessBoardPane();
+                getChildren().clear();
                 getChildren().addAll(chessboardPane);
 
                 chessboardPane.buildBoard();
@@ -78,7 +81,7 @@ public class ChessEngineControl extends Control {
                     chessboardPane.setClickLogic(ClickState.PIECE_PICKED_UP);
                     // Highlights valid moves.
                     for (PiecePosition p: validMoves) {
-                        chessboardPane.chessBoardFields.getFields()[p.x][p.y].setStroke(Color.RED);
+                        chessboardPane.chessBoardFields.fields[p.x][p.y].setStroke(Color.RED);
                     }
                 }
             }
@@ -139,15 +142,15 @@ public class ChessEngineControl extends Control {
             chessboardPane.chessBoard.replacePieces(boardstate);
             chessboardPane.buildBoard();
             chessboardPane.changeplayer();
-            chessboardPane.setClickLogic(ClickState.NULL);
             stalecountwhite = 8;
             stalecountblack = 8;
         } else {
-            chessboardPane.setClickLogic(ClickState.NULL);
             chessboardPane.chessBoard.replacePieces(oldstate);
             checkValidator.flipcheck();
             stalemateCheck();
         }
+
+        chessboardPane.setClickLogic(ClickState.NULL);
         return boardstate;
     }
 

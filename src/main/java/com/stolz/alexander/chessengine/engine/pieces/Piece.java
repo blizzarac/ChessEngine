@@ -23,9 +23,9 @@ public abstract class Piece {
     }
 
     /**
+     * Move piece on the board. NOT checking correct positioning.
      *
-     *
-     * @param target
+     * @param target Target position
      * @param boardstate
      * @return
      */
@@ -51,9 +51,12 @@ public abstract class Piece {
         return bs;
     }
 
+    /**
+     * Returns a list of possible positions for the current board.
+     * @param pieces The pieces on the board.
+     * @return List of possible positions.
+     */
     public abstract List<PiecePosition> findValidMoves(Piece[][] pieces);
-
-    public abstract Piece[][] findPossibleMoves(Piece[][] pieces);
 
     public int x() {
        return piecePosition.x;
@@ -65,9 +68,12 @@ public abstract class Piece {
 
     public PiecePosition getPiecePosition() { return piecePosition;}
 
+    public void setPiecePosition(PiecePosition pos) { this.piecePosition = pos;}
     public PieceColor getColor() { return color; }
 
     public PieceType getType() {
         return type;
     }
+
+    public abstract Piece copy();
 }

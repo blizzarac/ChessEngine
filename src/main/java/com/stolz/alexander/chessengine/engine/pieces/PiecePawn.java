@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PiecePawn extends Piece {
-	boolean firstmove;
+	private boolean firstmove;
 
     public PiecePawn(PieceColor color, int ii, int jj, boolean fm) {
 		super(PieceType.PAWN, color, ii, jj);
@@ -88,16 +88,7 @@ public class PiecePawn extends Piece {
         }
 
     @Override
-    public Piece[][] findPossibleMoves(Piece[][] pieces) {
-        Piece[][] possiblemoves = new Piece[8][8];
-        for (int x = 0; x < 8; x++) {
-            System.arraycopy(pieces[x], 0, possiblemoves[x], 0, 8);
-        }
-
-        findValidMoves(pieces).stream().forEach(move ->
-                possiblemoves[move.x][move.y] = new PiecePawn(color, move.x, move.y, false)
-        );
-
-        return possiblemoves;
+    public PiecePawn copy() {
+        return new PiecePawn(this.getColor(), this.x(), this.y(), false);
     }
 }
