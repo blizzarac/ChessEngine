@@ -1,5 +1,6 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
+import com.google.inject.Inject;
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import com.stolz.alexander.chessengine.gui.controls.main.Main;
 import com.stolz.alexander.chessengine.gui.pieces.PieceImageProvider;
@@ -18,9 +19,10 @@ public class ChessBoardPieces {
     private final ChessBoard chessBoard;
     private final ChessBoardFields chessBoardFields;
 
-    public ChessBoardPieces() {
-        this.chessBoard = Main.injector.getInstance(ChessBoard.class);;
-        this.chessBoardFields = Main.injector.getInstance(ChessBoardFields.class);
+    @Inject
+    public ChessBoardPieces(ChessBoard chessBoard, ChessBoardFields chessBoardFields) {
+        this.chessBoard = chessBoard;
+        this.chessBoardFields = chessBoardFields;
     }
 
     public void init() {

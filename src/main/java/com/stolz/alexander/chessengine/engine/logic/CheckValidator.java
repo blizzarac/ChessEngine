@@ -62,7 +62,9 @@ public class CheckValidator {
     }
 
 
-    // Check if player is in check
+    /**
+     * Check if player is in check
+     */
     public PiecePosition check4check(PieceColor currentplayer, Piece[][] boardstate) {
         // For loop to go through each piece and see if it can target the king
         for (int xi = 0; xi < 8; xi++) {
@@ -283,7 +285,7 @@ public class CheckValidator {
 
     private PiecePosition check4CheckBishop(PieceColor currentplayer, Piece[][] boardstate, int xi, int yi) {
         //__________________________________________BISHOPS_____________________________________//
-        if (boardstate[xi][yi].toString().equals("Bishop") && boardstate[xi][yi].getColor() == currentplayer) {
+        if (boardstate[xi][yi].getType() == BISHOP && boardstate[xi][yi].getColor() == currentplayer) {
             // Look up .. (left)
             for (int y = yi - 1, x = xi - 1; y >= 0 && x >= 0; y--, x--) {
                 boolean clearb = true;

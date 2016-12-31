@@ -1,9 +1,11 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
 import com.stolz.alexander.chessengine.engine.logic.CheckValidator;
+import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import com.stolz.alexander.chessengine.engine.logic.ClickState;
 import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
+import com.stolz.alexander.chessengine.gui.controls.main.Main;
 import com.stolz.alexander.chessengine.gui.pieces.PieceImageProvider;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -22,6 +24,7 @@ import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 public class ChessEngineControl extends Control {
 
     private static Logger logger = Logger.getLogger(ChessEngineControl.class.getName());
+    private final ChessBoard chessboard;
     private List<PiecePosition> validMoves;
 
     private ChessBoardPane chessboardPane;
@@ -38,8 +41,9 @@ public class ChessEngineControl extends Control {
 
     public ChessEngineControl() {
         setSkin(new ChessEngineControlSkin(this));
-        chessboardPane = new ChessBoardPane();
-        checkValidator = new CheckValidator();
+        chessboard = Main.injector.getInstance(ChessBoard.class);
+        chessboardPane = Main.injector.getInstance(ChessBoardPane.class);
+        checkValidator = Main.injector.getInstance(CheckValidator.class);
 
         getChildren().clear();
         getChildren().addAll(chessboardPane);
@@ -96,7 +100,7 @@ public class ChessEngineControl extends Control {
             int hash = event.getPickResult().getIntersectedNode().hashCode();
 
             if (clickState == ClickState.PIECE_PICKED_UP) {
-                final Piece[][] boardstate = chessboardPane.getLogicalPieces();
+                final Piece[][] boardstate = chessboard.pieces;
 
                 targetpiece = chessboardPane.selectTargetLocation(hash);
                 if (selectedpiece.getType() != NOTYPE
@@ -116,7 +120,7 @@ public class ChessEngineControl extends Control {
                 clickState = ClickState.NOTHING_CLICKED;
 
                 // Check for checkmate ..
-                winner = checkValidator.check4checkmate(chessboardPane.chessBoard.currentPlayer.mirror(), chessboardPane.getLogicalPieces());
+                winner = checkValidator.check4checkmate(chessboardPane.chessBoard.currentPlayer.mirror(), chessboard.pieces);
 
                 getScene().setCursor(Cursor.DEFAULT);
 

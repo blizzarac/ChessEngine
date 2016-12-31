@@ -11,4 +11,10 @@ public class PiecePosition {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        final PiecePosition other = (PiecePosition) obj;
+        return this.x == other.x && this.y == other.y;
+    }
 }

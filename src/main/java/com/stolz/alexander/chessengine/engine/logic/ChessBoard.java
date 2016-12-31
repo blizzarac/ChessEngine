@@ -89,26 +89,30 @@ public class ChessBoard {
         return backup;
     }
 
-    public void printBoard() {
+    public String printBoard() {
+        StringBuilder builder = new StringBuilder();
+
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (pieces[y][x].getType() == PieceType.NOTYPE) {
-                    System.out.print("_");
+                    builder.append("_");
                 } else if (pieces[y][x].getType() == PieceType.PAWN) {
-                    System.out.print("P");
+                     builder.append("P");
                 } else if (pieces[y][x].getType() == PieceType.KING) {
-                    System.out.print("K");
+                     builder.append("K");
                 } else if (pieces[y][x].getType() == PieceType.QUEEN) {
-                    System.out.print("Q");
+                     builder.append("Q");
                 } else if (pieces[y][x].getType() == PieceType.BISHOP) {
-                    System.out.print("B");
+                     builder.append("B");
                 } else if (pieces[y][x].getType() == PieceType.KNIGHT) {
-                    System.out.print("N");
+                     builder.append("N");
                 } else if (pieces[y][x].getType() == PieceType.ROOK) {
-                    System.out.print("R");
+                     builder.append("R");
                 }
             }
-            System.out.println();
+            builder.append("\n");
         }
+
+        return builder.toString();
     }
 }

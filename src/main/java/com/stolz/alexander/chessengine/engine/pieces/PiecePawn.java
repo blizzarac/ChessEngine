@@ -16,6 +16,16 @@ public class PiecePawn extends Piece {
 		return firstmove;
 	}
 
+	@Override
+    public Piece[][] move(Piece[][] boardstate, PiecePosition target) {
+        if (firstmove) {
+            firstmove = false;
+        }
+
+        Piece[][] resultBoard = super.move(boardstate, target);
+        return resultBoard;
+    }
+
     @Override
     public List<PiecePosition> findValidMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();

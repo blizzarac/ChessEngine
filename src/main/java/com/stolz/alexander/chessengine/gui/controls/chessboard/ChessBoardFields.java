@@ -80,13 +80,13 @@ public class ChessBoardFields {
         fields[i][j].setStroke(Color.TRANSPARENT);
 
         if (i % 2 == 0 && j % 2 == 1) {
-            fields[i][j].setFill(this.color1);
+            fields[i][j].setFill(color1);
         } else if (i % 2 == 0 && j % 2 == 0) {
-            fields[i][j].setFill(this.color2);
+            fields[i][j].setFill(color2);
         } else if (i % 2 == 1 && j % 2 == 1) {
-            fields[i][j].setFill(this.color2);
+            fields[i][j].setFill(color2);
         } else if (i % 2 == 1 && j % 2 == 0) {
-            fields[i][j].setFill(this.color1);
+            fields[i][j].setFill(color1);
         }
     }
 }

@@ -31,11 +31,10 @@ public class ChessBoardPane extends Pane {
     }
 
     public ChessBoardPane() {
-        chessBoardFields = Main.injector.getInstance(ChessBoardFields.class);
-        chessBoard = Main.injector.getInstance(ChessBoard.class);
-        chessBoard.init();
-        chessBoardPieces = Main.injector.getInstance(ChessBoardPieces.class);
-        chessBoardPieces.init();
+        this.chessBoardFields = Main.injector.getInstance(ChessBoardFields.class);
+        this.chessBoard = Main.injector.getInstance(ChessBoard.class);
+        this.chessBoard.init();
+        this.chessBoardPieces = Main.injector.getInstance(ChessBoardPieces.class);
 
         buildBoard();
     }
@@ -139,9 +138,5 @@ public class ChessBoardPane extends Pane {
 
 
         return null;
-    }
-
-    public Piece[][] getLogicalPieces() {
-        return chessBoard.pieces;
     }
 }
