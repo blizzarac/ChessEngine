@@ -1,5 +1,6 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
+import com.google.inject.Inject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -14,15 +15,13 @@ import javafx.scene.shape.StrokeType;
 public class ChessBoardFields {
     public static final int boardWidth = 8;
     public static final int boardHeight = 8;
+    public static final Color color1 = Color.WHITE;
+    public static final Color color2 = Color.BLUE;
 
     public final Rectangle[][] fields;
-    private final Color color1;
-    private final Color color2;
 
-
-    public ChessBoardFields(Color color1, Color color2) {
-        this.color1 = color1;
-        this.color2 = color2;
+    @Inject
+    public ChessBoardFields() {
         this.fields = new Rectangle[boardWidth][boardHeight];
 
         for (int x = 0; x < 8; x++) {

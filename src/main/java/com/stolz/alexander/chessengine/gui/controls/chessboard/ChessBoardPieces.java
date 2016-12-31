@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.gui.controls.chessboard;
 
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
+import com.stolz.alexander.chessengine.gui.controls.main.Main;
 import com.stolz.alexander.chessengine.gui.pieces.PieceImageProvider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,12 +15,12 @@ public class ChessBoardPieces {
     }
 
     private ImageView[][] imageviews;
-    public final ChessBoard chessBoard;
-    public final ChessBoardFields chessBoardFields;
+    private final ChessBoard chessBoard;
+    private final ChessBoardFields chessBoardFields;
 
-    public ChessBoardPieces(ChessBoard chessBoard, ChessBoardFields chessBoardFields) {
-        this.chessBoard = chessBoard;
-        this.chessBoardFields = chessBoardFields;
+    public ChessBoardPieces() {
+        this.chessBoard = Main.injector.getInstance(ChessBoard.class);;
+        this.chessBoardFields = Main.injector.getInstance(ChessBoardFields.class);
     }
 
     public void init() {

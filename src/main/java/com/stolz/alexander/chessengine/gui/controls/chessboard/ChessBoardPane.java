@@ -6,6 +6,7 @@ import com.stolz.alexander.chessengine.engine.pieces.Empty;
 import com.stolz.alexander.chessengine.engine.pieces.Piece;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
+import com.stolz.alexander.chessengine.gui.controls.main.Main;
 import com.stolz.alexander.chessengine.gui.pieces.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -30,10 +31,10 @@ public class ChessBoardPane extends Pane {
     }
 
     public ChessBoardPane() {
-        chessBoardFields = new ChessBoardFields(Color.YELLOW, Color.BROWN);
-        chessBoard = new ChessBoard();
+        chessBoardFields = Main.injector.getInstance(ChessBoardFields.class);
+        chessBoard = Main.injector.getInstance(ChessBoard.class);
         chessBoard.init();
-        chessBoardPieces = new ChessBoardPieces(chessBoard, chessBoardFields);
+        chessBoardPieces = Main.injector.getInstance(ChessBoardPieces.class);
         chessBoardPieces.init();
 
         buildBoard();

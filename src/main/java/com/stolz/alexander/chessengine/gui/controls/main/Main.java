@@ -1,5 +1,8 @@
 package com.stolz.alexander.chessengine.gui.controls.main;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.stolz.alexander.chessengine.ChessEngineModule;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,6 +12,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
+
+    public static final Injector injector;
+
+    static {
+        injector = Guice.createInjector(new ChessEngineModule());
+    }
 
     // overridden start method
     @Override
@@ -27,6 +36,8 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+
+
         launch(args);
     }
 }

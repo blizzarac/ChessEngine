@@ -1,5 +1,6 @@
 package com.stolz.alexander.chessengine.engine.logic;
 
+import com.google.inject.Inject;
 import com.stolz.alexander.chessengine.engine.pieces.*;
 import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardFields;
 
@@ -14,6 +15,7 @@ public class ChessBoard {
     public PieceColor currentPlayer;
     public boolean winner = false;
 
+    @Inject
     public ChessBoard() {
         currentPlayer = WHITE;
     }
