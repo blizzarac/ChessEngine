@@ -100,4 +100,9 @@ public class PieceKing extends Piece {
     public PieceKing copy() {
         return new PieceKing(this.getColor(), this.x(), this.y());
     }
+
+    @Override
+    public boolean isCheck(Piece[][] pieces, PieceColor currentPlayer) {
+        return false;
+    }
 }

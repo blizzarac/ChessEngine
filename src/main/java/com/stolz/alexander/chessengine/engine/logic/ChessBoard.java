@@ -18,17 +18,24 @@ public class ChessBoard {
     @Inject
     public ChessBoard() {
         currentPlayer = WHITE;
+        pieces = new Piece[ChessBoardFields.boardWidth][ChessBoardFields.boardHeight];
     }
 
+    public void initEmpty() {
+        // Empty Pieces
+        for (int x = 0; x < 8; x++) {
+            for (int j = 0; j < 8; j++) {
+                pieces[j][x] = new Empty(j, x);
+            }
+        }
+    }
 
     /**
-     * initialize the fields: background, data structures, inital layout of pieces
+     * initialize the inital layout of pieces
      *
      * @return
      */
     public void init() {
-        pieces = new Piece[ChessBoardFields.boardWidth][ChessBoardFields.boardHeight];
-
         // White Pieces
         pieces[7][7] = new PieceRook(WHITE, 7, 7);
         pieces[6][7] = new PieceKnight(WHITE, 6, 7);

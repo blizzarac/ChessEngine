@@ -76,4 +76,6 @@ public abstract class Piece {
     }
 
     public abstract Piece copy();
+
+    public abstract boolean isCheck(Piece[][] pieces, PieceColor currentPlayer);
 }

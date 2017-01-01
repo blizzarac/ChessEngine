@@ -3,6 +3,8 @@ package com.stolz.alexander.chessengine.engine.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.KING;
+
 public class PieceKnight extends Piece {
 
     public PieceKnight(PieceColor color, int ii, int jj) {
@@ -98,5 +100,67 @@ public class PieceKnight extends Piece {
     @Override
     public PieceKnight copy() {
         return new PieceKnight(this.getColor(), this.x(), this.y());
+    }
+
+    @Override
+    public boolean isCheck(Piece[][] boardstate, PieceColor currentPlayer) {
+        if (boardstate[this.piecePosition.x][this.piecePosition.y].getColor() == currentPlayer) {
+            // Up and left (first)
+            if (this.piecePosition.x - 1 >= 0 && this.piecePosition.y - 2 >= 0) {                // Bound check
+                if (boardstate[this.piecePosition.x - 1][this.piecePosition.y - 2].getType() == KING && boardstate[this.piecePosition.x - 1][this.piecePosition.y - 2].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Up and left (second)
+            if (this.piecePosition.x - 2 >= 0 && this.piecePosition.y - 1 >= 0) {                // Bound check
+                if (boardstate[this.piecePosition.x - 2][this.piecePosition.y - 1].getType() == KING && boardstate[this.piecePosition.x - 2][this.piecePosition.y - 1].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Up and right (first)
+            if (this.piecePosition.x + 1 < 8 && this.piecePosition.y - 2 >= 0) {                // Bound check
+                if (boardstate[this.piecePosition.x + 1][this.piecePosition.y - 2].getType() == KING && boardstate[this.piecePosition.x + 1][this.piecePosition.y - 2].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Up and right (second)
+            if (this.piecePosition.x + 2 < 8 && this.piecePosition.y - 1 >= 0) {                // Bound check
+                if (boardstate[this.piecePosition.x + 2][this.piecePosition.y - 1].getType() == KING && boardstate[this.piecePosition.x + 2][this.piecePosition.y - 1].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Bottom and right (first)
+            if (this.piecePosition.x + 1 < 8 && this.piecePosition.y + 2 < 8) {                // Bound check
+                if (boardstate[this.piecePosition.x + 1][this.piecePosition.y + 2].getType() == KING && boardstate[this.piecePosition.x + 1][this.piecePosition.y + 2].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Bottom and right (second)
+            if (this.piecePosition.x + 2 < 8 && this.piecePosition.y + 1 < 8) {                // Bound check
+                if (boardstate[this.piecePosition.x + 2][this.piecePosition.y + 1].getType() == KING && boardstate[this.piecePosition.x + 2][this.piecePosition.y + 1].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Bottom and left (first)
+            if (this.piecePosition.x - 1 >= 0 && this.piecePosition.y + 2 < 8) {                // Bound check
+                if (boardstate[this.piecePosition.x - 1][this.piecePosition.y + 2].getType() == KING && boardstate[this.piecePosition.x - 1][this.piecePosition.y + 2].getColor() == currentPlayer.mirror()) {
+                    return true;
+                }
+            }
+
+            // Bottom and left (second)
+            if (this.piecePosition.x - 2 >= 0 && this.piecePosition.y + 1 < 8) {                // Bound check
+                if (boardstate[this.piecePosition.x - 2][this.piecePosition.y + 1].getType() == KING && boardstate[this.piecePosition.x - 2][this.piecePosition.y + 1].getColor() == currentPlayer.mirror()) {
+                   return true;
+                }
+            }
+        }
+        return false;
     }
 }

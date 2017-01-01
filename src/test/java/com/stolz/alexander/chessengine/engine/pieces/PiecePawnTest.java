@@ -96,4 +96,151 @@ public class PiecePawnTest {
         Assertions.assertEquals(result.size(), 2);
     }
 
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * __K_____
+     * ___P____
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldGiveCheckOnLeftDialogalKing() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[3][3] = new PiecePawn(PieceColor.WHITE, 3,3, false);
+        sut.pieces[2][2] = new PieceKing(PieceColor.BLACK, 2, 2);
+
+        // When
+//        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[3][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertTrue(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ____K___
+     * ___P____
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldGiveCheckOnRightDialogalKing() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[3][3] = new PiecePawn(PieceColor.WHITE, 3,3, false);
+        sut.pieces[4][2] = new PieceKing(PieceColor.BLACK, 4, 2);
+
+        // When
+//        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[3][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertTrue(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ____K___
+     * ___P____
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldGiveNotCheckOnFrontKing() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[4][3] = new PiecePawn(PieceColor.WHITE, 4,3, false);
+        sut.pieces[4][2] = new PieceKing(PieceColor.BLACK, 4, 2);
+
+        // When
+//        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertFalse(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ________
+     * P_______
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldNotCrashCheckCalculationOnLeftBorder() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[0][3] = new PiecePawn(PieceColor.WHITE, 0,3, false);
+
+        // When
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[0][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertFalse(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ________
+     * _______P
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldNotCrashCheckCalculationOnRightBorder() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[7][3] = new PiecePawn(PieceColor.WHITE, 7,3, false);
+
+        // When
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[7][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertFalse(result);
+    }
 }

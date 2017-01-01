@@ -37,9 +37,9 @@ public class CheckvalidatorTest {
         System.out.print(chessBoard.printBoard());
 
 
-        final PiecePosition result = sut.check4check(PieceColor.WHITE, chessBoard.pieces);
+        final boolean result = sut.check4check(chessBoard.pieces, PieceColor.WHITE);
 
         // Then
-        Assertions.assertTrue(new PiecePosition(4, 0).equals(result));
+        Assertions.assertTrue(result);
     }
 }

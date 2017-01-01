@@ -4,126 +4,67 @@ import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 /**
- * Created by alexanderstolz on 12/31/16.
+ * Created by alexanderstolz on 1/1/17.
  */
-public class PieceBishopTest {
+public class PieceQueenTest {
     /**
      * Initial Board
-     * RNBQKBNR
-     * PPPPPPPP
      * ________
      * ________
      * ________
+     * ___Q____
      * ________
-     * PPPPPPPP
-     * RNBQKBNR
-     *
-     * the Bishop should have 0 possible moves
+     * ___K____
+     * ________
+     * ________
      *
      */
     @Test
-    public void shouldGiveCorrectValidMovesOnCleanBoard() {
+    public void shouldGiveCheckOnLowerKing() {
         // Given
         final ChessBoard sut = new ChessBoard();
-        sut.init();
+        sut.initEmpty();
+
+
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
+        sut.pieces[4][5] = new PieceKing(PieceColor.BLACK, 4, 5);
 
         // When
-        final List<PiecePosition> result = sut.pieces[2][7].findValidMoves(sut.pieces);
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
-        Assertions.assertEquals(0, result.size());
+        Assertions.assertTrue(result);
     }
 
     /**
      * Initial Board
-     * RNBQKBNR
-     * PPPPPPPP
+     * ________
+     * ___K____
+     * ________
+     * ___Q____
      * ________
      * ________
      * ________
-     * ___P____
-     * PPP_PPPP
-     * RNBQKBNR
-     *
-     * the Bishop should have 5 possible moves
+     * ________
      *
      */
     @Test
-    public void shouldGiveCorrectValidMovesOnPawnOpeningBoard() {
+    public void shouldGiveCheckOnUpperKing() {
         // Given
         final ChessBoard sut = new ChessBoard();
-        sut.init();
+        sut.initEmpty();
+
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
+        sut.pieces[4][2] = new PieceKing(PieceColor.BLACK, 4, 2);
 
         // When
-        sut.pieces[3][6].move(sut.pieces, new PiecePosition(3,5));
-        final List<PiecePosition> result = sut.pieces[2][7].findValidMoves(sut.pieces);
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
-        Assertions.assertEquals(5, result.size());
-    }
-
-    /**
-     * Initial Board
-     * RNBQKBNR
-     * PPPPPP_P
-     * ________
-     * ______P_
-     * ________
-     * ___P____
-     * PPP_PPPP
-     * RNBQKBNR
-     *
-     * the Bishop should have 4 possible moves
-     *
-     */
-    @Test
-    public void shouldGiveCorrectValidMovesOnPawnOpeningAndBlockedLine() {
-        // Given
-        final ChessBoard sut = new ChessBoard();
-        sut.init();
-
-        // When
-        //System.out.print(sut.printBoard());
-        //System.out.print(sut.pieces[2][7].getType());
-        sut.pieces[3][6].move(sut.pieces, new PiecePosition(3,5));
-        sut.pieces[6][1].move(sut.pieces, new PiecePosition(6,3));
-        final List<PiecePosition> result = sut.pieces[2][7].findValidMoves(sut.pieces);
-
-        // Then
-        Assertions.assertEquals(4, result.size());
-    }
-
-    /**
-     * Initial Board
-     * RNBQKBNR
-     * PPPPPPPP
-     * ________
-     * ___B____
-     * ________
-     * ________
-     * PPPPPPPP
-     * RN_QKBNR
-     *
-     * the Bishop should have 8 possible moves
-     *
-     */
-    @Test
-    public void shouldGiveCorrectValidMovesOnFourOpenLines() {
-        // Given
-        final ChessBoard sut = new ChessBoard();
-        sut.init();
-
-        // When
-        //System.out.print(sut.pieces[2][7].getType());
-        // System.out.print(sut.printBoard());
-        sut.pieces[2][7].move(sut.pieces, new PiecePosition(3,3));
-        final List<PiecePosition> result = sut.pieces[3][3].findValidMoves(sut.pieces);
-
-        // Then
-        Assertions.assertEquals(8, result.size());
+        Assertions.assertTrue(result);
     }
 
     /**
@@ -131,7 +72,67 @@ public class PieceBishopTest {
      * ________
      * ________
      * ________
-     * ___N____
+     * _K_Q____
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldGiveCheckOnLeftKing() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
+        sut.pieces[2][3] = new PieceKing(PieceColor.BLACK, 2, 3);
+
+        // When
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertTrue(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ________
+     * ___Q_K__
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    public void shouldGiveCheckOnRightKing() {
+        // Given
+        final ChessBoard sut = new ChessBoard();
+        sut.initEmpty();
+
+
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
+        sut.pieces[6][3] = new PieceKing(PieceColor.BLACK, 6, 3);
+
+        // When
+        System.out.print(sut.printBoard());
+        final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
+
+        // Then
+        Assertions.assertTrue(result);
+    }
+
+    /**
+     * Initial Board
+     * ________
+     * ________
+     * ________
+     * ___Q____
      * ________
      * _K______
      * ________
@@ -145,7 +146,7 @@ public class PieceBishopTest {
         sut.initEmpty();
 
 
-        sut.pieces[4][3] = new PieceBishop(PieceColor.WHITE, 4,3);
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
         sut.pieces[2][5] = new PieceKing(PieceColor.BLACK, 2, 5);
 
         // When
@@ -161,7 +162,7 @@ public class PieceBishopTest {
      * ________
      * ________
      * ________
-     * ___N____
+     * ___Q____
      * ________
      * _____K__
      * ________
@@ -175,7 +176,7 @@ public class PieceBishopTest {
         sut.initEmpty();
 
 
-        sut.pieces[4][3] = new PieceBishop(PieceColor.WHITE, 4,3);
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
         sut.pieces[6][5] = new PieceKing(PieceColor.BLACK, 6, 5);
 
         // When
@@ -191,7 +192,7 @@ public class PieceBishopTest {
      * ________
      * _____K__
      * ________
-     * ___N____
+     * ___Q____
      * ________
      * ________
      * ________
@@ -205,7 +206,7 @@ public class PieceBishopTest {
         sut.initEmpty();
 
 
-        sut.pieces[4][3] = new PieceBishop(PieceColor.WHITE, 4,3);
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
         sut.pieces[6][1] = new PieceKing(PieceColor.BLACK, 6, 1);
 
         // When
@@ -221,7 +222,7 @@ public class PieceBishopTest {
      * ________
      * _K______
      * ________
-     * ___N____
+     * ___Q____
      * ________
      * ________
      * ________
@@ -235,7 +236,7 @@ public class PieceBishopTest {
         sut.initEmpty();
 
 
-        sut.pieces[4][3] = new PieceBishop(PieceColor.WHITE, 4,3);
+        sut.pieces[4][3] = new PieceQueen(PieceColor.WHITE, 4,3);
         sut.pieces[2][1] = new PieceKing(PieceColor.BLACK, 2, 1);
 
         // When

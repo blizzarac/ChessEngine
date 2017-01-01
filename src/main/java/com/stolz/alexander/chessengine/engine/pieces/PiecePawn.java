@@ -3,6 +3,8 @@ package com.stolz.alexander.chessengine.engine.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.KING;
+
 public class PiecePawn extends Piece {
 	private boolean firstmove;
 
@@ -100,5 +102,24 @@ public class PiecePawn extends Piece {
     @Override
     public PiecePawn copy() {
         return new PiecePawn(this.getColor(), this.x(), this.y(), false);
+    }
+
+    @Override
+    public boolean isCheck(Piece[][] boardstate, PieceColor currentPlayer) {
+	    final int direction = (currentPlayer == PieceColor.WHITE)? 1: -1;
+
+        // LOOK ONE SQUARE LEFT DIAGONALLY IF KING PRESENT HIGHLIGHT
+        if (this.piecePosition.x > 0 && boardstate[this.piecePosition.x - 1][this.piecePosition.y - direction].getType() == KING
+                && boardstate[this.piecePosition.x - 1][this.piecePosition.y - direction].getColor() == this.color.mirror()) {
+            return true;
+        }
+
+        // LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
+        if (this.piecePosition.x < 7 &&boardstate[this.piecePosition.x + 1][this.piecePosition.y - direction].getType() == KING
+                && boardstate[this.piecePosition.x + 1][this.piecePosition.y - direction].getColor() == this.color.mirror()) {
+            return true;
+        }
+
+        return false;
     }
 }

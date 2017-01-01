@@ -125,8 +125,9 @@ public class ChessEngineControl extends Control {
                 getScene().setCursor(Cursor.DEFAULT);
 
                 // highlight check..
-                if (checkValidator.checkstate() != null) {
-                    chessboardPane.chessBoardFields.setFieldHightlightColor(checkValidator.checkstate().x, checkValidator.checkstate().y, Color.RED);
+                if (checkValidator.checkstate()) {
+                    // TODO Check highlighting
+                    //chessboardPane.chessBoardFields.setFieldHightlightColor(checkValidator.checkstate().x, checkValidator.checkstate().y, Color.RED);
                     if (!winner) {
                         logger.log(Level.FINE, "CHECK!");
                     }
@@ -143,7 +144,7 @@ public class ChessEngineControl extends Control {
         boardstate = selectedpiece.move(boardstate, targetpiece.getPiecePosition());
 
         // If move results in no check, do move
-        if (checkValidator.check4check(chessboardPane.chessBoard.currentPlayer.mirror(), boardstate) == null) {
+        if (!checkValidator.check4check(boardstate, chessboardPane.chessBoard.currentPlayer.mirror())) {
             chessboardPane.chessBoard.replacePieces(boardstate);
             chessboardPane.buildBoard();
             chessboardPane.chessBoard.currentPlayer = chessboardPane.chessBoard.currentPlayer.mirror();

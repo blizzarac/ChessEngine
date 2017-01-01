@@ -23,4 +23,9 @@ public class Empty extends Piece {
     public Piece copy() {
         throw new NotImplementedException();
     }
+
+    @Override
+    public boolean isCheck(Piece[][] pieces, PieceColor currentPlayer) {
+        throw new NotImplementedException();
+    }
 }

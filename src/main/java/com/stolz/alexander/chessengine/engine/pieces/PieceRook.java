@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.NONE;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.KING;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceType.NOTYPE;
 
 public class PieceRook extends Piece {
 
@@ -83,5 +85,73 @@ public class PieceRook extends Piece {
     @Override
     public PieceRook copy() {
         return new PieceRook(this.getColor(), this.x(), this.y());
+    }
+
+    @Override
+    public boolean isCheck(Piece[][] boardstate, PieceColor currentplayer) {
+        if (boardstate[this.piecePosition.x][this.piecePosition.y].getColor() == currentplayer) {
+            // Look Up ..
+            for (int y = this.piecePosition.y - 1; y >= 0; y--) {
+                boolean clearc = true;
+                if (!(boardstate[this.piecePosition.x][y].getType() == NOTYPE) && !(boardstate[this.piecePosition.x][y].getType() == KING)) {
+                    clearc = false;
+                    y = -1;
+                }
+                // If path is clear, check for king ..
+                if (clearc && y != -1) {
+                    //System.out.println(clearc);
+                    if (boardstate[this.piecePosition.x][y].getType() == KING && boardstate[this.piecePosition.x][y].getColor() == currentplayer.mirror()) {
+                        return true;
+                    }
+                }
+            }
+
+            // Look Right ..
+            for (int x = this.piecePosition.x + 1; x < 8; x++) {
+                boolean clearc = true;
+                if (!(boardstate[x][this.piecePosition.y].getType() == NOTYPE) && !(boardstate[x][this.piecePosition.y].getType() == KING)) {
+                    clearc = false;
+                    x = 8;
+                }
+                // If path is clear, check for king ..
+                if (clearc && x != 8) {
+                    if (boardstate[x][this.piecePosition.y].getType() == KING && boardstate[x][this.piecePosition.y].getColor() == currentplayer.mirror()) {
+                        return true;
+                    }
+                }
+            }
+
+            // Look Left ..
+            for (int x = this.piecePosition.x - 1; x >= 0; x--) {
+                boolean clearc = true;
+                if (!(boardstate[x][this.piecePosition.y].getType() == NOTYPE) && !(boardstate[x][this.piecePosition.y].getType() == KING)) {
+                    clearc = false;
+                    x = -1;
+                }
+                // If path is clear, check for king ..
+                if (clearc && x != -1) {
+                    if (boardstate[x][this.piecePosition.y].getType() == KING && boardstate[x][this.piecePosition.y].getColor() == currentplayer.mirror()) {
+                        return true;
+                    }
+                }
+            }
+
+            // Look Down ..
+            for (int y = this.piecePosition.y + 1; y < 8; y++) {
+                boolean clearc = true;
+                if (!(boardstate[this.piecePosition.x][y].getType() == NOTYPE) && !(boardstate[this.piecePosition.x][y].getType() == KING)) {
+                    clearc = false;
+                    y = 8;
+                }
+                // If path is clear, check for king ..
+                if (clearc && y != 8) {
+                    if (boardstate[this.piecePosition.x][y].getType() == KING && boardstate[this.piecePosition.x][y].getColor() == currentplayer.mirror()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
