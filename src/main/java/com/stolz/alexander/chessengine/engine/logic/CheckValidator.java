@@ -28,8 +28,8 @@ public class CheckValidator {
 
 
     // Take current boardstate and evaluate check for all pieces in boardstate
-    public boolean check4checkmate(PieceColor currentPlayer, Piece[][] boardstate) {
-        logger.log(Level.FINE, "check4checkmate");
+    public boolean isCheckMate(PieceColor currentPlayer, Piece[][] boardstate) {
+        logger.log(Level.FINE, "isCheckMate");
         boolean checkmateflag = true;
         // For loop to check every piece on current fields
         for (int x = 0; x < 8; x++) {
@@ -39,7 +39,7 @@ public class CheckValidator {
                     // Create an array of possible moves for this piece
                     Piece[][] possibleMoves = findBoardWithPossiblePiecePositions(boardstate[x][y], boardstate);
                     // If possiblemoves has a move that resolves check == false, flag=false
-                    check = check4check(possibleMoves, currentPlayer);
+                    check = isCheck(possibleMoves, currentPlayer);
                     if (!check) {
                         checkmateflag = false;
                     }
@@ -47,11 +47,11 @@ public class CheckValidator {
             }
         }
 
-        logger.log(Level.FINE, "check4checkmate result: " + checkmateflag);
+        logger.log(Level.FINE, "isCheckMate result: " + checkmateflag);
         return checkmateflag;
     }
 
-    private Piece[][] findBoardWithPossiblePiecePositions(Piece currentPiece, Piece[][] pieces) {
+    public Piece[][] findBoardWithPossiblePiecePositions(Piece currentPiece, Piece[][] pieces) {
         Piece[][] possiblemoves = new Piece[8][8];
         for (int x = 0; x < 8; x++) {
             System.arraycopy(pieces[x], 0, possiblemoves[x], 0, 8);
@@ -70,7 +70,7 @@ public class CheckValidator {
     /**
      * Check if player is in check
      */
-    public boolean check4check(Piece[][] pieces, PieceColor currentPlayer) {
+    public boolean isCheck(Piece[][] pieces, PieceColor currentPlayer) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Piece pieceToCheck = pieces[x][y];

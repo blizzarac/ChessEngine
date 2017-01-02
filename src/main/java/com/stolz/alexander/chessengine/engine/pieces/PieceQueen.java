@@ -235,7 +235,8 @@ public class PieceQueen extends Piece {
             for (int y = this.piecePosition.y - 1, x = this.piecePosition.x + 1; y >= 0 && x < 8; y--, x++) {
                 boolean clearq = true;
                 if (!(boardstate[x][y].getType() == NOTYPE) && !(boardstate[x][y].getType() == KING)) {
-                    return true;
+                    clearq = false;
+                    y = -1;
                 }
                 // If path is clear, check for king ..
                 if (clearq && y != -1 && x != 8) {
@@ -249,7 +250,8 @@ public class PieceQueen extends Piece {
             for (int y = this.piecePosition.y + 1, x = this.piecePosition.x - 1; y < 8 && x >= 0; y++, x--) {
                 boolean clearq = true;
                 if (!(boardstate[x][y].getType() == NOTYPE) && !(boardstate[x][y].getType() == KING)) {
-                    return true;
+                    clearq = false;
+                    y = 8;
                 }
                 // If path is clear, check for king ..
                 if (clearq && y != 8 && x != -1) {
@@ -264,7 +266,7 @@ public class PieceQueen extends Piece {
                 boolean clearq = true;
                 if (!(boardstate[x][y].getType() == NOTYPE) && !(boardstate[x][y].getType() == KING)) {
                     clearq = false;
-                    return true;
+                    y = 8;
                 }
                 // If path is clear, check for king ..
                 if (clearq && y != 8 && x != 8) {

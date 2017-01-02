@@ -1,8 +1,10 @@
 package com.stolz.alexander.chessengine.engine.logic;
 
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
-import com.stolz.alexander.chessengine.engine.pieces.PiecePosition;
+import com.stolz.alexander.chessengine.engine.pieces.PieceKing;
+import com.stolz.alexander.chessengine.engine.pieces.PieceQueen;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,34 +14,67 @@ public class CheckvalidatorTest {
 
     /**
      * Initial Board
-     * RNBQKBNR
-     * PPP_PPPP
-     * ___P____
-     * _B______
+     * K_______
+     * _Q______
+     * __Q_____
      * ________
-     * ____P___
-     * PPPP_PPP
-     * RNBQK_NR
-     * the should be in check
+     * ________
+     * ________
+     * ________
+     * ________
      *
      */
     @Test
-    public void shouldGiveCorrectPositionOnSimpleCheckForBishop() {
+    @DisplayName("Should give checkmate on cornered King")
+    public void shouldGiveCheckmateOnCorneredKing() {
         // Given
         final ChessBoard chessBoard = new ChessBoard();
-        chessBoard.init();
+        chessBoard.initEmpty();
+
         final CheckValidator sut = new CheckValidator();
 
+        chessBoard.pieces[1][1] = new PieceQueen(PieceColor.WHITE, 1,1);
+        chessBoard.pieces[2][2] = new PieceQueen(PieceColor.WHITE, 2,2);
+        chessBoard.pieces[0][0] = new PieceKing(PieceColor.BLACK, 0, 0);
+
         // When
-        chessBoard.pieces[4][6].move(chessBoard.pieces, new PiecePosition(4,5));
-        chessBoard.pieces[3][1].move(chessBoard.pieces, new PiecePosition(3,2));
-        chessBoard.pieces[5][7].move(chessBoard.pieces, new PiecePosition(1,3));
         System.out.print(chessBoard.printBoard());
-
-
-        final boolean result = sut.check4check(chessBoard.pieces, PieceColor.WHITE);
+        final boolean result = sut.isCheckMate(PieceColor.WHITE, chessBoard.pieces);
 
         // Then
         Assertions.assertTrue(result);
+    }
+
+    /**
+     * Initial Board
+     * K_______
+     * ________
+     * Q_Q_____
+     * ________
+     * ________
+     * ________
+     * ________
+     * ________
+     *
+     */
+    @Test
+    @DisplayName("Should give not Checkmate on King With Move Left")
+    public void shouldGiveNotCheckMateOnKingWithMoveLeft() {
+        // Given
+        final ChessBoard chessBoard = new ChessBoard();
+        chessBoard.initEmpty();
+
+        final CheckValidator sut = new CheckValidator();
+
+        chessBoard.pieces[0][2] = new PieceQueen(PieceColor.WHITE, 0,2);
+        chessBoard.pieces[2][2] = new PieceQueen(PieceColor.WHITE, 2,2);
+        chessBoard.pieces[0][0] = new PieceKing(PieceColor.BLACK, 0, 0);
+
+        // When
+        System.out.print(chessBoard.printBoard());
+        final boolean result = sut.isCheckMate(PieceColor.BLACK, chessBoard.pieces);
+
+        // Then
+        Assertions.assertFalse(result);
     }
 }

@@ -69,7 +69,6 @@ public class ChessEngineControl extends Control {
         });
 
         setOnDragDetected(event -> {
-            logger.log(Level.SEVERE, "setOnMouseDragged");
             startFullDrag();
 
             // Get hash of what we clicked on ..
@@ -77,7 +76,7 @@ public class ChessEngineControl extends Control {
 
             if (clickState == ClickState.NOTHING_CLICKED && !stale && !winner) {
                 selectedpiece = chessboardPane.selectPiece(hash);
-
+                logger.log(Level.SEVERE, "Picking up ("+ selectedpiece.getType() + ":" + selectedpiece.getColor() + ") from: " + selectedpiece.getPiecePosition());
                 junkselection = selectedpiece == null || !chessboardPane.isPieceSelected();
 
                 if (!junkselection) {
@@ -96,13 +95,13 @@ public class ChessEngineControl extends Control {
 
 
         setOnMouseReleased(event -> {
-            logger.log(Level.SEVERE, "setOnMouseReleased");
             int hash = event.getPickResult().getIntersectedNode().hashCode();
 
             if (clickState == ClickState.PIECE_PICKED_UP) {
                 final Piece[][] boardstate = chessboard.pieces;
 
                 targetpiece = chessboardPane.selectTargetLocation(hash);
+                logger.log(Level.SEVERE, "Dropping to: ("+ targetpiece.getType() + ":" + targetpiece.getColor() + ") " + targetpiece.getPiecePosition());
                 if (selectedpiece.getType() != NOTYPE
                         && selectedpiece != null
                         && targetpiece != null
@@ -110,6 +109,7 @@ public class ChessEngineControl extends Control {
 
                     if (validMoves.stream().anyMatch(pos -> pos.x == targetpiece.x() && pos.y == targetpiece.y())) {
                         final Piece[][] oldState = chessboardPane.chessBoard.backupPieces(boardstate);
+                        logger.log(Level.SEVERE, "Old state:\n" + chessboardPane.chessBoard.printBoard());
                         tryMoveAndReverseOnCheck(boardstate, oldState);
                     } else {
                         stalemateCheck();
@@ -120,7 +120,7 @@ public class ChessEngineControl extends Control {
                 clickState = ClickState.NOTHING_CLICKED;
 
                 // Check for checkmate ..
-                winner = checkValidator.check4checkmate(chessboardPane.chessBoard.currentPlayer.mirror(), chessboard.pieces);
+                winner = checkValidator.isCheckMate(chessboardPane.chessBoard.currentPlayer.mirror(), chessboard.pieces);
 
                 getScene().setCursor(Cursor.DEFAULT);
 
@@ -141,16 +141,20 @@ public class ChessEngineControl extends Control {
 
 
     private Piece[][] tryMoveAndReverseOnCheck(Piece[][] boardstate, Piece[][] oldstate) {
+        logger.log(Level.SEVERE, "tryMoveAndReverseOnCheck");
         boardstate = selectedpiece.move(boardstate, targetpiece.getPiecePosition());
 
         // If move results in no check, do move
-        if (!checkValidator.check4check(boardstate, chessboardPane.chessBoard.currentPlayer.mirror())) {
+        if (!checkValidator.isCheck(boardstate, chessboardPane.chessBoard.currentPlayer)) {
+            logger.log(Level.SEVERE, "Not in check after move!");
             chessboardPane.chessBoard.replacePieces(boardstate);
+            logger.log(Level.SEVERE, "New Board state:\n" + chessboardPane.chessBoard.printBoard());
             chessboardPane.buildBoard();
             chessboardPane.chessBoard.currentPlayer = chessboardPane.chessBoard.currentPlayer.mirror();
             stalecountwhite = 8;
             stalecountblack = 8;
         } else {
+            logger.log(Level.SEVERE, "In check after move!");
             chessboardPane.chessBoard.replacePieces(oldstate);
             checkValidator.flipcheck();
             stalemateCheck();

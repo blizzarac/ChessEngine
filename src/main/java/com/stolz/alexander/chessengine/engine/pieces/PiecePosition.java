@@ -17,4 +17,9 @@ public class PiecePosition {
         final PiecePosition other = (PiecePosition) obj;
         return this.x == other.x && this.y == other.y;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y+")";
+    }
 }
