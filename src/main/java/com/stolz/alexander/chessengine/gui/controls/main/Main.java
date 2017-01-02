@@ -22,7 +22,7 @@ public class Main extends Application {
     // overridden start method
     @Override
     public void start(Stage primaryStage) throws IOException {
-        final StackPane sp_mainlayout = FXMLLoader.load(getClass().getResource("main.fxml"));
+        final StackPane sp_mainlayout = FXMLLoader.load(getClass().getResource("/com/stolz/alexander/chessengine/gui/controls/main/main.fxml"));
         // set the title and scene, and show the stage
         primaryStage.setTitle("Chess");
         primaryStage.setScene(new Scene(sp_mainlayout, 300, 300));
@@ -36,8 +36,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-
-
         launch(args);
     }
 }
