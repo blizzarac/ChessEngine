@@ -76,10 +76,10 @@ public class ChessEngineControl extends Control {
 
             if (clickState == ClickState.NOTHING_CLICKED && !stale && !winner) {
                 selectedpiece = chessboardPane.selectPiece(hash);
-                logger.log(Level.SEVERE, "Picking up ("+ selectedpiece.getType() + ":" + selectedpiece.getColor() + ") from: " + selectedpiece.getPiecePosition());
-                junkselection = selectedpiece == null || !chessboardPane.isPieceSelected();
+                junkselection = selectedpiece == null || !chessboardPane.isPieceSelected() || selectedpiece.getColor() != chessboard.currentPlayer;
 
                 if (!junkselection) {
+                    logger.log(Level.SEVERE, "Picking up ("+ selectedpiece.getType() + ":" + selectedpiece.getColor() + ") from: " + selectedpiece.getPiecePosition());
                     validMoves = selectedpiece.findValidMoves(chessboardPane.chessBoard.pieces);
                     getScene().setCursor(new ImageCursor(PieceImageProvider.INSTANCE.getImageForPiece(selectedpiece)));
                     clickState = ClickState.PIECE_PICKED_UP;
