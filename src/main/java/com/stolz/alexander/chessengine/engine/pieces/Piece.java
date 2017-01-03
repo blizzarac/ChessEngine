@@ -38,15 +38,20 @@ public abstract class Piece {
         int targetY = target.y;
 
         final Piece tmp =  bs[targetX][targetY]; // Saving target
+
         // Update target piece
         bs[targetX][targetY] = bs[currX][currY];
         bs[targetX][targetY].piecePosition.x = targetX;
         bs[targetX][targetY].piecePosition.y = targetY;
 
         // Update this
-        bs[currX][currY] = tmp;
-        bs[currX][currY].piecePosition.x = currX;
-        bs[currX][currY].piecePosition.y = currY;
+        if (tmp.getType() == PieceType.NOTYPE) {
+            bs[currX][currY] = tmp;
+            bs[currX][currY].piecePosition.x = currX;
+            bs[currX][currY].piecePosition.y = currY;
+        } else {
+            bs[currX][currY] = new Empty(currX, currY);
+        }
 
         return bs;
     }
