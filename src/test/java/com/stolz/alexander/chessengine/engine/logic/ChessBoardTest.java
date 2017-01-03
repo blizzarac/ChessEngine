@@ -17,14 +17,15 @@ public class ChessBoardTest {
         sut.init();
 
         // Then
-        Assertions.assertEquals(sut.printBoard(),
-                "RNBQKBNR\n" +
-                        "PPPPPPPP\n" +
+        Assertions.assertEquals(
+                "rnbqkbnr\n" +
+                        "pppppppp\n" +
                         "________\n" +
                         "________\n" +
                         "________\n" +
                         "________\n" +
                         "PPPPPPPP\n" +
-                        "RNBQKBNR\n");
+                        "RNBQKBNR\n",
+                sut.printBoard());
     }
 }

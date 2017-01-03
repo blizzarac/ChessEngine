@@ -4,6 +4,11 @@ import com.google.inject.Inject;
 import com.stolz.alexander.chessengine.engine.pieces.*;
 import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardFields;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
@@ -14,6 +19,11 @@ public class ChessBoard {
     public Piece[][] pieces;
     public PieceColor currentPlayer;
     public boolean winner = false;
+    private int endGame = 0;
+    public String initialFen;
+    public int moveNumber;
+    public int initialMoveNumber;
+    private String fen;
 
     @Inject
     public ChessBoard() {
@@ -96,30 +106,51 @@ public class ChessBoard {
         return backup;
     }
 
+    @FunctionalInterface
+    interface Function2 <A, B, R> {
+        //R is like Return, but doesn't have to be last in the list nor named R.
+        R apply (A a, B b);
+    }
+
     public String printBoard() {
         StringBuilder builder = new StringBuilder();
+
+        Function2<Piece, String, String> blackWhite =
+                (Piece piece, String sym) -> piece.getColor()==BLACK?sym.toLowerCase():sym;
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (pieces[y][x].getType() == PieceType.NOTYPE) {
                     builder.append("_");
                 } else if (pieces[y][x].getType() == PieceType.PAWN) {
-                     builder.append("P");
+                     builder.append(blackWhite.apply(pieces[y][x], "P"));
                 } else if (pieces[y][x].getType() == PieceType.KING) {
-                     builder.append("K");
+                    builder.append(blackWhite.apply(pieces[y][x], "K"));
                 } else if (pieces[y][x].getType() == PieceType.QUEEN) {
-                     builder.append("Q");
+                    builder.append(blackWhite.apply(pieces[y][x], "Q"));
                 } else if (pieces[y][x].getType() == PieceType.BISHOP) {
-                     builder.append("B");
+                    builder.append(blackWhite.apply(pieces[y][x], "B"));
                 } else if (pieces[y][x].getType() == PieceType.KNIGHT) {
-                     builder.append("N");
+                    builder.append(blackWhite.apply(pieces[y][x], "N"));
                 } else if (pieces[y][x].getType() == PieceType.ROOK) {
-                     builder.append("R");
+                    builder.append(blackWhite.apply(pieces[y][x], "R"));
                 }
             }
             builder.append("\n");
         }
 
         return builder.toString();
+    }
+
+    public int isEndGame() {
+        return endGame;
+    }
+
+    public char[] getSanMove(int i) {
+        return null;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }
