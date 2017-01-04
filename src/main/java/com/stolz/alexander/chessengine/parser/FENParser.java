@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.BLACK;
+import static com.stolz.alexander.chessengine.engine.pieces.PieceColor.WHITE;
 
 /**
  * Created by astolz on 03.01.2017.
@@ -131,6 +132,9 @@ public class FENParser {
             emptyCounter = 0;
             if (x < 7) builder.append("/");
         }
+
+        builder.append(" ");
+        builder.append(board.currentPlayer==WHITE?"w":"b");
 
         return builder.toString();
     }

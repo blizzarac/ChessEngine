@@ -177,5 +177,38 @@ public class FENParserTest {
         Assertions.assertTrue(startFAN.contains(result));
     }
 
+    @Test
+    @DisplayName("should produce FEN from Board with correct current player black")
+    void test10() {
+        // Given
+        final FENParser sut = new FENParser();
+        ChessBoard board = new ChessBoard();
+        board.init();
+        board.currentPlayer = PieceColor.BLACK;
+
+        // When
+        final String result = sut.export(board);
+        final String[] splitResult = result.split(" ");
+
+        // Then
+        Assertions.assertTrue(splitResult[1].equals("b"));
+    }
+
+    @Test
+    @DisplayName("should produce FEN from Board with correct current player white")
+    void test11() {
+        // Given
+        final FENParser sut = new FENParser();
+        ChessBoard board = new ChessBoard();
+        board.init();
+
+        // When
+        final String result = sut.export(board);
+        final String[] splitResult = result.split(" ");
+
+        // Then
+        Assertions.assertTrue(splitResult[1].equals("w"));
+    }
+
 
 }
