@@ -41,7 +41,7 @@ public class ChessBoard {
     }
 
     /**
-     * initialize the inital layout of pieces
+     * initialize the inital layout of piecesw
      *
      * @return
      */

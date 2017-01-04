@@ -3,6 +3,8 @@ package com.stolz.alexander.chessengine.parser;
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import com.stolz.alexander.chessengine.engine.pieces.*;
 
+import java.net.Inet4Address;
+
 /**
  * Created by astolz on 03.01.2017.
  */
@@ -17,15 +19,26 @@ public class FENParser {
         int col = 0;
 
         for (int idx = 0; idx < 8; idx++) {
-            if (idx == 7) {
-                continue;
-            }
+            for (int idx2 = 0; idx2 < 8 && col < 8; idx2++) {
+                char pos = parts[idx].toCharArray()[idx2];
 
-            for (char pos : parts[idx].toCharArray()) {
-                board.pieces[row][col] = symToPiece(pos);
+
+                if (String.valueOf(pos).matches("-?\\d+(\\.\\d+)?")){
+                    int numberOfEmpties = Integer.parseInt(String.valueOf(pos));
+                    col += numberOfEmpties - 1;
+                }
+
+                Piece createdPiece = symToPiece(pos);
+                if (createdPiece != null) {
+                    board.pieces[col][row] = createdPiece;
+                    System.out.print(board.printBoard() + "\n");
+                }
+
                 col += 1;
             }
-            row += 0;
+
+            row += 1;
+            col = 0;
         }
 
         return board;
@@ -33,7 +46,7 @@ public class FENParser {
 
     private Piece symToPiece(char sym) {
         Piece result = null;
-        PieceColor color = Character.isUpperCase(sym)?PieceColor.BLACK:PieceColor.WHITE;
+        PieceColor color = Character.isUpperCase(sym)?PieceColor.WHITE:PieceColor.BLACK;
         switch (Character.toLowerCase(sym)){
             case 'r':
                 result = new PieceRook(color, 0,0);
@@ -48,7 +61,7 @@ public class FENParser {
                 result = new PieceQueen(color, 0,0);
                 break;
             case 'k':
-                result = new PieceQueen(color, 0,0);
+                result = new PieceKing(color, 0,0);
                 break;
             case 'p':
                 result = new PiecePawn(color, 0,0, true);

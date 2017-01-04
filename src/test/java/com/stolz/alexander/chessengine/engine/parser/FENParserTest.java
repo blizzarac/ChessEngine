@@ -49,14 +49,15 @@ public class FENParserTest {
         final ChessBoard result = sut.parse(startFAN);
 
         // Then
-        assertEquals(result.printBoard(),
-                "RNBQKBNR\n" +
-                        "PPPPPPPP\n" +
-                        "________\n" +
+        assertEquals(
+                "rnbqkbnr\n" +
+                        "pppppppp\n" +
                         "________\n" +
                         "________\n" +
                         "____P___\n" +
+                        "________\n" +
                         "PPPP_PPP\n" +
-                        "RNBQKBNR\n");
+                        "RNBQKBNR\n",
+                result.printBoard());
     }
 }
