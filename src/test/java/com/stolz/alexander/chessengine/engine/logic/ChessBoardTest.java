@@ -1,5 +1,6 @@
 package com.stolz.alexander.chessengine.engine.logic;
 
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Test;
  * Created by alexanderstolz on 12/31/16.
  */
 public class ChessBoardTest {
+
+    private DebugParser debugParser = new DebugParser();
 
     @Test
     public void shouldBuildCorrectInitialBoard() {
@@ -26,6 +29,6 @@ public class ChessBoardTest {
                         "________\n" +
                         "PPPPPPPP\n" +
                         "RNBQKBNR\n",
-                sut.printBoard());
+                debugParser.printBoard(sut));
     }
 }

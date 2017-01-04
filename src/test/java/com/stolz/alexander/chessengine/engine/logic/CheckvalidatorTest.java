@@ -3,6 +3,7 @@ package com.stolz.alexander.chessengine.engine.logic;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
 import com.stolz.alexander.chessengine.engine.pieces.PieceKing;
 import com.stolz.alexander.chessengine.engine.pieces.PieceQueen;
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
  * Created by alexanderstolz on 12/31/16.
  */
 public class CheckvalidatorTest {
+
+    private DebugParser debugParser = new DebugParser();
 
     /**
      * Initial Board
@@ -38,7 +41,7 @@ public class CheckvalidatorTest {
         chessBoard.pieces[0][0] = new PieceKing(PieceColor.BLACK, 0, 0);
 
         // When
-        System.out.print(chessBoard.printBoard());
+        System.out.print(debugParser.printBoard(chessBoard));
         final boolean result = sut.isCheckMate(PieceColor.WHITE, chessBoard.pieces);
 
         // Then
@@ -71,7 +74,7 @@ public class CheckvalidatorTest {
         chessBoard.pieces[0][0] = new PieceKing(PieceColor.BLACK, 0, 0);
 
         // When
-        System.out.print(chessBoard.printBoard());
+        System.out.print(debugParser.printBoard(chessBoard));
         final boolean result = sut.isCheckMate(PieceColor.BLACK, chessBoard.pieces);
 
         // Then

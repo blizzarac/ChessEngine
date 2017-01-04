@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.engine.pieces;
 
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,8 @@ import java.util.List;
  * Created by alexanderstolz on 12/31/16.
  */
 public class PieceBishopTest {
+    private DebugParser debugParser = new DebugParser();
+
     /**
      * Initial Board
      * RNBQKBNR
@@ -86,7 +89,7 @@ public class PieceBishopTest {
         sut.init();
 
         // When
-        //System.out.print(sut.printBoard());
+        //System.out.print(debugParser.printBoard(sut));
         //System.out.print(sut.pieces[2][7].getType());
         sut.pieces[3][6].move(sut.pieces, new PiecePosition(3,5));
         sut.pieces[6][1].move(sut.pieces, new PiecePosition(6,3));
@@ -118,7 +121,7 @@ public class PieceBishopTest {
 
         // When
         //System.out.print(sut.pieces[2][7].getType());
-        // System.out.print(sut.printBoard());
+        // System.out.print(debugParser.printBoard(sut));
         sut.pieces[2][7].move(sut.pieces, new PiecePosition(3,3));
         final List<PiecePosition> result = sut.pieces[3][3].findValidMoves(sut.pieces);
 
@@ -149,7 +152,7 @@ public class PieceBishopTest {
         sut.pieces[2][5] = new PieceKing(PieceColor.BLACK, 2, 5);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -179,7 +182,7 @@ public class PieceBishopTest {
         sut.pieces[6][5] = new PieceKing(PieceColor.BLACK, 6, 5);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -209,7 +212,7 @@ public class PieceBishopTest {
         sut.pieces[6][1] = new PieceKing(PieceColor.BLACK, 6, 1);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -239,7 +242,7 @@ public class PieceBishopTest {
         sut.pieces[2][1] = new PieceKing(PieceColor.BLACK, 2, 1);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then

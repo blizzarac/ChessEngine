@@ -2,6 +2,7 @@ package com.stolz.alexander.chessengine.engine.parser;
 
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
 import com.stolz.alexander.chessengine.engine.pieces.PieceColor;
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import com.stolz.alexander.chessengine.parser.FENParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by astolz on 03.01.2017.
  */
 public class FENParserTest {
+    DebugParser debugParser = new DebugParser();
 
     @Test
     @DisplayName("should create board from FEN for starting Position")
@@ -36,7 +38,7 @@ public class FENParserTest {
                         "________\n" +
                         "PPPPPPPP\n" +
                         "RNBQKBNR\n",
-                result.printBoard());
+                debugParser.printBoard(result));
     }
 
     @Test
@@ -59,7 +61,7 @@ public class FENParserTest {
                         "________\n" +
                         "PPPP_PPP\n" +
                         "RNBQKBNR\n",
-                result.printBoard());
+                debugParser.printBoard(result));
     }
 
     @Test

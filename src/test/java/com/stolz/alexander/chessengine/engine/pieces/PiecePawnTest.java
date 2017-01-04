@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.engine.pieces;
 
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,8 @@ import java.util.List;
  * Created by alexanderstolz on 12/31/16.
  */
 public class PiecePawnTest {
+
+    private DebugParser debugParser = new DebugParser();
 
     /**
      * Initial Board
@@ -208,7 +211,7 @@ public class PiecePawnTest {
         sut.pieces[0][3] = new PiecePawn(PieceColor.WHITE, 0,3, false);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[0][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -237,7 +240,7 @@ public class PiecePawnTest {
         sut.pieces[7][3] = new PiecePawn(PieceColor.WHITE, 7,3, false);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[7][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then

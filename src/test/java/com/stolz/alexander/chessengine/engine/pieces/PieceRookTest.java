@@ -1,6 +1,7 @@
 package com.stolz.alexander.chessengine.engine.pieces;
 
 import com.stolz.alexander.chessengine.engine.logic.ChessBoard;
+import com.stolz.alexander.chessengine.parser.DebugParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
  * Created by alexanderstolz on 1/1/17.
  */
 public class PieceRookTest {
+
+    private DebugParser debugParser = new DebugParser();
 
     /**
      * Initial Board
@@ -32,7 +35,7 @@ public class PieceRookTest {
         sut.pieces[4][5] = new PieceKing(PieceColor.BLACK, 4, 5);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -61,7 +64,7 @@ public class PieceRookTest {
         sut.pieces[4][2] = new PieceKing(PieceColor.BLACK, 4, 2);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -91,7 +94,7 @@ public class PieceRookTest {
         sut.pieces[2][3] = new PieceKing(PieceColor.BLACK, 2, 3);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
@@ -121,7 +124,7 @@ public class PieceRookTest {
         sut.pieces[6][3] = new PieceKing(PieceColor.BLACK, 6, 3);
 
         // When
-        System.out.print(sut.printBoard());
+        System.out.print(debugParser.printBoard(sut));
         final boolean result = sut.pieces[4][3].isCheck(sut.pieces, PieceColor.WHITE);
 
         // Then
