@@ -62,7 +62,7 @@ public class PiecePawnTest {
         sut.init();
 
         // When
-        sut.pieces[6][6].move(sut.pieces, new PiecePosition(6,5));
+        sut.move(sut.pieces[6][6], new PiecePosition(6,5));
         final List<PiecePosition> result = sut.pieces[6][5].findValidMoves(sut.pieces);
 
         // Then
@@ -90,8 +90,8 @@ public class PiecePawnTest {
         sut.init();
 
         // When
-        sut.pieces[6][6].move(sut.pieces, new PiecePosition(6,4));
-        sut.pieces[5][1].move(sut.pieces, new PiecePosition(5,3));
+        sut.move(sut.pieces[6][6], new PiecePosition(6,4));
+        sut.move(sut.pieces[5][1], new PiecePosition(5,3));
         //System.out.print(sut.printBoard());
         final List<PiecePosition> result = sut.pieces[6][4].findValidMoves(sut.pieces);
 

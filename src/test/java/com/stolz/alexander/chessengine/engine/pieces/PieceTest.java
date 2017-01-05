@@ -18,11 +18,11 @@ public class PieceTest {
         chessBoard.pieces[pawn.x()][pawn.y()] = pawn;
 
         // when
-        Piece[][] resultBoard = pawn.move(chessBoard.pieces, new PiecePosition(2,3));
+        chessBoard.move(pawn, new PiecePosition(2,3));
 
         // then
-        Assertions.assertTrue(resultBoard[0][2] instanceof Empty, "");
-        Assertions.assertTrue(resultBoard[2][3] instanceof PiecePawn, "");
+        Assertions.assertTrue(chessBoard.pieces[0][2] instanceof Empty, "");
+        Assertions.assertTrue(chessBoard.pieces[2][3] instanceof PiecePawn, "");
     }
 
     @Test
@@ -35,10 +35,10 @@ public class PieceTest {
         chessBoard.pieces[pawn.x()][pawn.y()] = pawn;
 
         // when/then
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> pawn.move(chessBoard.pieces, new PiecePosition(-1,3)));
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> pawn.move(chessBoard.pieces, new PiecePosition(9,3)));
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> pawn.move(chessBoard.pieces, new PiecePosition(2,-1)));
-        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> pawn.move(chessBoard.pieces, new PiecePosition(2,9)));
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> chessBoard.move(pawn, new PiecePosition(-1,3)));
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> chessBoard.move(pawn, new PiecePosition(9,3)));
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> chessBoard.move(pawn, new PiecePosition(2,-1)));
+        Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> chessBoard.move(pawn, new PiecePosition(2,9)));
     }
 
     @Test
@@ -56,13 +56,13 @@ public class PieceTest {
         Assertions.assertTrue(chessBoard.pieces[2][3].getPiecePosition().y == 3, "");
 
         // when
-        Piece[][] resultBoard = pawn.move(chessBoard.pieces, new PiecePosition(2,3));
+        chessBoard.move(pawn, new PiecePosition(2,3));
 
         // then
-        Assertions.assertTrue(resultBoard[0][2].getPiecePosition().x == 0, "");
-        Assertions.assertTrue(resultBoard[0][2].getPiecePosition().y == 2, "");
-        Assertions.assertTrue(resultBoard[2][3].getPiecePosition().x == 2, "");
-        Assertions.assertTrue(resultBoard[2][3].getPiecePosition().y == 3, "");
+        Assertions.assertTrue(chessBoard.pieces[0][2].getPiecePosition().x == 0, "");
+        Assertions.assertTrue(chessBoard.pieces[0][2].getPiecePosition().y == 2, "");
+        Assertions.assertTrue(chessBoard.pieces[2][3].getPiecePosition().x == 2, "");
+        Assertions.assertTrue(chessBoard.pieces[2][3].getPiecePosition().y == 3, "");
     }
 
     @Test
@@ -75,10 +75,10 @@ public class PieceTest {
         chessBoard.pieces[2][2] = new PiecePawn(PieceColor.BLACK, 2, 2, true);
 
         // when
-        Piece[][] resultBoard = chessBoard.pieces[3][3].move(chessBoard.pieces, new PiecePosition(2, 2));
+        chessBoard.move(chessBoard.pieces[3][3], new PiecePosition(2, 2));
 
         // then
-        Assertions.assertEquals(resultBoard[3][3].getType(), PieceType.NOTYPE);
-        Assertions.assertEquals(resultBoard[2][2].getType(), PieceType.PAWN);
+        Assertions.assertEquals(chessBoard.pieces[3][3].getType(), PieceType.NOTYPE);
+        Assertions.assertEquals(chessBoard.pieces[2][2].getType(), PieceType.PAWN);
     }
 }

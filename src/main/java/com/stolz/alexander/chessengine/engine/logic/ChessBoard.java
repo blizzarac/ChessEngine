@@ -6,6 +6,7 @@ import com.stolz.alexander.chessengine.gui.controls.chessboard.ChessBoardFields;
 import com.stolz.alexander.chessengine.gui.controls.main.Main;
 import com.stolz.alexander.chessengine.parser.FENParser;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.function.BiConsumer;
@@ -32,6 +33,7 @@ public class ChessBoard {
     private String fen;
 
     private Stack<String> fenHistory;
+    private final FENParser fenParser = Main.injector.getInstance(FENParser.class);
 
     @Inject
     public ChessBoard() {
@@ -57,28 +59,60 @@ public class ChessBoard {
      * @return
      */
     public void init() {
-        final FENParser fenParser = Main.injector.getInstance(FENParser.class);
         final ChessBoard parseResult = fenParser.parse(initialFen);
 
         this.pieces = parseResult.pieces;
         this.currentPlayer = parseResult.currentPlayer;
     }
 
-    public void replacePieces(Piece[][] newboard) {
-        for (int x = 0; x < 8; x++) {
-            System.arraycopy(newboard[x], 0, pieces[x], 0, 8);
+    /**
+     * Move piece on the board. NOT checking correct positioning.
+     *
+     * @param target Target position
+     * @param pieceToMove The piece to move
+     * @return
+     */
+    public void move(Piece pieceToMove, PiecePosition target) {
+        int currX = pieceToMove.x();
+        int currY = pieceToMove.y();
+        int targetX = target.x;
+        int targetY = target.y;
+
+        final Piece tmp =  pieces[targetX][targetY]; // Saving target
+
+        // Update target piece
+        pieces[targetX][targetY] = pieces[currX][currY];
+        pieces[targetX][targetY].piecePosition.x = targetX;
+        pieces[targetX][targetY].piecePosition.y = targetY;
+
+        // Update this
+        if (tmp.getType() == PieceType.NOTYPE) {
+            pieces[currX][currY] = tmp;
+            pieces[currX][currY].piecePosition.x = currX;
+            pieces[currX][currY].piecePosition.y = currY;
+        } else {
+            pieces[currX][currY] = new Empty(currX, currY);
         }
+
+        if (pieces[targetX][targetY] instanceof WithFirstmove) {
+            WithFirstmove piece = (WithFirstmove)pieces[targetX][targetY];
+            if(piece.isFirstmove()){
+                piece.setFirstmove(false);
+            }
+        }
+
+        fenHistory.push(fenParser.export(this));
     }
 
-    public Piece[][] backupPieces(Piece[][] boardstate) {
-        final Piece[][] backup = new Piece[8][8];
-        for (int x = 0; x < 8; x++) {
-            System.arraycopy(boardstate[x], 0, backup[x], 0, 8);
-        }
-        return backup;
+    public void undoMove() {
+        fenHistory.pop();
+        String lastMove = fenHistory.peek();
+
+        final FENParser fenParser = Main.injector.getInstance(FENParser.class);
+        ChessBoard oldState = fenParser.parse(lastMove);
+        this.pieces = oldState.pieces;
+        this.currentPlayer = oldState.currentPlayer;
     }
-
-
 
     public int isEndGame() {
         return endGame;

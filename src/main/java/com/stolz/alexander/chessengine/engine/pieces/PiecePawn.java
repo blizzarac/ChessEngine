@@ -5,7 +5,7 @@ import java.util.List;
 
 import static com.stolz.alexander.chessengine.engine.pieces.PieceType.KING;
 
-public class PiecePawn extends Piece {
+public class PiecePawn extends Piece implements WithFirstmove{
 	private boolean firstmove;
 
     public PiecePawn(PieceColor color, int ii, int jj, boolean fm) {
@@ -14,86 +14,81 @@ public class PiecePawn extends Piece {
 	}
 
 	@Override
-	public boolean firstmove(){
+	public boolean isFirstmove(){
 		return firstmove;
 	}
 
 	@Override
-    public Piece[][] move(Piece[][] boardstate, PiecePosition target) {
-        if (firstmove) {
-            firstmove = false;
-        }
-
-        Piece[][] resultBoard = super.move(boardstate, target);
-        return resultBoard;
+    public void setFirstmove(boolean firstmove) {
+	    this.firstmove = firstmove;
     }
 
     @Override
     public List<PiecePosition> findValidMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();
 		if (color == PieceColor.BLACK)
-            validMoves.addAll(drawBlackMoves(this, pieces));
+            validMoves.addAll(drawBlackMoves(pieces));
 		else
-            validMoves.addAll(drawWhiteMoves(this, pieces));
+            validMoves.addAll(drawWhiteMoves(pieces));
 
         return validMoves;
     }
 
-    private List<PiecePosition>  drawBlackMoves(Piece p, Piece[][] pieces) {
+    private List<PiecePosition>  drawBlackMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();
             // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
-            if(p.y()+1 < 8){ // Guard for bounds
-                if(pieces[p.x()][p.y()+1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(p.x(),p.y()+1));
+            if(this.y()+1 < 8){ // Guard for bounds
+                if(pieces[this.x()][this.y()+1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x(),this.y()+1));
                 }}
 
-            if(p.firstmove()){
+            if(firstmove){
                 // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
-                if(pieces[p.x()][p.y()+2].getColor() == PieceColor.NONE
-                        && pieces[p.x()][p.y()+1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(p.x(),p.y()+2));
+                if(pieces[this.x()][this.y()+2].getColor() == PieceColor.NONE
+                        && pieces[this.x()][this.y()+1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x(),this.y()+2));
                 }}
 
             // LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
-            if(p.x()-1 >= 0 && p.y()+1 < 8){
-                if(pieces[p.x()-1][p.y()+1].getColor() == PieceColor.WHITE){
-                    validMoves.add(new PiecePosition(p.x()-1,p.y()+1));
+            if(this.x()-1 >= 0 && this.y()+1 < 8){
+                if(pieces[this.x()-1][this.y()+1].getColor() == PieceColor.WHITE){
+                    validMoves.add(new PiecePosition(this.x()-1,this.y()+1));
                 }}
 
             // LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
-            if(p.x()+1 < 8 && p.y()+1 < 8){
-                if(pieces[p.x()+1][p.y()+1].getColor() == PieceColor.WHITE){
-                    validMoves.add(new PiecePosition(p.x()+1, p.y()+1));
+            if(this.x()+1 < 8 && this.y()+1 < 8){
+                if(pieces[this.x()+1][this.y()+1].getColor() == PieceColor.WHITE){
+                    validMoves.add(new PiecePosition(this.x()+1, this.y()+1));
                 }}
 
         return validMoves;
     }
 
-    private List<PiecePosition> drawWhiteMoves(Piece p, Piece[][] pieces) {
+    private List<PiecePosition> drawWhiteMoves(Piece[][] pieces) {
         List<PiecePosition> validMoves = new ArrayList<>();
             // LOOK ONE SQUARE AHEAD IF CLEAR HIGHLIGHT
-            if(p.y()-1 >= 0){ // Guard for bounds
-                if(pieces[p.x()][p.y()-1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(p.x(),p.y()-1));
+            if(this.y()-1 >= 0){ // Guard for bounds
+                if(pieces[this.x()][this.y()-1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x(),this.y()-1));
                 }}
 
-            if(p.firstmove()){
+            if(firstmove){
                 // LOOK TWO SQUARE AHEAD IF CLEAR HIGHLIGHT
-                if(pieces[p.x()][p.y()-2].getColor() == PieceColor.NONE
-                        && pieces[p.x()][p.y()-1].getColor() == PieceColor.NONE){
-                    validMoves.add(new PiecePosition(p.x(), p.y()-2));
+                if(pieces[this.x()][this.y()-2].getColor() == PieceColor.NONE
+                        && pieces[this.x()][this.y()-1].getColor() == PieceColor.NONE){
+                    validMoves.add(new PiecePosition(this.x(), this.y()-2));
                 }}
 
             // LOOK ONE SQUARE LEFT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
-            if(p.x()-1 >= 0 && p.y()-1 >= 0){
-                if(pieces[p.x()-1][p.y()-1].getColor() == PieceColor.BLACK){
-                    validMoves.add(new PiecePosition(p.x()-1, p.y()-1));
+            if(this.x()-1 >= 0 && this.y()-1 >= 0){
+                if(pieces[this.x()-1][this.y()-1].getColor() == PieceColor.BLACK){
+                    validMoves.add(new PiecePosition(this.x()-1, this.y()-1));
                 }}
 
             // LOOK ONE SQUARE RIGHT DIAGONALLY IF ENEMY PRESENT HIGHLIGHT
-            if(p.x()+1 < 8 && p.y()-1 >= 0){
-                if(pieces[p.x()+1][p.y()-1].getColor() == PieceColor.BLACK){
-                    validMoves.add(new PiecePosition(p.x()+1, p.y()-1));
+            if(this.x()+1 < 8 && this.y()-1 >= 0){
+                if(pieces[this.x()+1][this.y()-1].getColor() == PieceColor.BLACK){
+                    validMoves.add(new PiecePosition(this.x()+1, this.y()-1));
                 }}
 
             return validMoves;

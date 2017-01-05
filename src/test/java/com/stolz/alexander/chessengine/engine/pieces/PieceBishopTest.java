@@ -61,7 +61,7 @@ public class PieceBishopTest {
         sut.init();
 
         // When
-        sut.pieces[3][6].move(sut.pieces, new PiecePosition(3,5));
+        sut.move(sut.pieces[3][6], new PiecePosition(3,5));
         final List<PiecePosition> result = sut.pieces[2][7].findValidMoves(sut.pieces);
 
         // Then
@@ -91,8 +91,8 @@ public class PieceBishopTest {
         // When
         //System.out.print(debugParser.printBoard(sut));
         //System.out.print(sut.pieces[2][7].getType());
-        sut.pieces[3][6].move(sut.pieces, new PiecePosition(3,5));
-        sut.pieces[6][1].move(sut.pieces, new PiecePosition(6,3));
+        sut.move(sut.pieces[3][6], new PiecePosition(3,5));
+        sut.move(sut.pieces[6][1], new PiecePosition(6,3));
         final List<PiecePosition> result = sut.pieces[2][7].findValidMoves(sut.pieces);
 
         // Then
@@ -122,7 +122,7 @@ public class PieceBishopTest {
         // When
         //System.out.print(sut.pieces[2][7].getType());
         // System.out.print(debugParser.printBoard(sut));
-        sut.pieces[2][7].move(sut.pieces, new PiecePosition(3,3));
+        sut.move(sut.pieces[2][7], new PiecePosition(3,3));
         final List<PiecePosition> result = sut.pieces[3][3].findValidMoves(sut.pieces);
 
         // Then

@@ -108,8 +108,7 @@ public class ChessEngineControl extends Control {
                         && !selectedpiece.equals(targetpiece)) {
 
                     if (validMoves.stream().anyMatch(pos -> pos.x == targetpiece.x() && pos.y == targetpiece.y())) {
-                        final Piece[][] oldState = chessboardPane.chessBoard.backupPieces(boardstate);
-                        tryMoveAndReverseOnCheck(boardstate, oldState);
+                        tryMoveAndReverseOnCheck(boardstate);
                     } else {
                         stalemateCheck();
                     }
@@ -139,27 +138,25 @@ public class ChessEngineControl extends Control {
 
 
 
-    private Piece[][] tryMoveAndReverseOnCheck(Piece[][] boardstate, Piece[][] oldstate) {
+    private void tryMoveAndReverseOnCheck(Piece[][] oldstate) {
         logger.log(Level.SEVERE, "tryMoveAndReverseOnCheck");
-        boardstate = selectedpiece.move(boardstate, targetpiece.getPiecePosition());
+        chessboard.move(selectedpiece, targetpiece.getPiecePosition());
 
         // If move results in no check, do move
-        if (!checkValidator.isCheck(boardstate, chessboardPane.chessBoard.currentPlayer)) {
+        if (!checkValidator.isCheck(chessboard.pieces, chessboardPane.chessBoard.currentPlayer)) {
             logger.log(Level.SEVERE, "Not in check after move!");
-            chessboardPane.chessBoard.replacePieces(boardstate);
             chessboardPane.buildBoard();
             chessboardPane.chessBoard.currentPlayer = chessboardPane.chessBoard.currentPlayer.mirror();
             stalecountwhite = 8;
             stalecountblack = 8;
         } else {
             logger.log(Level.SEVERE, "In check after move!");
-            chessboardPane.chessBoard.replacePieces(oldstate);
+            chessboard.undoMove();
             checkValidator.flipcheck();
             stalemateCheck();
         }
 
         clickState = ClickState.NULL;
-        return boardstate;
     }
 
     @Override
